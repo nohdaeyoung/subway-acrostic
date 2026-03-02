@@ -346,6 +346,10 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-myeongil", name: "명일", lat: 37.5514, lng: 127.1439, lines: ["5"] },
   { id: "s-godeok", name: "고덕", lat: 37.5550, lng: 127.1542, lines: ["5"] },
   { id: "s-sangil", name: "상일동", lat: 37.5563, lng: 127.1665, lines: ["5"] },
+  { id: "s-gangil", name: "강일", lat: 37.5575, lng: 127.1758, lines: ["5"] },
+  { id: "s-misa", name: "미사", lat: 37.5631, lng: 127.1928, lines: ["5"] },
+  { id: "s-hanam_pungsan", name: "하남풍산", lat: 37.5520, lng: 127.2036, lines: ["5"] },
+  { id: "s-hanam_city", name: "하남시청", lat: 37.5418, lng: 127.2067, lines: ["5"] },
   { id: "s-hanam", name: "하남검단산", lat: 37.5398, lng: 127.2236, lines: ["5"] },
   { id: "s-macheon", name: "마천", lat: 37.4971, lng: 127.1510, lines: ["5"] },
 
@@ -800,7 +804,7 @@ export const SEOUL_LINE_ROUTES: Record<string, string[][]> = {
   ],
   "3": [["s-daehwa", "s-juyeop", "s-jeongbalsan", "s-baekseokmaeul", "s-baekseok3", "s-daegok", "s-hwajeong", "s-wondang", "s-wonheung", "s-samsong", "s-jichuk", "s-gupabal", "s-yeonsinnae", "s-bulgwang", "s-nokbeon", "s-hongje", "s-muakjae", "s-dongnimmun", "s-gyeongbokgung", "s-anguk", "s-jongno3ga", "s-euljiro3", "s-chungmuro", "s-dongguk", "s-yaksu", "s-geumho", "s-oksu", "s-apgujeong", "s-sinsa", "s-jamwon", "s-gosok", "s-gyodae", "s-nambu", "s-yangjae", "s-maebong", "s-dogok", "s-daechee", "s-hagye", "s-daechi2", "s-ilwon", "s-suseo", "s-garak", "s-police", "s-ogeum"]],
   "4": [["s-jinjeop", "s-onam", "s-byeolnaebyelgaram", "s-buramsan", "s-sanggye", "s-nowon", "s-changdong", "s-ssangmun", "s-suyu", "s-mia", "s-mia3", "s-gireum", "s-sungsin", "s-hansung", "s-hyehwa", "s-dongdaemun", "s-dongdaemunhist", "s-chungmuro", "s-myeongdong", "s-hoehyeon", "s-seoulstation", "s-sookmyung", "s-sinyongsan", "s-samgakji", "s-ichon", "s-dongjak", "s-sadang", "s-namtaeryeong", "s-seoleksan", "s-gyeongmagongwon", "s-daegongwon", "s-gwacheon", "s-jeongbu", "s-indeogwon", "s-pyeongchon", "s-beomgye", "s-geumjeong", "s-sanbon", "s-surisan", "s-daeyami", "s-banwol", "s-sangnoksu", "s-handaeap", "s-jungang_ansan", "s-gojan", "s-choji", "s-ansan", "s-neunggil", "s-jeongwang", "s-oido"]],
-  "5": [["s-banghwa", "s-gaehwa", "s-gimpo", "s-songjeong5", "s-magok", "s-balsan", "s-ujangsan", "s-hwagok", "s-kkachisan", "s-sinjeong", "s-mokdong", "s-omokgyo", "s-yangpyeong", "s-ydpgucheong", "s-ydpmarket", "s-sinan", "s-yeouido", "s-yeouinaru", "s-mapo", "s-gongdeok", "s-aehogaejon", "s-chungjeongno", "s-seodaemun", "s-gwanghwamun", "s-jongno3ga", "s-euljiro4", "s-dongdaemunhist", "s-cheonggu", "s-singeumho", "s-haengdang", "s-wangsimni", "s-majang", "s-dapsimni", "s-janghanpyeong", "s-gunja", "s-achasan", "s-gwangnaru", "s-cheonho", "s-gangdong", "s-gildonggil", "s-gubi", "s-myeongil", "s-godeok", "s-sangil", "s-hanam"],
+  "5": [["s-banghwa", "s-gaehwa", "s-gimpo", "s-songjeong5", "s-magok", "s-balsan", "s-ujangsan", "s-hwagok", "s-kkachisan", "s-sinjeong", "s-mokdong", "s-omokgyo", "s-yangpyeong", "s-ydpgucheong", "s-ydpmarket", "s-sinan", "s-yeouido", "s-yeouinaru", "s-mapo", "s-gongdeok", "s-aehogaejon", "s-chungjeongno", "s-seodaemun", "s-gwanghwamun", "s-jongno3ga", "s-euljiro4", "s-dongdaemunhist", "s-cheonggu", "s-singeumho", "s-haengdang", "s-wangsimni", "s-majang", "s-dapsimni", "s-janghanpyeong", "s-gunja", "s-achasan", "s-gwangnaru", "s-cheonho", "s-gangdong", "s-gildonggil", "s-gubi", "s-myeongil", "s-godeok", "s-sangil", "s-gangil", "s-misa", "s-hanam_pungsan", "s-hanam_city", "s-hanam"],
     ["s-gangdong", "s-dunchondong", "s-olympic", "s-bangi", "s-ogeum", "s-gaerong", "s-geoyeo", "s-macheon"]],
   "6": [
     // 본선

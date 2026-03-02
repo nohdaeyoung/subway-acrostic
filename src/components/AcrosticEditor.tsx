@@ -7,7 +7,7 @@ import {
   updateAcrostic,
   deleteAcrostic,
 } from "@/lib/bkend";
-import { getToken } from "@/lib/auth";
+import { isLoggedIn } from "@/lib/auth";
 
 interface AcrosticEditorProps {
   station: Station;
@@ -46,8 +46,7 @@ export default function AcrosticEditor({
   }
 
   async function handleSave() {
-    const token = getToken();
-    if (!token) {
+    if (!isLoggedIn()) {
       setError("로그인이 필요합니다");
       return;
     }
@@ -55,34 +54,33 @@ export default function AcrosticEditor({
     setSaving(true);
     setError("");
 
-    const result = acrostic
-      ? await updateAcrostic(acrostic._id, lines, token)
-      : await createAcrostic(station.id, lines, token);
-
-    setSaving(false);
-
-    if (result) {
+    try {
+      if (acrostic) {
+        await updateAcrostic(acrostic._id, lines);
+      } else {
+        await createAcrostic(station.id, lines);
+      }
       onSaved();
-    } else {
-      setError("저장에 실패했습니다. 다시 시도해주세요.");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "저장에 실패했습니다.");
+    } finally {
+      setSaving(false);
     }
   }
 
   async function handleDelete() {
     if (!acrostic) return;
-    const token = getToken();
-    if (!token) return;
-
+    if (!isLoggedIn()) return;
     if (!confirm("정말 삭제하시겠습니까?")) return;
 
     setSaving(true);
-    const ok = await deleteAcrostic(acrostic._id, token);
-    setSaving(false);
-
-    if (ok) {
+    try {
+      await deleteAcrostic(acrostic._id);
       onSaved();
-    } else {
+    } catch {
       setError("삭제에 실패했습니다.");
+    } finally {
+      setSaving(false);
     }
   }
 

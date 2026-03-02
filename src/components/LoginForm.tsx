@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { login, setToken } from "@/lib/auth";
+import { login } from "@/lib/auth";
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -9,24 +9,17 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ onSuccess, onCancel }: LoginFormProps) {
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
-    const result = await login(email, password);
-    setLoading(false);
-
-    if (result) {
-      setToken(result.accessToken);
+    if (login(password)) {
       onSuccess();
     } else {
-      setError("이메일 또는 비밀번호가 올바르지 않습니다.");
+      setError("비밀번호가 올바르지 않습니다.");
     }
   }
 
@@ -44,18 +37,6 @@ export default function LoginForm({ onSuccess, onCancel }: LoginFormProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              이메일
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
               비밀번호
             </label>
             <input
@@ -63,6 +44,7 @@ export default function LoginForm({ onSuccess, onCancel }: LoginFormProps) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoFocus
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
             />
           </div>
@@ -79,10 +61,9 @@ export default function LoginForm({ onSuccess, onCancel }: LoginFormProps) {
             </button>
             <button
               type="submit"
-              disabled={loading}
-              className="flex-1 px-4 py-2 text-sm bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-sm bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
             >
-              {loading ? "로그인 중..." : "로그인"}
+              로그인
             </button>
           </div>
         </form>

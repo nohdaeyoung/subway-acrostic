@@ -1,102 +1,69 @@
 import type { Acrostic } from "@/types/subway";
 
-const API_BASE = process.env.NEXT_PUBLIC_BKEND_API_URL || "";
-const PROJECT_ID = process.env.NEXT_PUBLIC_BKEND_PROJECT_ID || "";
+const STORAGE_KEY = "subway-acrostics";
 
-export class ApiError extends Error {
-  status: number;
-  constructor(message: string, status: number) {
-    super(message);
-    this.name = "ApiError";
-    this.status = status;
+function loadAll(): Acrostic[] {
+  if (typeof window === "undefined") return [];
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
   }
 }
 
-export class ConflictError extends ApiError {
-  constructor(message = "이미 N행시가 등록된 역입니다") {
-    super(message, 409);
-    this.name = "ConflictError";
-  }
-}
-
-function getHeaders(token?: string): HeadersInit {
-  const headers: HeadersInit = { "Content-Type": "application/json" };
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-  if (PROJECT_ID) {
-    headers["x-project-id"] = PROJECT_ID;
-  }
-  return headers;
+function saveAll(acrostics: Acrostic[]): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(acrostics));
 }
 
 export async function getAcrosticByStation(
   stationId: string
 ): Promise<Acrostic | null> {
-  const res = await fetch(
-    `${API_BASE}/acrostics?stationId=${encodeURIComponent(stationId)}`,
-    { headers: getHeaders(), cache: "no-store" }
-  );
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.data?.[0] ?? null;
+  return loadAll().find((a) => a.stationId === stationId) ?? null;
 }
 
 export async function getAllAcrostics(): Promise<Acrostic[]> {
-  const res = await fetch(`${API_BASE}/acrostics`, {
-    headers: getHeaders(),
-    cache: "no-store",
-  });
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.data ?? [];
+  return loadAll();
 }
 
 export async function createAcrostic(
   stationId: string,
-  lines: string[],
-  token: string
+  lines: string[]
 ): Promise<Acrostic> {
-  const res = await fetch(`${API_BASE}/acrostics`, {
-    method: "POST",
-    headers: getHeaders(token),
-    body: JSON.stringify({ stationId, lines }),
-  });
-  if (res.status === 409) {
-    throw new ConflictError();
+  const all = loadAll();
+  const existing = all.find((a) => a.stationId === stationId);
+  if (existing) {
+    throw new Error("이미 N행시가 등록된 역입니다");
   }
-  if (!res.ok) {
-    throw new ApiError("저장에 실패했습니다", res.status);
-  }
-  return res.json();
+  const now = new Date().toISOString();
+  const acrostic: Acrostic = {
+    _id: crypto.randomUUID(),
+    stationId,
+    lines,
+    createdAt: now,
+    updatedAt: now,
+  };
+  all.push(acrostic);
+  saveAll(all);
+  return acrostic;
 }
 
 export async function updateAcrostic(
   id: string,
-  lines: string[],
-  token: string
+  lines: string[]
 ): Promise<Acrostic> {
-  const res = await fetch(`${API_BASE}/acrostics/${id}`, {
-    method: "PUT",
-    headers: getHeaders(token),
-    body: JSON.stringify({ lines }),
-  });
-  if (!res.ok) {
-    throw new ApiError("수정에 실패했습니다", res.status);
-  }
-  return res.json();
+  const all = loadAll();
+  const idx = all.findIndex((a) => a._id === id);
+  if (idx === -1) throw new Error("N행시를 찾을 수 없습니다");
+  all[idx] = { ...all[idx], lines, updatedAt: new Date().toISOString() };
+  saveAll(all);
+  return all[idx];
 }
 
-export async function deleteAcrostic(
-  id: string,
-  token: string
-): Promise<boolean> {
-  const res = await fetch(`${API_BASE}/acrostics/${id}`, {
-    method: "DELETE",
-    headers: getHeaders(token),
-  });
-  if (!res.ok) {
-    throw new ApiError("삭제에 실패했습니다", res.status);
-  }
+export async function deleteAcrostic(id: string): Promise<boolean> {
+  const all = loadAll();
+  const filtered = all.filter((a) => a._id !== id);
+  saveAll(filtered);
   return true;
 }

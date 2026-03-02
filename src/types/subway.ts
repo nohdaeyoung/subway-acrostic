@@ -10,7 +10,6 @@ export interface Station {
 export interface Acrostic {
   _id: string;
   stationId: string;
-  createdBy: string;
   lines: string[];
   createdAt: string;
   updatedAt: string;

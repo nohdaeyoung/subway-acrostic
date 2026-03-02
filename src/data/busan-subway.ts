@@ -111,15 +111,23 @@ export const BUSAN_STATIONS: StationData[] = [
   { id: "b-youngsan", name: "영산대", lat: 35.2256, lng: 129.1462, lines: ["4"] },
   { id: "b-anpyeong", name: "안평", lat: 35.2373, lng: 129.1718, lines: ["4"] },
 
-  // ===== 동해선 (주요역) =====
+  // ===== 동해선 (부전~태화강) =====
   // bujeon already defined
-  { id: "b-geoje_d", name: "거제해맞이", lat: 35.1543, lng: 129.0647, lines: ["donghae"] },
+  { id: "b-geoje_d", name: "거제해맞이", lat: 35.1822, lng: 129.0690, lines: ["donghae"] },
   { id: "b-geoyeo", name: "거여", lat: 35.1524, lng: 129.0748, lines: ["donghae"] },
-  { id: "b-centum_d", name: "센텀", lat: 35.1698, lng: 129.1303, lines: ["donghae"] },
+  { id: "b-centum_d", name: "센텀", lat: 35.1795, lng: 129.1245, lines: ["donghae"] },
+  { id: "b-sinhaeundae", name: "신해운대", lat: 35.1817, lng: 129.1770, lines: ["donghae"] },
   { id: "b-songjeong_d", name: "송정", lat: 35.1775, lng: 129.1917, lines: ["donghae"] },
   { id: "b-gijang", name: "기장", lat: 35.2440, lng: 129.2176, lines: ["donghae"] },
-  { id: "b-ilgwang", name: "일광", lat: 35.2700, lng: 129.2250, lines: ["donghae"] },
-  { id: "b-jeonggwan", name: "정관", lat: 35.3239, lng: 129.1757, lines: ["donghae"] },
+  { id: "b-ilgwang", name: "일광", lat: 35.2665, lng: 129.2328, lines: ["donghae"] },
+  { id: "b-jwacheon_dh", name: "좌천", lat: 35.3120, lng: 129.2451, lines: ["donghae"] },
+  { id: "b-wolnae", name: "월내", lat: 35.3262, lng: 129.2750, lines: ["donghae"] },
+  { id: "b-seosaeng", name: "서생", lat: 35.3448, lng: 129.2923, lines: ["donghae"] },
+  { id: "b-onsan", name: "온산", lat: 35.4214, lng: 129.3511, lines: ["donghae"] },
+  { id: "b-deokha", name: "덕하", lat: 35.4955, lng: 129.3090, lines: ["donghae"] },
+  { id: "b-taehwagang", name: "태화강", lat: 35.5391, lng: 129.3542, lines: ["donghae"] },
+  // 정관은 동해선 미운행 구간 (별도 노선)
+  { id: "b-jeonggwan", name: "정관", lat: 35.3239, lng: 129.1757, lines: [] },
 ];
 
 export const BUSAN_LINE_ROUTES: Record<string, string[][]> = {
@@ -157,5 +165,5 @@ export const BUSAN_LINE_ROUTES: Record<string, string[][]> = {
     "b-chungnyeol", "b-myeongjang", "b-seobu", "b-geumsa",
     "b-bansong", "b-seokdae", "b-youngsan", "b-anpyeong",
   ]],
-  donghae: [["b-bujeon", "b-geoje_d", "b-geoyeo", "b-centum_d", "b-songjeong_d", "b-gijang", "b-ilgwang", "b-jeonggwan"]],
+  donghae: [["b-bujeon", "b-geoje_d", "b-geoyeo", "b-centum_d", "b-sinhaeundae", "b-songjeong_d", "b-gijang", "b-ilgwang", "b-jwacheon_dh", "b-wolnae", "b-seosaeng", "b-onsan", "b-deokha", "b-taehwagang"]],
 };

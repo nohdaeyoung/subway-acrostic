@@ -398,24 +398,24 @@ export const SEOUL_STATIONS: StationData[] = [
   // ===== Line 7 북부 연장 =====
   { id: "s-madeul", name: "마들", lat: 37.6647, lng: 127.0578, lines: ["7"] },
   { id: "s-suraksan", name: "수락산", lat: 37.6778, lng: 127.0553, lines: ["7"] },
-  { id: "s-jangam", name: "장암", lat: 37.6963, lng: 127.0534, lines: ["7"] },
+  { id: "s-jangam", name: "장암", lat: 37.7000, lng: 127.0531, lines: ["7"] },
   // dobongsan already defined
   // nowon already defined
   { id: "s-junggye", name: "중계", lat: 37.6446, lng: 127.0650, lines: ["7"] },
   { id: "s-hagye7", name: "하계", lat: 37.6350, lng: 127.0660, lines: ["7"] },
   { id: "s-gongneung", name: "공릉", lat: 37.6254, lng: 127.0730, lines: ["7"] },
   // taereung already defined
-  { id: "s-meogeol", name: "먹골", lat: 37.6117, lng: 127.0821, lines: ["7"] },
-  { id: "s-junghwa", name: "중화", lat: 37.6027, lng: 127.0826, lines: ["7"] },
+  { id: "s-meogeol", name: "먹골", lat: 37.6106, lng: 127.0778, lines: ["7"] },
+  { id: "s-junghwa", name: "중화", lat: 37.6025, lng: 127.0792, lines: ["7"] },
   { id: "s-mangu", name: "상봉", lat: 37.5963, lng: 127.0857, lines: ["7", "gyeongui", "gyeongchun"] },
-  { id: "s-myeonmok", name: "면목", lat: 37.5855, lng: 127.0850, lines: ["7"] },
+  { id: "s-myeonmok", name: "면목", lat: 37.5886, lng: 127.0875, lines: ["7"] },
   { id: "s-sagajeong", name: "사가정", lat: 37.5808, lng: 127.0883, lines: ["7"] },
-  { id: "s-yongmasan", name: "용마산", lat: 37.5699, lng: 127.0868, lines: ["7"] },
+  { id: "s-yongmasan", name: "용마산", lat: 37.5736, lng: 127.0867, lines: ["7"] },
   { id: "s-junggok", name: "중곡", lat: 37.5647, lng: 127.0838, lines: ["7"] },
   // gunja already defined
   { id: "s-eorinyi", name: "어린이대공원", lat: 37.5484, lng: 127.0747, lines: ["7"] },
   // geondae already defined
-  { id: "s-ttukseomyuwon", name: "뚝섬유원지", lat: 37.5313, lng: 127.0657, lines: ["7"] },
+  { id: "s-jayang", name: "자양", lat: 37.5313, lng: 127.0657, lines: ["7"] },
   { id: "s-cheongdam", name: "청담", lat: 37.5193, lng: 127.0526, lines: ["7"] },
   { id: "s-gangnamgu", name: "강남구청", lat: 37.5170, lng: 127.0413, lines: ["7", "suin"] },
   { id: "s-hak", name: "학동", lat: 37.5146, lng: 127.0317, lines: ["7"] },
@@ -423,7 +423,7 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-banpo", name: "반포", lat: 37.5084, lng: 127.0125, lines: ["7"] },
   // gosok already defined
   { id: "s-naebang", name: "내방", lat: 37.4882, lng: 126.9966, lines: ["7"] },
-  { id: "s-total", name: "총신대입구", lat: 37.4867, lng: 126.9877, lines: ["7"] },
+  { id: "s-total", name: "총신대입구", lat: 37.4878, lng: 126.9820, lines: ["7"] },
   { id: "s-namsung", name: "남성", lat: 37.4844, lng: 126.9711, lines: ["7"] },
   { id: "s-sungbuk", name: "숭실대입구", lat: 37.4961, lng: 126.9539, lines: ["7"] },
   { id: "s-sangdo", name: "상도", lat: 37.5028, lng: 126.9478, lines: ["7"] },
@@ -437,7 +437,7 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-cheolsan", name: "철산", lat: 37.4741, lng: 126.8667, lines: ["7"] },
   { id: "s-gwangmyeongsageori", name: "광명사거리", lat: 37.4792, lng: 126.8547, lines: ["7"] },
   { id: "s-chungan", name: "천왕", lat: 37.4867, lng: 126.8386, lines: ["7"] },
-  { id: "s-onsu", name: "온수", lat: 37.4891, lng: 126.8248, lines: ["7", "1"] },
+  { id: "s-onsu", name: "온수", lat: 37.4920, lng: 126.8230, lines: ["7", "1"] },
 
   // ===== Line 7 인천 연장 =====
   { id: "s-kkachiul", name: "까치울", lat: 37.5062, lng: 126.8110, lines: ["7"] },
@@ -806,7 +806,7 @@ export const SEOUL_LINE_ROUTES: Record<string, string[][]> = {
     // 응암순환
     ["s-eungam", "s-yeokchon", "s-bulgwang", "s-dokbawi", "s-yeonsinnae", "s-gusan", "s-eungam"]
   ],
-  "7": [["s-jangam", "s-suraksan", "s-madeul", "s-dobongsan", "s-nowon", "s-junggye", "s-hagye7", "s-gongneung", "s-taereung", "s-meogeol", "s-junghwa", "s-mangu", "s-myeonmok", "s-sagajeong", "s-yongmasan", "s-junggok", "s-gunja", "s-eorinyi", "s-geondae", "s-ttukseomyuwon", "s-cheongdam", "s-gangnamgu", "s-hak", "s-nonhyeon", "s-banpo", "s-gosok", "s-naebang", "s-total", "s-namsung", "s-sungbuk", "s-sangdo", "s-jangseungbae", "s-sinpung", "s-boramae7", "s-sindaebang3", "s-namguro", "s-daelim", "s-gasandigital", "s-cheolsan", "s-gwangmyeongsageori", "s-chungan", "s-onsu", "s-kkachiul", "s-bucheon_stadium", "s-chunui", "s-sinjungdong", "s-bucheonsicheong", "s-sangdong", "s-samsancheyukgwan", "s-gulpocheon", "s-sangok", "s-bupyeong_gu", "s-seongnam_ic"]],
+  "7": [["s-jangam", "s-dobongsan", "s-suraksan", "s-madeul", "s-nowon", "s-junggye", "s-hagye7", "s-gongneung", "s-taereung", "s-meogeol", "s-junghwa", "s-mangu", "s-myeonmok", "s-sagajeong", "s-yongmasan", "s-junggok", "s-gunja", "s-eorinyi", "s-geondae", "s-jayang", "s-cheongdam", "s-gangnamgu", "s-hak", "s-nonhyeon", "s-banpo", "s-gosok", "s-naebang", "s-total", "s-namsung", "s-sungbuk", "s-sangdo", "s-jangseungbae", "s-sindaebang3", "s-boramae7", "s-sinpung", "s-daelim", "s-namguro", "s-gasandigital", "s-cheolsan", "s-gwangmyeongsageori", "s-chungan", "s-onsu", "s-kkachiul", "s-bucheon_stadium", "s-chunui", "s-sinjungdong", "s-bucheonsicheong", "s-sangdong", "s-samsancheyukgwan", "s-gulpocheon", "s-bupyeong_gu", "s-sangok", "s-seongnam_ic"]],
   "8": [["s-byeolnae", "s-dasan", "s-donggureung", "s-jangjahosugongwon", "s-guri", "s-amsayeoksa", "s-amsa", "s-cheonho", "s-gangdong8", "s-mongchon", "s-jamsil", "s-seokchon", "s-songpa", "s-garak", "s-munjeong", "s-jangji", "s-bokjeong", "s-namwirye", "s-sanseong", "s-namhansanseong", "s-dandaeogeori", "s-sinheung", "s-sujin", "s-moran"]],
   "9": [["s-gaehwa9", "s-gimpo", "s-airport9", "s-sinbanghwa", "s-magongnaru", "s-yangcheonhyanggyo", "s-gayang", "s-jeungmi", "s-deungchon", "s-yeomchang", "s-sinmok", "s-dangsan", "s-seonyudo", "s-gukhoe", "s-yeouido", "s-saetgang", "s-nodeul", "s-noryangjin", "s-heukseok", "s-dongjak", "s-guhban", "s-sinbanpo", "s-gosok", "s-sapyeong", "s-sinnonhyeon", "s-seonjeongneung", "s-eonju", "s-samsungjungang", "s-bongeunsa", "s-jonghap", "s-samjeon", "s-seokchon9", "s-seokchon", "s-songpa9", "s-hangangjung", "s-olympic", "s-dunchonoryun", "s-bokhun"]],
   shinbundang: [["s-sinsa_sb", "s-nonhyeon_sb", "s-sinnonhyeon", "s-gangnam", "s-yangjae", "s-yangjae_citizen", "s-cheonggyesan", "s-pangyo", "s-jeongja", "s-migeum", "s-dongcheon", "s-suji", "s-seongbok", "s-sanghyeon", "s-gwanggyo_jungang", "s-gwanggyo"]],

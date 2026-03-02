@@ -60,7 +60,7 @@ export default function SubwayLeafletMap({
 }: LeafletMapProps) {
   const center = CITY_CENTER[city];
   const [zoom, setZoom] = useState(center.zoom);
-  const showLabels = zoom >= 13 || selectedLine !== null;
+  const showLabels = selectedLine !== null;
 
   // Build polyline coordinates for each line
   const polylines = useMemo(() => {

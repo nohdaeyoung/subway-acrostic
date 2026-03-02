@@ -119,8 +119,24 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Line Legend */}
-      <div className="flex items-center gap-2 px-4 py-2 overflow-x-auto border-b border-gray-100 shrink-0 scrollbar-hide">
+      {/* Line Legend - Desktop: wrap buttons, Mobile: select box */}
+      {/* Mobile select */}
+      <div className="md:hidden px-4 py-2 border-b border-gray-100 shrink-0">
+        <select
+          value={selectedLine ?? ""}
+          onChange={(e) => setSelectedLine(e.target.value || null)}
+          className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300"
+        >
+          <option value="">전체 노선</option>
+          {Object.values(lines).map((line) => (
+            <option key={line.id} value={line.id}>
+              {line.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      {/* Desktop buttons */}
+      <div className="hidden md:flex flex-wrap items-center gap-2 px-4 py-2 border-b border-gray-100 shrink-0">
         {Object.values(lines).map((line) => {
           const isActive = selectedLine === null || selectedLine === line.id;
           return (

@@ -405,15 +405,15 @@ export const SEOUL_STATIONS: StationData[] = [
   // gangnam already defined
   // yangjae already defined
   { id: "s-yangjae_citizen", name: "양재시민의숲", lat: 37.4703, lng: 127.0404, lines: ["shinbundang"] },
-  { id: "s-cheonggyesan", name: "청계산입구", lat: 37.4510, lng: 127.0491, lines: ["shinbundang"] },
+  { id: "s-cheonggyesan", name: "청계산입구", lat: 37.4485, lng: 127.0544, lines: ["shinbundang"] },
   { id: "s-pangyo", name: "판교", lat: 37.3952, lng: 127.1117, lines: ["shinbundang"] },
   { id: "s-jeongja", name: "정자", lat: 37.3668, lng: 127.1083, lines: ["shinbundang", "suin"] },
   { id: "s-migeum", name: "미금", lat: 37.3512, lng: 127.1098, lines: ["shinbundang", "suin"] },
-  { id: "s-dongcheon", name: "동천", lat: 37.3379, lng: 127.1084, lines: ["shinbundang"] },
-  { id: "s-suji", name: "수지구청", lat: 37.3239, lng: 127.0980, lines: ["shinbundang"] },
-  { id: "s-seongbok", name: "성복", lat: 37.3118, lng: 127.0810, lines: ["shinbundang"] },
-  { id: "s-sangcheon", name: "상현", lat: 37.3006, lng: 127.0645, lines: ["shinbundang"] },
-  { id: "s-gwanggyo", name: "광교", lat: 37.2856, lng: 127.0452, lines: ["shinbundang"] },
+  { id: "s-dongcheon", name: "동천", lat: 37.3381, lng: 127.1028, lines: ["shinbundang"] },
+  { id: "s-suji", name: "수지구청", lat: 37.3224, lng: 127.0942, lines: ["shinbundang"] },
+  { id: "s-seongbok", name: "성복", lat: 37.3110, lng: 127.0748, lines: ["shinbundang"] },
+  { id: "s-sangcheon", name: "상현", lat: 37.2976, lng: 127.0693, lines: ["shinbundang"] },
+  { id: "s-gwanggyo", name: "광교", lat: 37.3021, lng: 127.0443, lines: ["shinbundang"] },
 
   // ===== 경의중앙선 (주요역) =====
   { id: "s-munsan", name: "문산", lat: 37.8590, lng: 126.7855, lines: ["gyeongui"] },

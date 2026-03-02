@@ -45,7 +45,7 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-dobong", name: "도봉", lat: 37.6793, lng: 127.0437, lines: ["1"] },
   { id: "s-bangnak", name: "방학", lat: 37.6688, lng: 127.0347, lines: ["1"] },
   { id: "s-changdong", name: "창동", lat: 37.6530, lng: 127.0479, lines: ["1", "4"] },
-  { id: "s-nogyangsan", name: "녹양", lat: 37.6430, lng: 127.0393, lines: ["1"] },
+  { id: "s-nokcheon", name: "녹천", lat: 37.6458, lng: 127.0504, lines: ["1"] },
   { id: "s-wolge", name: "월계", lat: 37.6285, lng: 127.0582, lines: ["1"] },
   { id: "s-gwangundae", name: "광운대", lat: 37.6226, lng: 127.0611, lines: ["1"] },
   { id: "s-seokgye", name: "석계", lat: 37.6148, lng: 127.0656, lines: ["1", "6"] },
@@ -69,6 +69,25 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-guro", name: "구로", lat: 37.5032, lng: 126.8826, lines: ["1"] },
   { id: "s-gasandigital", name: "가산디지털단지", lat: 37.4817, lng: 126.8827, lines: ["1", "7"] },
   { id: "s-geumcheon", name: "금천구청", lat: 37.4747, lng: 126.8954, lines: ["1"] },
+
+  // ===== Line 1 연천 방면 (경원선) =====
+  { id: "s-mangwolsa", name: "망월사", lat: 37.6986, lng: 127.0430, lines: ["1"] },
+  // 회룡(s-hoeryong) 이미 존재
+  { id: "s-uijeongbu", name: "의정부", lat: 37.7387, lng: 127.0459, lines: ["1"] },
+  { id: "s-ganeung", name: "가능", lat: 37.7486, lng: 127.0443, lines: ["1"] },
+  { id: "s-nokyang", name: "녹양", lat: 37.7602, lng: 127.0432, lines: ["1"] },
+  { id: "s-yangju", name: "양주", lat: 37.7742, lng: 127.0448, lines: ["1"] },
+  { id: "s-deokgye", name: "덕계", lat: 37.8197, lng: 127.0569, lines: ["1"] },
+  { id: "s-deokjeong", name: "덕정", lat: 37.8432, lng: 127.0620, lines: ["1"] },
+  { id: "s-jihaeng", name: "지행", lat: 37.8917, lng: 127.0572, lines: ["1"] },
+  { id: "s-dongducheon_jungang", name: "동두천중앙", lat: 37.9005, lng: 127.0564, lines: ["1"] },
+  { id: "s-bosan", name: "보산", lat: 37.9140, lng: 127.0573, lines: ["1"] },
+  { id: "s-dongducheon", name: "동두천", lat: 37.9277, lng: 127.0561, lines: ["1"] },
+  { id: "s-soyosan", name: "소요산", lat: 37.9480, lng: 127.0608, lines: ["1"] },
+  { id: "s-choseongri", name: "초성리", lat: 37.9813, lng: 127.0684, lines: ["1"] },
+  { id: "s-hantangang", name: "한탄강", lat: 38.0030, lng: 127.0700, lines: ["1"] },
+  { id: "s-jeongok", name: "전곡", lat: 38.0246, lng: 127.0719, lines: ["1"] },
+  { id: "s-yeoncheon", name: "연천", lat: 38.1007, lng: 127.0737, lines: ["1"] },
 
   // ===== Line 1 인천 방면 (경인선) =====
   { id: "s-guil", name: "구일", lat: 37.4964, lng: 126.8709, lines: ["1"] },
@@ -576,7 +595,7 @@ export const SEOUL_STATIONS: StationData[] = [
 
   // ===== 의정부경전철 =====
   { id: "s-balgok", name: "발곡", lat: 37.6488, lng: 127.0110, lines: ["uijeongbu"] },
-  { id: "s-hoeryong", name: "회룡", lat: 37.6520, lng: 127.0189, lines: ["1", "uijeongbu"] },
+  { id: "s-hoeryong", name: "회룡", lat: 37.7236, lng: 127.0480, lines: ["1", "uijeongbu"] },
   { id: "s-beomgol", name: "범골", lat: 37.6585, lng: 127.0199, lines: ["uijeongbu"] },
   { id: "s-lrt_uijeongbu", name: "경전철의정부", lat: 37.6682, lng: 127.0275, lines: ["uijeongbu"] },
   { id: "s-uijeongbu_city", name: "의정부시청", lat: 37.6760, lng: 127.0338, lines: ["uijeongbu"] },
@@ -656,7 +675,9 @@ export const SEOUL_STATIONS: StationData[] = [
 export const SEOUL_LINE_ROUTES: Record<string, string[][]> = {
   "1": [
     // 본선: 도봉산 → 구로 → 금천구청
-    ["s-dobongsan", "s-dobong", "s-bangnak", "s-changdong", "s-nogyangsan", "s-wolge", "s-gwangundae", "s-seokgye", "s-sinimun", "s-hoegi", "s-cheongnyangni", "s-jegi", "s-sinseol", "s-dongmyo", "s-dongdaemun", "s-jongno5ga", "s-jongno3ga", "s-jonggak", "s-sicheong", "s-seoulstation", "s-namyeong", "s-yongsan", "s-noryangjin", "s-daebang", "s-sindorim", "s-guro", "s-gasandigital", "s-geumcheon"],
+    ["s-dobongsan", "s-dobong", "s-bangnak", "s-changdong", "s-nokcheon", "s-wolge", "s-gwangundae", "s-seokgye", "s-sinimun", "s-hoegi", "s-cheongnyangni", "s-jegi", "s-sinseol", "s-dongmyo", "s-dongdaemun", "s-jongno5ga", "s-jongno3ga", "s-jonggak", "s-sicheong", "s-seoulstation", "s-namyeong", "s-yongsan", "s-noryangjin", "s-daebang", "s-sindorim", "s-guro", "s-gasandigital", "s-geumcheon"],
+    // 연천 방면 (경원선): 도봉산 → 연천
+    ["s-dobongsan", "s-mangwolsa", "s-hoeryong", "s-uijeongbu", "s-ganeung", "s-nokyang", "s-yangju", "s-deokgye", "s-deokjeong", "s-jihaeng", "s-dongducheon_jungang", "s-bosan", "s-dongducheon", "s-soyosan", "s-choseongri", "s-hantangang", "s-jeongok", "s-yeoncheon"],
     // 인천 방면 (경인선): 구로 → 인천
     ["s-guro", "s-guil", "s-gaebong", "s-oryudong", "s-onsu", "s-yeokgok", "s-sosa", "s-bucheon", "s-jungdong", "s-songnae", "s-bugae", "s-bupyeong", "s-baekun", "s-dongam", "s-ganseok", "s-juan", "s-dohwa", "s-jemulpo", "s-dowon", "s-dongincheon", "s-incheon_s"],
     // 천안/신창 방면 (경부선): 금천구청 → 신창

@@ -150,14 +150,16 @@ export default function SubwayLeafletMap({
               click: () => onStationClick(station),
             }}
           >
-            <Tooltip
-              direction="top"
-              offset={[0, -8]}
-              className="subway-tooltip"
-              permanent={showLabels}
-            >
-              <span className="font-medium text-[10px]">{station.name}</span>
-            </Tooltip>
+            {showLabels && (
+              <Tooltip
+                direction="top"
+                offset={[0, -8]}
+                className="subway-tooltip"
+                permanent
+              >
+                <span className="font-medium text-[10px]">{station.name}</span>
+              </Tooltip>
+            )}
           </CircleMarker>
         );
       })}

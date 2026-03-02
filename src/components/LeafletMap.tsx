@@ -14,6 +14,7 @@ interface LeafletMapProps {
   lineRoutes: Record<string, string[][]>;
   stationDataMap: Map<string, StationData>;
   acrosticStationIds: Set<string>;
+  selectedLine: string | null;
   onStationClick: (station: Station) => void;
 }
 
@@ -44,6 +45,7 @@ export default function SubwayLeafletMap({
   lineRoutes,
   stationDataMap,
   acrosticStationIds,
+  selectedLine,
   onStationClick,
 }: LeafletMapProps) {
   const center = CITY_CENTER[city];
@@ -99,13 +101,17 @@ export default function SubwayLeafletMap({
           <Polyline
             key={`${lineId}-${idx}`}
             positions={segment}
-            pathOptions={{ color, weight: 3, opacity: 0.85 }}
+            pathOptions={{
+              color,
+              weight: selectedLine === lineId ? 4 : 3,
+              opacity: selectedLine === null ? 0.85 : selectedLine === lineId ? 1 : 0.1,
+            }}
           />
         ))
       )}
 
       {/* Draw station markers */}
-      {stations.map((station) => {
+      {stations.filter((s) => selectedLine === null || s.lines.includes(selectedLine)).map((station) => {
         const hasAcrostic = acrosticStationIds.has(station.id);
         const transfer = isTransfer(station);
         const lineColor = lines[station.lines[0]]?.color ?? "#888";

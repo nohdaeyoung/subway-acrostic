@@ -26,6 +26,7 @@ export default function Home() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [selectedLine, setSelectedLine] = useState<string | null>(null);
 
   // Build station data from local TS modules
   const { stations, lines, lineRoutes, stationDataMap } = useMemo(() => {
@@ -124,18 +125,28 @@ export default function Home() {
 
       {/* Line Legend */}
       <div className="flex items-center gap-2 px-4 py-2 overflow-x-auto border-b border-gray-100 shrink-0 scrollbar-hide">
-        {Object.values(lines).map((line) => (
-          <span
-            key={line.id}
-            className="flex items-center gap-1 text-[11px] text-gray-600 whitespace-nowrap"
-          >
-            <span
-              className="w-3 h-3 rounded-full inline-block shrink-0"
-              style={{ backgroundColor: line.color }}
-            />
-            {line.name}
-          </span>
-        ))}
+        {Object.values(lines).map((line) => {
+          const isActive = selectedLine === null || selectedLine === line.id;
+          return (
+            <button
+              key={line.id}
+              onClick={() => setSelectedLine(prev => prev === line.id ? null : line.id)}
+              className={`flex items-center gap-1 text-[11px] whitespace-nowrap px-2 py-1 rounded-full transition-all ${
+                selectedLine === line.id
+                  ? "bg-gray-900 text-white font-medium"
+                  : isActive
+                    ? "text-gray-600 hover:bg-gray-100"
+                    : "text-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              <span
+                className="w-3 h-3 rounded-full inline-block shrink-0"
+                style={{ backgroundColor: line.color, opacity: isActive ? 1 : 0.3 }}
+              />
+              {line.name}
+            </button>
+          );
+        })}
       </div>
 
       {/* Map */}
@@ -147,6 +158,7 @@ export default function Home() {
           lineRoutes={lineRoutes}
           stationDataMap={stationDataMap}
           acrosticStationIds={acrosticStationIds}
+          selectedLine={selectedLine}
           onStationClick={handleStationClick}
         />
       </div>

@@ -20,6 +20,7 @@ interface SubwayMapProps {
   lineRoutes: Record<string, string[][]>;
   stationDataMap: Map<string, StationData>;
   acrosticStationIds: Set<string>;
+  selectedLine: string | null;
   onStationClick: (station: Station) => void;
 }
 

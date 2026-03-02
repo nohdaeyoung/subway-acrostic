@@ -2,9 +2,9 @@ export interface Station {
   id: string;
   name: string;
   city: "seoul" | "busan";
-  line: string;
-  x: number;
-  y: number;
+  lines: string[];
+  lat: number;
+  lng: number;
 }
 
 export interface Acrostic {

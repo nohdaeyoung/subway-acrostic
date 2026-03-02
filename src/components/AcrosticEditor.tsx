@@ -107,7 +107,7 @@ export default function AcrosticEditor({
             🚇 {station.name}역{" "}
             <span className="text-sm font-normal text-gray-500">(편집)</span>
           </h2>
-          <p className="text-sm text-gray-500">{station.line}</p>
+          <p className="text-sm text-gray-500">{station.lines.join(", ")}</p>
         </div>
 
         <div className="border-t pt-4 space-y-3">

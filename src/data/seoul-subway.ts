@@ -1,0 +1,457 @@
+export interface LineInfo {
+  id: string;
+  name: string;
+  color: string;
+}
+
+export interface StationData {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  lines: string[];
+}
+
+export const SEOUL_LINES: Record<string, LineInfo> = {
+  "1": { id: "1", name: "1호선", color: "#0052A4" },
+  "2": { id: "2", name: "2호선", color: "#00A84D" },
+  "3": { id: "3", name: "3호선", color: "#EF7C1C" },
+  "4": { id: "4", name: "4호선", color: "#00A4E3" },
+  "5": { id: "5", name: "5호선", color: "#996CAC" },
+  "6": { id: "6", name: "6호선", color: "#CD7C2F" },
+  "7": { id: "7", name: "7호선", color: "#747F00" },
+  "8": { id: "8", name: "8호선", color: "#E6186C" },
+  "9": { id: "9", name: "9호선", color: "#BDB092" },
+  shinbundang: { id: "shinbundang", name: "신분당선", color: "#A71E31" },
+  gyeongui: { id: "gyeongui", name: "경의중앙선", color: "#73C7A6" },
+  suin: { id: "suin", name: "수인분당선", color: "#F5A200" },
+  arex: { id: "arex", name: "공항철도", color: "#0090D2" },
+  ui: { id: "ui", name: "우이신설선", color: "#B0CE18" },
+  sillim: { id: "sillim", name: "신림선", color: "#6789CA" },
+};
+
+// All stations with real lat/lng coordinates
+export const SEOUL_STATIONS: StationData[] = [
+  // ===== Line 1 =====
+  { id: "s-dobongsan", name: "도봉산", lat: 37.6890, lng: 127.0449, lines: ["1", "7"] },
+  { id: "s-dobong", name: "도봉", lat: 37.6793, lng: 127.0437, lines: ["1"] },
+  { id: "s-bangnak", name: "방학", lat: 37.6688, lng: 127.0347, lines: ["1"] },
+  { id: "s-changdong", name: "창동", lat: 37.6530, lng: 127.0479, lines: ["1", "4"] },
+  { id: "s-nogyangsan", name: "녹양", lat: 37.6430, lng: 127.0393, lines: ["1"] },
+  { id: "s-wolge", name: "월계", lat: 37.6285, lng: 127.0582, lines: ["1"] },
+  { id: "s-gwangundae", name: "광운대", lat: 37.6226, lng: 127.0611, lines: ["1"] },
+  { id: "s-seokgye", name: "석계", lat: 37.6148, lng: 127.0656, lines: ["1", "6"] },
+  { id: "s-sinimun", name: "신이문", lat: 37.5966, lng: 127.0566, lines: ["1"] },
+  { id: "s-hoegi", name: "회기", lat: 37.5894, lng: 127.0579, lines: ["1", "gyeongui"] },
+  { id: "s-cheongnyangni", name: "청량리", lat: 37.5804, lng: 127.0469, lines: ["1", "gyeongui", "suin"] },
+  { id: "s-jegi", name: "제기동", lat: 37.5786, lng: 127.0374, lines: ["1"] },
+  { id: "s-sinseol", name: "신설동", lat: 37.5756, lng: 127.0250, lines: ["1", "2", "ui"] },
+  { id: "s-dongmyo", name: "동묘앞", lat: 37.5720, lng: 127.0163, lines: ["1", "6"] },
+  { id: "s-dongdaemun", name: "동대문", lat: 37.5710, lng: 127.0093, lines: ["1", "4"] },
+  { id: "s-jongno5ga", name: "종로5가", lat: 37.5710, lng: 127.0023, lines: ["1"] },
+  { id: "s-jongno3ga", name: "종로3가", lat: 37.5712, lng: 126.9916, lines: ["1", "3", "5"] },
+  { id: "s-jonggak", name: "종각", lat: 37.5700, lng: 126.9831, lines: ["1"] },
+  { id: "s-sicheong", name: "시청", lat: 37.5649, lng: 126.9773, lines: ["1", "2"] },
+  { id: "s-seoulstation", name: "서울역", lat: 37.5547, lng: 126.9706, lines: ["1", "4", "arex", "gyeongui"] },
+  { id: "s-namyeong", name: "남영", lat: 37.5413, lng: 126.9720, lines: ["1"] },
+  { id: "s-yongsan", name: "용산", lat: 37.5299, lng: 126.9644, lines: ["1", "gyeongui"] },
+  { id: "s-noryangjin", name: "노량진", lat: 37.5131, lng: 126.9426, lines: ["1", "9"] },
+  { id: "s-daebang", name: "대방", lat: 37.5130, lng: 126.9267, lines: ["1"] },
+  { id: "s-sindorim", name: "신도림", lat: 37.5088, lng: 126.8912, lines: ["1", "2"] },
+  { id: "s-guro", name: "구로", lat: 37.5032, lng: 126.8826, lines: ["1"] },
+  { id: "s-gasandigital", name: "가산디지털단지", lat: 37.4817, lng: 126.8827, lines: ["1", "7"] },
+  { id: "s-geumcheon", name: "금천구청", lat: 37.4747, lng: 126.8954, lines: ["1"] },
+
+  // ===== Line 2 (순환) =====
+  { id: "s-euljiro1", name: "을지로입구", lat: 37.5660, lng: 126.9822, lines: ["2"] },
+  { id: "s-euljiro3", name: "을지로3가", lat: 37.5663, lng: 126.9922, lines: ["2", "3"] },
+  { id: "s-euljiro4", name: "을지로4가", lat: 37.5665, lng: 127.0010, lines: ["2", "5"] },
+  { id: "s-dongdaemunhist", name: "동대문역사문화공원", lat: 37.5653, lng: 127.0073, lines: ["2", "4", "5"] },
+  { id: "s-sindang", name: "신당", lat: 37.5658, lng: 127.0182, lines: ["2", "6"] },
+  { id: "s-sangwangsimni", name: "상왕십리", lat: 37.5649, lng: 127.0289, lines: ["2"] },
+  { id: "s-wangsimni", name: "왕십리", lat: 37.5614, lng: 127.0370, lines: ["2", "5", "gyeongui", "suin"] },
+  { id: "s-hanyangdae", name: "한양대", lat: 37.5554, lng: 127.0437, lines: ["2"] },
+  { id: "s-ttukseom", name: "뚝섬", lat: 37.5474, lng: 127.0470, lines: ["2"] },
+  { id: "s-seongsu", name: "성수", lat: 37.5445, lng: 127.0557, lines: ["2"] },
+  { id: "s-geondae", name: "건대입구", lat: 37.5404, lng: 127.0694, lines: ["2", "7"] },
+  { id: "s-guui", name: "구의", lat: 37.5353, lng: 127.0862, lines: ["2"] },
+  { id: "s-gangbyeon", name: "강변", lat: 37.5348, lng: 127.0939, lines: ["2"] },
+  { id: "s-jamsilnaru", name: "잠실나루", lat: 37.5218, lng: 127.1015, lines: ["2"] },
+  { id: "s-jamsil", name: "잠실", lat: 37.5133, lng: 127.0998, lines: ["2", "8"] },
+  { id: "s-jamsilnew", name: "잠실새내", lat: 37.5117, lng: 127.0862, lines: ["2"] },
+  { id: "s-jonghap", name: "종합운동장", lat: 37.5106, lng: 127.0738, lines: ["2", "9"] },
+  { id: "s-samseong", name: "삼성", lat: 37.5089, lng: 127.0636, lines: ["2"] },
+  { id: "s-seolleung", name: "선릉", lat: 37.5046, lng: 127.0491, lines: ["2", "suin"] },
+  { id: "s-yeoksam", name: "역삼", lat: 37.5007, lng: 127.0366, lines: ["2"] },
+  { id: "s-gangnam", name: "강남", lat: 37.4979, lng: 127.0276, lines: ["2", "shinbundang"] },
+  { id: "s-gyodae", name: "교대", lat: 37.4934, lng: 127.0143, lines: ["2", "3"] },
+  { id: "s-seocho", name: "서초", lat: 37.4920, lng: 127.0076, lines: ["2"] },
+  { id: "s-bangbae", name: "방배", lat: 37.4816, lng: 126.9977, lines: ["2"] },
+  { id: "s-sadang", name: "사당", lat: 37.4764, lng: 126.9816, lines: ["2", "4"] },
+  { id: "s-nakseongdae", name: "낙성대", lat: 37.4768, lng: 126.9636, lines: ["2"] },
+  { id: "s-seouluniv", name: "서울대입구", lat: 37.4816, lng: 126.9528, lines: ["2"] },
+  { id: "s-bongcheon", name: "봉천", lat: 37.4826, lng: 126.9417, lines: ["2"] },
+  { id: "s-sillim2", name: "신림", lat: 37.4840, lng: 126.9290, lines: ["2", "sillim"] },
+  { id: "s-sindaebang", name: "신대방", lat: 37.4877, lng: 126.9133, lines: ["2"] },
+  { id: "s-daelim", name: "대림", lat: 37.4931, lng: 126.9027, lines: ["2", "7"] },
+  { id: "s-gurodigital", name: "구로디지털단지", lat: 37.5024, lng: 126.8960, lines: ["2"] },
+  { id: "s-mullae", name: "문래", lat: 37.5179, lng: 126.8972, lines: ["2"] },
+  { id: "s-ydpgucheong", name: "영등포구청", lat: 37.5243, lng: 126.8960, lines: ["2", "5"] },
+  { id: "s-dangsan", name: "당산", lat: 37.5346, lng: 126.9029, lines: ["2", "9"] },
+  { id: "s-hapjeong", name: "합정", lat: 37.5495, lng: 126.9136, lines: ["2", "6"] },
+  { id: "s-hongdae", name: "홍대입구", lat: 37.5573, lng: 126.9252, lines: ["2", "arex", "gyeongui"] },
+  { id: "s-sinchon", name: "신촌", lat: 37.5555, lng: 126.9367, lines: ["2"] },
+  { id: "s-ewha", name: "이대", lat: 37.5567, lng: 126.9457, lines: ["2"] },
+  { id: "s-ahyeon", name: "아현", lat: 37.5572, lng: 126.9565, lines: ["2"] },
+  { id: "s-chungjeongno", name: "충정로", lat: 37.5599, lng: 126.9636, lines: ["2", "5"] },
+
+  // ===== Line 3 =====
+  { id: "s-daehwa", name: "대화", lat: 37.6763, lng: 126.7470, lines: ["3"] },
+  { id: "s-juyeop", name: "주엽", lat: 37.6707, lng: 126.7548, lines: ["3"] },
+  { id: "s-jeongbalsan", name: "정발산", lat: 37.6631, lng: 126.7635, lines: ["3"] },
+  { id: "s-baekseokmaeul", name: "마두", lat: 37.6519, lng: 126.7717, lines: ["3"] },
+  { id: "s-daegok", name: "대곡", lat: 37.6347, lng: 126.7983, lines: ["3", "gyeongui"] },
+  { id: "s-hwajeong", name: "화정", lat: 37.6302, lng: 126.8168, lines: ["3"] },
+  { id: "s-wonheung", name: "원흥", lat: 37.6360, lng: 126.8335, lines: ["3"] },
+  { id: "s-gupabal", name: "구파발", lat: 37.6370, lng: 126.9190, lines: ["3"] },
+  { id: "s-yeonsinnae", name: "연신내", lat: 37.6190, lng: 126.9207, lines: ["3", "6"] },
+  { id: "s-bulgwang", name: "불광", lat: 37.6100, lng: 126.9298, lines: ["3", "6"] },
+  { id: "s-nokbeon", name: "녹번", lat: 37.6010, lng: 126.9355, lines: ["3"] },
+  { id: "s-hongje", name: "홍제", lat: 37.5875, lng: 126.9433, lines: ["3"] },
+  { id: "s-muakjae", name: "무악재", lat: 37.5829, lng: 126.9502, lines: ["3"] },
+  { id: "s-dongnimmun", name: "독립문", lat: 37.5727, lng: 126.9605, lines: ["3"] },
+  { id: "s-gyeongbokgung", name: "경복궁", lat: 37.5760, lng: 126.9737, lines: ["3"] },
+  { id: "s-anguk", name: "안국", lat: 37.5760, lng: 126.9856, lines: ["3"] },
+  // jongno3ga already defined above
+  { id: "s-chungmuro", name: "충무로", lat: 37.5611, lng: 126.9940, lines: ["3", "4"] },
+  { id: "s-dongguk", name: "동국대입구", lat: 37.5580, lng: 127.0004, lines: ["3"] },
+  { id: "s-yaksu", name: "약수", lat: 37.5546, lng: 127.0102, lines: ["3", "6"] },
+  { id: "s-geumho", name: "금호", lat: 37.5475, lng: 127.0147, lines: ["3"] },
+  { id: "s-oksu", name: "옥수", lat: 37.5403, lng: 127.0172, lines: ["3", "gyeongui"] },
+  { id: "s-apgujeong", name: "압구정", lat: 37.5271, lng: 127.0284, lines: ["3"] },
+  { id: "s-sinsa", name: "신사", lat: 37.5168, lng: 127.0199, lines: ["3"] },
+  { id: "s-jamwon", name: "잠원", lat: 37.5120, lng: 127.0134, lines: ["3"] },
+  { id: "s-gosok", name: "고속터미널", lat: 37.5048, lng: 127.0050, lines: ["3", "7", "9"] },
+  // gyodae already defined
+  { id: "s-nambu", name: "남부터미널", lat: 37.4856, lng: 127.0154, lines: ["3"] },
+  { id: "s-yangjae", name: "양재", lat: 37.4843, lng: 127.0343, lines: ["3", "shinbundang"] },
+  { id: "s-maebong", name: "매봉", lat: 37.4870, lng: 127.0466, lines: ["3"] },
+  { id: "s-dogok", name: "도곡", lat: 37.4915, lng: 127.0554, lines: ["3", "suin"] },
+  { id: "s-daechee", name: "대치", lat: 37.4944, lng: 127.0636, lines: ["3"] },
+  { id: "s-hagye", name: "학여울", lat: 37.4968, lng: 127.0716, lines: ["3"] },
+  { id: "s-daechi2", name: "대청", lat: 37.4918, lng: 127.0797, lines: ["3"] },
+  { id: "s-ilwon", name: "일원", lat: 37.4865, lng: 127.0862, lines: ["3"] },
+  { id: "s-suseo", name: "수서", lat: 37.4865, lng: 127.1015, lines: ["3", "suin"] },
+  { id: "s-garak", name: "가락시장", lat: 37.4927, lng: 127.1182, lines: ["3", "8"] },
+  { id: "s-police", name: "경찰병원", lat: 37.4959, lng: 127.1256, lines: ["3"] },
+  { id: "s-ogeum", name: "오금", lat: 37.5023, lng: 127.1283, lines: ["3", "5"] },
+
+  // ===== Line 4 =====
+  { id: "s-danggogae", name: "당고개", lat: 37.6731, lng: 127.0120, lines: ["4"] },
+  { id: "s-sanggye", name: "상계", lat: 37.6611, lng: 127.0175, lines: ["4"] },
+  { id: "s-nowon", name: "노원", lat: 37.6564, lng: 127.0616, lines: ["4", "7"] },
+  { id: "s-ssangmun", name: "쌍문", lat: 37.6484, lng: 127.0340, lines: ["4"] },
+  { id: "s-suyu", name: "수유", lat: 37.6383, lng: 127.0254, lines: ["4"] },
+  { id: "s-mia", name: "미아", lat: 37.6265, lng: 127.0278, lines: ["4"] },
+  { id: "s-mia3", name: "미아사거리", lat: 37.6135, lng: 127.0300, lines: ["4"] },
+  { id: "s-gireum", name: "길음", lat: 37.6030, lng: 127.0250, lines: ["4"] },
+  { id: "s-sungsin", name: "성신여대입구", lat: 37.5926, lng: 127.0163, lines: ["4", "ui"] },
+  { id: "s-hansung", name: "한성대입구", lat: 37.5886, lng: 127.0065, lines: ["4"] },
+  { id: "s-hyehwa", name: "혜화", lat: 37.5842, lng: 127.0018, lines: ["4"] },
+  // dongdaemun already defined
+  // dongdaemunhist already defined
+  // chungmuro already defined
+  { id: "s-myeongdong", name: "명동", lat: 37.5607, lng: 126.9862, lines: ["4"] },
+  { id: "s-hoehyeon", name: "회현", lat: 37.5580, lng: 126.9812, lines: ["4"] },
+  // seoulstation already defined
+  { id: "s-sookmyung", name: "숙대입구", lat: 37.5460, lng: 126.9723, lines: ["4"] },
+  { id: "s-samgakji", name: "삼각지", lat: 37.5345, lng: 126.9733, lines: ["4", "6"] },
+  { id: "s-ichon", name: "이촌", lat: 37.5216, lng: 126.9715, lines: ["4", "gyeongui"] },
+  { id: "s-dongjak", name: "동작", lat: 37.5083, lng: 126.9522, lines: ["4", "9"] },
+  // sadang already defined
+  { id: "s-namtaeryeong", name: "남태령", lat: 37.4646, lng: 126.9834, lines: ["4"] },
+  { id: "s-seoleksan", name: "선바위", lat: 37.4523, lng: 126.9888, lines: ["4"] },
+  { id: "s-gwacheon", name: "과천", lat: 37.4418, lng: 126.9879, lines: ["4"] },
+  { id: "s-indeogwon", name: "인덕원", lat: 37.4175, lng: 126.9883, lines: ["4"] },
+  { id: "s-pyeongchon", name: "평촌", lat: 37.3942, lng: 126.9643, lines: ["4"] },
+  { id: "s-beomgye", name: "범계", lat: 37.3901, lng: 126.9522, lines: ["4"] },
+  { id: "s-sanbon", name: "산본", lat: 37.3754, lng: 126.9296, lines: ["4"] },
+
+  // ===== Line 5 =====
+  { id: "s-banghwa", name: "방화", lat: 37.5729, lng: 126.8152, lines: ["5"] },
+  { id: "s-gaehwa", name: "개화산", lat: 37.5725, lng: 126.7978, lines: ["5"] },
+  { id: "s-gimpo", name: "김포공항", lat: 37.5617, lng: 126.8010, lines: ["5", "9", "arex"] },
+  { id: "s-songjeong5", name: "송정", lat: 37.5556, lng: 126.8066, lines: ["5"] },
+  { id: "s-magongnaru", name: "마곡나루", lat: 37.5595, lng: 126.8270, lines: ["5", "arex"] },
+  { id: "s-balsan", name: "발산", lat: 37.5477, lng: 126.8383, lines: ["5"] },
+  { id: "s-ujangsan", name: "우장산", lat: 37.5463, lng: 126.8495, lines: ["5"] },
+  { id: "s-hwagok", name: "화곡", lat: 37.5412, lng: 126.8399, lines: ["5"] },
+  { id: "s-kkachisan", name: "까치산", lat: 37.5329, lng: 126.8466, lines: ["5", "2"] },
+  { id: "s-sinjeong", name: "신정", lat: 37.5248, lng: 126.8540, lines: ["5"] },
+  { id: "s-mokdong", name: "목동", lat: 37.5252, lng: 126.8649, lines: ["5"] },
+  { id: "s-omokgyo", name: "오목교", lat: 37.5243, lng: 126.8754, lines: ["5"] },
+  { id: "s-yangpyeong", name: "양평", lat: 37.5248, lng: 126.8850, lines: ["5"] },
+  // ydpgucheong already defined
+  { id: "s-ydpmarket", name: "영등포시장", lat: 37.5221, lng: 126.9069, lines: ["5"] },
+  { id: "s-sinan", name: "신길", lat: 37.5156, lng: 126.9167, lines: ["5"] },
+  { id: "s-yeouido", name: "여의도", lat: 37.5217, lng: 126.9246, lines: ["5", "9"] },
+  { id: "s-yeouinaru", name: "여의나루", lat: 37.5270, lng: 126.9329, lines: ["5"] },
+  { id: "s-mapo", name: "마포", lat: 37.5393, lng: 126.9462, lines: ["5"] },
+  { id: "s-gongdeok", name: "공덕", lat: 37.5441, lng: 126.9517, lines: ["5", "6", "arex", "gyeongui"] },
+  { id: "s-aehogaejon", name: "애오개", lat: 37.5536, lng: 126.9569, lines: ["5"] },
+  // chungjeongno already defined
+  { id: "s-seodaemun", name: "서대문", lat: 37.5658, lng: 126.9665, lines: ["5"] },
+  { id: "s-gwanghwamun", name: "광화문", lat: 37.5710, lng: 126.9768, lines: ["5"] },
+  // jongno3ga already defined
+  // euljiro4 already defined
+  // dongdaemunhist already defined
+  { id: "s-cheonggu", name: "청구", lat: 37.5601, lng: 127.0141, lines: ["5", "6"] },
+  { id: "s-singeumho", name: "신금호", lat: 37.5549, lng: 127.0196, lines: ["5"] },
+  { id: "s-haengdang", name: "행당", lat: 37.5573, lng: 127.0296, lines: ["5"] },
+  // wangsimni already defined
+  { id: "s-majang", name: "마장", lat: 37.5659, lng: 127.0443, lines: ["5"] },
+  { id: "s-dapsimni", name: "답십리", lat: 37.5667, lng: 127.0523, lines: ["5"] },
+  { id: "s-janghanpyeong", name: "장한평", lat: 37.5613, lng: 127.0644, lines: ["5"] },
+  { id: "s-gunja", name: "군자", lat: 37.5574, lng: 127.0798, lines: ["5", "7"] },
+  { id: "s-achasan", name: "아차산", lat: 37.5511, lng: 127.0870, lines: ["5"] },
+  { id: "s-gwangnaru", name: "광나루", lat: 37.5450, lng: 127.1036, lines: ["5"] },
+  { id: "s-cheonho", name: "천호", lat: 37.5388, lng: 127.1237, lines: ["5", "8"] },
+  { id: "s-gangdong", name: "강동", lat: 37.5352, lng: 127.1317, lines: ["5"] },
+  { id: "s-gildonggil", name: "길동", lat: 37.5349, lng: 127.1435, lines: ["5"] },
+  { id: "s-gubi", name: "굽은다리", lat: 37.5330, lng: 127.1522, lines: ["5"] },
+  { id: "s-myeongil", name: "명일", lat: 37.5291, lng: 127.1510, lines: ["5"] },
+  { id: "s-godeok", name: "고덕", lat: 37.5253, lng: 127.1545, lines: ["5"] },
+  { id: "s-sangil", name: "상일동", lat: 37.5563, lng: 127.1665, lines: ["5"] },
+  { id: "s-macheon", name: "마천", lat: 37.4971, lng: 127.1510, lines: ["5"] },
+
+  // ===== Line 6 =====
+  { id: "s-eungam", name: "응암", lat: 37.5991, lng: 126.9139, lines: ["6"] },
+  { id: "s-saemaeul", name: "새절", lat: 37.5908, lng: 126.9132, lines: ["6"] },
+  { id: "s-jeungsan", name: "증산", lat: 37.5837, lng: 126.9098, lines: ["6"] },
+  { id: "s-dmc", name: "디지털미디어시티", lat: 37.5767, lng: 126.8997, lines: ["6", "arex", "gyeongui"] },
+  { id: "s-worldcup", name: "월드컵경기장", lat: 37.5683, lng: 126.8975, lines: ["6"] },
+  { id: "s-mangwon", name: "망원", lat: 37.5560, lng: 126.9105, lines: ["6"] },
+  // hapjeong already defined
+  { id: "s-sangsu", name: "상수", lat: 37.5473, lng: 126.9229, lines: ["6"] },
+  { id: "s-gwangheungcang", name: "광흥창", lat: 37.5475, lng: 126.9324, lines: ["6"] },
+  { id: "s-daheung", name: "대흥", lat: 37.5478, lng: 126.9429, lines: ["6"] },
+  // gongdeok already defined
+  { id: "s-hyochang", name: "효창공원앞", lat: 37.5397, lng: 126.9619, lines: ["6"] },
+  // samgakji already defined
+  { id: "s-noksapyeong", name: "녹사평", lat: 37.5340, lng: 126.9868, lines: ["6"] },
+  { id: "s-itaewon", name: "이태원", lat: 37.5347, lng: 126.9946, lines: ["6"] },
+  { id: "s-hangangjin", name: "한강진", lat: 37.5398, lng: 127.0000, lines: ["6"] },
+  { id: "s-beotigo", name: "버티고개", lat: 37.5478, lng: 127.0067, lines: ["6"] },
+  // yaksu already defined
+  // cheonggu already defined
+  // sindang already defined
+  // dongmyo already defined
+  { id: "s-changsin", name: "창신", lat: 37.5792, lng: 127.0138, lines: ["6"] },
+  { id: "s-boramae", name: "보문", lat: 37.5854, lng: 127.0191, lines: ["6"] },
+  { id: "s-annam", name: "안암", lat: 37.5862, lng: 127.0290, lines: ["6"] },
+  { id: "s-korea_univ", name: "고려대", lat: 37.5897, lng: 127.0355, lines: ["6"] },
+  { id: "s-wolkok", name: "월곡", lat: 37.5999, lng: 127.0406, lines: ["6"] },
+  { id: "s-sangwolkok", name: "상월곡", lat: 37.6056, lng: 127.0476, lines: ["6"] },
+  { id: "s-dolgotzge", name: "돌곶이", lat: 37.6107, lng: 127.0527, lines: ["6"] },
+  // seokgye already defined
+  { id: "s-taereung", name: "태릉입구", lat: 37.6181, lng: 127.0748, lines: ["6", "7"] },
+  { id: "s-hwarangdae", name: "화랑대", lat: 37.6204, lng: 127.0844, lines: ["6"] },
+  { id: "s-bonghwasan", name: "봉화산", lat: 37.6169, lng: 127.0914, lines: ["6"] },
+  { id: "s-sinnae", name: "신내", lat: 37.6133, lng: 127.1025, lines: ["6"] },
+
+  // ===== Line 7 =====
+  { id: "s-jangam", name: "장암", lat: 37.6963, lng: 127.0534, lines: ["7"] },
+  // dobongsan already defined
+  // nowon already defined
+  { id: "s-junggye", name: "중계", lat: 37.6446, lng: 127.0650, lines: ["7"] },
+  { id: "s-hagye7", name: "하계", lat: 37.6350, lng: 127.0660, lines: ["7"] },
+  { id: "s-gongneung", name: "공릉", lat: 37.6254, lng: 127.0730, lines: ["7"] },
+  // taereung already defined
+  { id: "s-meogeol", name: "먹골", lat: 37.6117, lng: 127.0821, lines: ["7"] },
+  { id: "s-junghwa", name: "중화", lat: 37.6027, lng: 127.0826, lines: ["7"] },
+  { id: "s-mangu", name: "상봉", lat: 37.5963, lng: 127.0857, lines: ["7", "gyeongui"] },
+  { id: "s-myeonmok", name: "면목", lat: 37.5855, lng: 127.0850, lines: ["7"] },
+  { id: "s-sagajeong", name: "사가정", lat: 37.5766, lng: 127.0851, lines: ["7"] },
+  { id: "s-yongmasan", name: "용마산", lat: 37.5699, lng: 127.0868, lines: ["7"] },
+  { id: "s-junggok", name: "중곡", lat: 37.5647, lng: 127.0838, lines: ["7"] },
+  // gunja already defined
+  { id: "s-eorinyi", name: "어린이대공원", lat: 37.5484, lng: 127.0747, lines: ["7"] },
+  // geondae already defined
+  { id: "s-ttukseomyuwon", name: "뚝섬유원지", lat: 37.5313, lng: 127.0657, lines: ["7"] },
+  { id: "s-cheongdam", name: "청담", lat: 37.5193, lng: 127.0526, lines: ["7"] },
+  { id: "s-gangnamgu", name: "강남구청", lat: 37.5170, lng: 127.0413, lines: ["7", "suin"] },
+  { id: "s-hak", name: "학동", lat: 37.5146, lng: 127.0317, lines: ["7"] },
+  { id: "s-nonhyeon", name: "논현", lat: 37.5107, lng: 127.0235, lines: ["7"] },
+  { id: "s-banpo", name: "반포", lat: 37.5084, lng: 127.0125, lines: ["7"] },
+  // gosok already defined
+  { id: "s-naebang", name: "내방", lat: 37.4882, lng: 126.9966, lines: ["7"] },
+  { id: "s-total", name: "총신대입구", lat: 37.4867, lng: 126.9877, lines: ["7"] },
+  { id: "s-namsung", name: "남성", lat: 37.4862, lng: 126.9781, lines: ["7"] },
+  { id: "s-sungbuk", name: "숭실대입구", lat: 37.4860, lng: 126.9590, lines: ["7"] },
+  { id: "s-sangdo", name: "상도", lat: 37.4944, lng: 126.9485, lines: ["7"] },
+  { id: "s-jangseungbae", name: "장승배기", lat: 37.5025, lng: 126.9395, lines: ["7"] },
+  { id: "s-sinpung", name: "신풍", lat: 37.5081, lng: 126.9265, lines: ["7"] },
+  { id: "s-boramae7", name: "보라매", lat: 37.4990, lng: 126.9218, lines: ["7"] },
+  { id: "s-sindaebang3", name: "신대방삼거리", lat: 37.4962, lng: 126.9097, lines: ["7"] },
+  { id: "s-namguro", name: "남구로", lat: 37.4876, lng: 126.8875, lines: ["7"] },
+  // daelim already defined
+  // gasandigital already defined
+  { id: "s-cheolsan", name: "철산", lat: 37.4741, lng: 126.8667, lines: ["7"] },
+  { id: "s-gwangmyeong", name: "광명사거리", lat: 37.4687, lng: 126.8555, lines: ["7"] },
+  { id: "s-chungan", name: "천왕", lat: 37.4736, lng: 126.8403, lines: ["7"] },
+  { id: "s-onsu", name: "온수", lat: 37.4891, lng: 126.8248, lines: ["7", "1"] },
+
+  // ===== Line 8 =====
+  { id: "s-amsa", name: "암사", lat: 37.5509, lng: 127.1271, lines: ["8"] },
+  // cheonho already defined
+  { id: "s-gangdong8", name: "강동구청", lat: 37.5303, lng: 127.1264, lines: ["8"] },
+  { id: "s-mongchon", name: "몽촌토성", lat: 37.5165, lng: 127.1134, lines: ["8"] },
+  // jamsil already defined
+  { id: "s-jamsil8", name: "잠실(8)", lat: 37.5133, lng: 127.0999, lines: ["8"] },
+  { id: "s-seokchon", name: "석촌", lat: 37.5056, lng: 127.1050, lines: ["8"] },
+  { id: "s-songpa", name: "송파", lat: 37.4998, lng: 127.1095, lines: ["8"] },
+  // garak already defined
+  { id: "s-moran", name: "모란", lat: 37.4321, lng: 127.1293, lines: ["8", "suin"] },
+
+  // ===== Line 9 =====
+  { id: "s-gaehwa9", name: "개화", lat: 37.5763, lng: 126.7913, lines: ["9"] },
+  // gimpo already defined
+  { id: "s-airport9", name: "공항시장", lat: 37.5601, lng: 126.8117, lines: ["9"] },
+  { id: "s-sinmok", name: "신목동", lat: 37.5396, lng: 126.8566, lines: ["9"] },
+  { id: "s-yeomchang", name: "염창", lat: 37.5413, lng: 126.8760, lines: ["9"] },
+  // dangsan already defined
+  { id: "s-seonyudo", name: "선유도", lat: 37.5344, lng: 126.8938, lines: ["9"] },
+  { id: "s-noryangjin9", name: "노량진", lat: 37.5131, lng: 126.9427, lines: ["9"] },
+  // yeouido already defined
+  { id: "s-saetgang", name: "샛강", lat: 37.5176, lng: 126.9310, lines: ["9"] },
+  // dongjak already defined
+  { id: "s-guhban", name: "구반포", lat: 37.5091, lng: 126.9684, lines: ["9"] },
+  { id: "s-sinbanpo", name: "신반포", lat: 37.5071, lng: 126.9789, lines: ["9"] },
+  // gosok already defined
+  { id: "s-sapyeong", name: "사평", lat: 37.5073, lng: 127.0134, lines: ["9"] },
+  { id: "s-bongeunsa", name: "봉은사", lat: 37.5080, lng: 127.0371, lines: ["9"] },
+  // jonghap already defined
+  { id: "s-samjeon", name: "삼전", lat: 37.5040, lng: 127.0872, lines: ["9"] },
+  { id: "s-seokchon9", name: "석촌고분", lat: 37.5010, lng: 127.1010, lines: ["9"] },
+  { id: "s-songpa9", name: "송파나루", lat: 37.4991, lng: 127.1130, lines: ["9"] },
+  { id: "s-hangangjung", name: "한성백제", lat: 37.4915, lng: 127.1233, lines: ["9"] },
+  { id: "s-olympic", name: "올림픽공원", lat: 37.5160, lng: 127.1304, lines: ["9"] },
+  { id: "s-bokhun", name: "중앙보훈병원", lat: 37.4877, lng: 127.1357, lines: ["9"] },
+
+  // ===== 신분당선 =====
+  { id: "s-sinsa_sb", name: "신사", lat: 37.5168, lng: 127.0199, lines: ["shinbundang"] },
+  // gangnam already defined
+  // yangjae already defined
+  { id: "s-yangjae_citizen", name: "양재시민의숲", lat: 37.4703, lng: 127.0404, lines: ["shinbundang"] },
+  { id: "s-cheonggyesan", name: "청계산입구", lat: 37.4510, lng: 127.0491, lines: ["shinbundang"] },
+  { id: "s-pangyo", name: "판교", lat: 37.3952, lng: 127.1117, lines: ["shinbundang"] },
+  { id: "s-jeongja", name: "정자", lat: 37.3668, lng: 127.1083, lines: ["shinbundang", "suin"] },
+  { id: "s-migeum", name: "미금", lat: 37.3512, lng: 127.1098, lines: ["shinbundang", "suin"] },
+  { id: "s-dongcheon", name: "동천", lat: 37.3379, lng: 127.1084, lines: ["shinbundang"] },
+  { id: "s-suji", name: "수지구청", lat: 37.3239, lng: 127.0980, lines: ["shinbundang"] },
+  { id: "s-seongbok", name: "성복", lat: 37.3118, lng: 127.0810, lines: ["shinbundang"] },
+  { id: "s-sangcheon", name: "상현", lat: 37.3006, lng: 127.0645, lines: ["shinbundang"] },
+  { id: "s-gwanggyo", name: "광교", lat: 37.2856, lng: 127.0452, lines: ["shinbundang"] },
+
+  // ===== 경의중앙선 (주요역) =====
+  { id: "s-munsan", name: "문산", lat: 37.8590, lng: 126.7855, lines: ["gyeongui"] },
+  { id: "s-geumchon", name: "금촌", lat: 37.7695, lng: 126.7680, lines: ["gyeongui"] },
+  { id: "s-ilsan", name: "일산", lat: 37.6655, lng: 126.7734, lines: ["gyeongui"] },
+  // daegok already defined
+  { id: "s-neunggok", name: "능곡", lat: 37.6263, lng: 126.7768, lines: ["gyeongui"] },
+  { id: "s-haengsin", name: "행신", lat: 37.6125, lng: 126.8164, lines: ["gyeongui"] },
+  { id: "s-ganmae", name: "강매", lat: 37.5966, lng: 126.8418, lines: ["gyeongui"] },
+  // dmc already defined
+  { id: "s-gasan_g", name: "가좌", lat: 37.5702, lng: 126.9129, lines: ["gyeongui"] },
+  // hongdae already defined
+  // gongdeok already defined
+  // seoulstation already defined
+  { id: "s-oksu_g", name: "옥수", lat: 37.5403, lng: 127.0172, lines: ["gyeongui"] },
+  // wangsimni already defined
+  // mangu (sangbong) already defined
+  { id: "s-mangu_g", name: "망우", lat: 37.5987, lng: 127.0920, lines: ["gyeongui"] },
+  { id: "s-yangwon", name: "양원", lat: 37.6072, lng: 127.1045, lines: ["gyeongui"] },
+  { id: "s-guri", name: "구리", lat: 37.6043, lng: 127.1305, lines: ["gyeongui"] },
+  { id: "s-dunnae", name: "도농", lat: 37.6072, lng: 127.1407, lines: ["gyeongui"] },
+  { id: "s-yangjeong_g", name: "양정", lat: 37.5934, lng: 127.1547, lines: ["gyeongui"] },
+  { id: "s-deokso", name: "덕소", lat: 37.5850, lng: 127.1720, lines: ["gyeongui"] },
+  { id: "s-yongmun_g", name: "용문", lat: 37.5236, lng: 127.6099, lines: ["gyeongui"] },
+
+  // ===== 수인분당선 (주요역) =====
+  { id: "s-cheongnyangni_s", name: "청량리", lat: 37.5804, lng: 127.0469, lines: ["suin"] },
+  // wangsimni already defined
+  // seolleung already defined
+  // gangnamgu already defined
+  // suseo already defined
+  // dogok already defined
+  { id: "s-bokjeong", name: "복정", lat: 37.4712, lng: 127.1262, lines: ["suin", "8"] },
+  { id: "s-imae", name: "이매", lat: 37.4019, lng: 127.1297, lines: ["suin"] },
+  // jeongja already defined
+  { id: "s-sunae", name: "서현", lat: 37.3838, lng: 127.1234, lines: ["suin"] },
+  { id: "s-ori", name: "오리", lat: 37.3395, lng: 127.1080, lines: ["suin"] },
+  { id: "s-jukjeon", name: "죽전", lat: 37.3246, lng: 127.1079, lines: ["suin"] },
+  { id: "s-bojeong", name: "보정", lat: 37.3128, lng: 127.1085, lines: ["suin"] },
+  { id: "s-giheung", name: "기흥", lat: 37.2748, lng: 127.1155, lines: ["suin"] },
+  { id: "s-mangpo", name: "망포", lat: 37.2555, lng: 127.0710, lines: ["suin"] },
+  { id: "s-suwon", name: "수원", lat: 37.2663, lng: 127.0018, lines: ["suin", "1"] },
+  { id: "s-oido", name: "오이도", lat: 37.3484, lng: 126.6888, lines: ["suin", "4"] },
+  { id: "s-incheon_s", name: "인천", lat: 37.4560, lng: 126.7072, lines: ["suin", "1"] },
+
+  // ===== 공항철도 =====
+  { id: "s-incheonairport1", name: "인천공항1터미널", lat: 37.4614, lng: 126.4407, lines: ["arex"] },
+  { id: "s-incheonairport2", name: "인천공항2터미널", lat: 37.4686, lng: 126.4153, lines: ["arex"] },
+  { id: "s-geomam", name: "검암", lat: 37.5619, lng: 126.6781, lines: ["arex"] },
+  { id: "s-gyeyang", name: "계양", lat: 37.5687, lng: 126.7254, lines: ["arex"] },
+  // gimpo already defined
+  // dmc already defined
+  // hongdae already defined
+  // gongdeok already defined
+  // seoulstation already defined
+
+  // ===== 우이신설선 =====
+  { id: "s-bukhansan", name: "북한산우이", lat: 37.6634, lng: 127.0130, lines: ["ui"] },
+  { id: "s-solgol", name: "솔밭공원", lat: 37.6565, lng: 127.0140, lines: ["ui"] },
+  { id: "s-samyang", name: "삼양사거리", lat: 37.6451, lng: 127.0149, lines: ["ui"] },
+  { id: "s-samyanng", name: "삼양", lat: 37.6389, lng: 127.0139, lines: ["ui"] },
+  { id: "s-hwagye_ui", name: "화계", lat: 37.6320, lng: 127.0150, lines: ["ui"] },
+  { id: "s-gaori", name: "가오리", lat: 37.6250, lng: 127.0149, lines: ["ui"] },
+  { id: "s-4.19", name: "4·19민주묘지", lat: 37.6200, lng: 127.0170, lines: ["ui"] },
+  { id: "s-ssongshin", name: "성신여대입구", lat: 37.5926, lng: 127.0163, lines: ["ui"] },
+  // sinseol already defined
+
+  // ===== 신림선 =====
+  { id: "s-gwanak", name: "관악산", lat: 37.4493, lng: 126.9289, lines: ["sillim"] },
+  { id: "s-seouluniv_s", name: "서울대벤처타운", lat: 37.4567, lng: 126.9308, lines: ["sillim"] },
+  { id: "s-sillim_s", name: "서원", lat: 37.4634, lng: 126.9297, lines: ["sillim"] },
+  { id: "s-nangok", name: "난곡", lat: 37.4700, lng: 126.9295, lines: ["sillim"] },
+  { id: "s-nanghyang", name: "난향", lat: 37.4767, lng: 126.9302, lines: ["sillim"] },
+  { id: "s-sillimsta", name: "신림", lat: 37.4840, lng: 126.9290, lines: ["sillim"] },
+  { id: "s-dangok", name: "당곡", lat: 37.4870, lng: 126.9305, lines: ["sillim"] },
+  // sillim2 already defined (line 2 신림)
+  { id: "s-boramae_s", name: "보라매", lat: 37.4955, lng: 126.9196, lines: ["sillim"] },
+  { id: "s-boramae_park", name: "보라매공원", lat: 37.4979, lng: 126.9138, lines: ["sillim"] },
+  { id: "s-boramae_hosp", name: "보라매병원", lat: 37.5021, lng: 126.9082, lines: ["sillim"] },
+  { id: "s-daebang_s", name: "대방", lat: 37.5130, lng: 126.9267, lines: ["sillim"] },
+  { id: "s-seoyul", name: "서울지방병무청", lat: 37.5084, lng: 126.9042, lines: ["sillim"] },
+  { id: "s-sindaebang_s", name: "샛강", lat: 37.5103, lng: 126.9118, lines: ["sillim"] },
+];
+
+// Ordered station IDs per line (for drawing polylines)
+export const SEOUL_LINE_ROUTES: Record<string, string[][]> = {
+  "1": [["s-dobongsan", "s-dobong", "s-bangnak", "s-changdong", "s-nogyangsan", "s-wolge", "s-gwangundae", "s-seokgye", "s-sinimun", "s-hoegi", "s-cheongnyangni", "s-jegi", "s-sinseol", "s-dongmyo", "s-dongdaemun", "s-jongno5ga", "s-jongno3ga", "s-jonggak", "s-sicheong", "s-seoulstation", "s-namyeong", "s-yongsan", "s-noryangjin", "s-daebang", "s-sindorim", "s-guro", "s-gasandigital", "s-geumcheon"]],
+  "2": [["s-sicheong", "s-euljiro1", "s-euljiro3", "s-euljiro4", "s-dongdaemunhist", "s-sindang", "s-sangwangsimni", "s-wangsimni", "s-hanyangdae", "s-ttukseom", "s-seongsu", "s-geondae", "s-guui", "s-gangbyeon", "s-jamsilnaru", "s-jamsil", "s-jamsilnew", "s-jonghap", "s-samseong", "s-seolleung", "s-yeoksam", "s-gangnam", "s-gyodae", "s-seocho", "s-bangbae", "s-sadang", "s-nakseongdae", "s-seouluniv", "s-bongcheon", "s-sillim2", "s-sindaebang", "s-daelim", "s-gurodigital", "s-sindorim", "s-mullae", "s-ydpgucheong", "s-dangsan", "s-hapjeong", "s-hongdae", "s-sinchon", "s-ewha", "s-ahyeon", "s-chungjeongno", "s-sicheong"]],
+  "3": [["s-daehwa", "s-juyeop", "s-jeongbalsan", "s-baekseokmaeul", "s-daegok", "s-hwajeong", "s-wonheung", "s-gupabal", "s-yeonsinnae", "s-bulgwang", "s-nokbeon", "s-hongje", "s-muakjae", "s-dongnimmun", "s-gyeongbokgung", "s-anguk", "s-jongno3ga", "s-euljiro3", "s-chungmuro", "s-dongguk", "s-yaksu", "s-geumho", "s-oksu", "s-apgujeong", "s-sinsa", "s-jamwon", "s-gosok", "s-gyodae", "s-nambu", "s-yangjae", "s-maebong", "s-dogok", "s-daechee", "s-hagye", "s-daechi2", "s-ilwon", "s-suseo", "s-garak", "s-police", "s-ogeum"]],
+  "4": [["s-danggogae", "s-sanggye", "s-nowon", "s-ssangmun", "s-suyu", "s-mia", "s-mia3", "s-gireum", "s-sungsin", "s-hansung", "s-hyehwa", "s-dongdaemun", "s-dongdaemunhist", "s-chungmuro", "s-myeongdong", "s-hoehyeon", "s-seoulstation", "s-sookmyung", "s-samgakji", "s-ichon", "s-dongjak", "s-sadang", "s-namtaeryeong", "s-seoleksan", "s-gwacheon", "s-indeogwon", "s-pyeongchon", "s-beomgye", "s-sanbon"]],
+  "5": [["s-banghwa", "s-gaehwa", "s-gimpo", "s-songjeong5", "s-magongnaru", "s-balsan", "s-ujangsan", "s-hwagok", "s-kkachisan", "s-sinjeong", "s-mokdong", "s-omokgyo", "s-yangpyeong", "s-ydpgucheong", "s-ydpmarket", "s-sinan", "s-yeouido", "s-yeouinaru", "s-mapo", "s-gongdeok", "s-aehogaejon", "s-chungjeongno", "s-seodaemun", "s-gwanghwamun", "s-jongno3ga", "s-euljiro4", "s-dongdaemunhist", "s-cheonggu", "s-singeumho", "s-haengdang", "s-wangsimni", "s-majang", "s-dapsimni", "s-janghanpyeong", "s-gunja", "s-achasan", "s-gwangnaru", "s-cheonho", "s-gangdong", "s-gildonggil", "s-gubi", "s-myeongil", "s-godeok", "s-sangil"],
+    ["s-gangdong", "s-macheon"]],
+  "6": [["s-eungam", "s-saemaeul", "s-jeungsan", "s-dmc", "s-worldcup", "s-mangwon", "s-hapjeong", "s-sangsu", "s-gwangheungcang", "s-daheung", "s-gongdeok", "s-hyochang", "s-samgakji", "s-noksapyeong", "s-itaewon", "s-hangangjin", "s-beotigo", "s-yaksu", "s-cheonggu", "s-sindang", "s-dongmyo", "s-changsin", "s-boramae", "s-annam", "s-korea_univ", "s-wolkok", "s-sangwolkok", "s-dolgotzge", "s-seokgye", "s-taereung", "s-hwarangdae", "s-bonghwasan", "s-sinnae"]],
+  "7": [["s-jangam", "s-dobongsan", "s-nowon", "s-junggye", "s-hagye7", "s-gongneung", "s-taereung", "s-meogeol", "s-junghwa", "s-mangu", "s-myeonmok", "s-sagajeong", "s-yongmasan", "s-junggok", "s-gunja", "s-eorinyi", "s-geondae", "s-ttukseomyuwon", "s-cheongdam", "s-gangnamgu", "s-hak", "s-nonhyeon", "s-banpo", "s-gosok", "s-naebang", "s-total", "s-namsung", "s-sungbuk", "s-sangdo", "s-jangseungbae", "s-sinpung", "s-boramae7", "s-sindaebang3", "s-namguro", "s-daelim", "s-gasandigital", "s-cheolsan", "s-gwangmyeong", "s-chungan", "s-onsu"]],
+  "8": [["s-amsa", "s-cheonho", "s-gangdong8", "s-mongchon", "s-jamsil", "s-seokchon", "s-songpa", "s-garak", "s-moran"]],
+  "9": [["s-gaehwa9", "s-gimpo", "s-airport9", "s-sinmok", "s-yeomchang", "s-dangsan", "s-seonyudo", "s-noryangjin", "s-noryangjin9", "s-dongjak", "s-guhban", "s-sinbanpo", "s-gosok", "s-sapyeong", "s-bongeunsa", "s-jonghap", "s-samjeon", "s-seokchon9", "s-songpa9", "s-hangangjung", "s-olympic", "s-bokhun"]],
+  shinbundang: [["s-sinsa_sb", "s-gangnam", "s-yangjae", "s-yangjae_citizen", "s-cheonggyesan", "s-pangyo", "s-jeongja", "s-migeum", "s-dongcheon", "s-suji", "s-seongbok", "s-sangcheon", "s-gwanggyo"]],
+  gyeongui: [["s-munsan", "s-geumchon", "s-ilsan", "s-daegok", "s-neunggok", "s-haengsin", "s-ganmae", "s-dmc", "s-gasan_g", "s-hongdae", "s-gongdeok", "s-seoulstation", "s-ichon", "s-oksu", "s-wangsimni", "s-mangu", "s-mangu_g", "s-yangwon", "s-guri", "s-dunnae", "s-yangjeong_g", "s-deokso"]],
+  suin: [["s-cheongnyangni", "s-wangsimni", "s-seolleung", "s-gangnamgu", "s-dogok", "s-suseo", "s-bokjeong", "s-moran", "s-imae", "s-jeongja", "s-sunae", "s-ori", "s-jukjeon", "s-bojeong", "s-giheung", "s-mangpo", "s-suwon"]],
+  arex: [["s-incheonairport2", "s-incheonairport1", "s-geomam", "s-gyeyang", "s-gimpo", "s-dmc", "s-hongdae", "s-gongdeok", "s-seoulstation"]],
+  ui: [["s-bukhansan", "s-solgol", "s-samyang", "s-samyanng", "s-hwagye_ui", "s-gaori", "s-4.19", "s-sungsin", "s-sinseol"]],
+  sillim: [["s-gwanak", "s-seouluniv_s", "s-sillim_s", "s-nangok", "s-nanghyang", "s-sillimsta", "s-dangok", "s-sillim2", "s-boramae_s", "s-boramae_park", "s-boramae_hosp", "s-daebang_s"]],
+};

@@ -46,7 +46,7 @@ export default function AcrosticModal({
           <h2 className="text-xl font-bold text-gray-900">
             🚇 {station.name}역
           </h2>
-          <p className="text-sm text-gray-500">{station.line}</p>
+          <p className="text-sm text-gray-500">{station.lines.join(", ")}</p>
         </div>
 
         <div className="border-t pt-4">

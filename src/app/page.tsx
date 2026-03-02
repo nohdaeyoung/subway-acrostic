@@ -6,7 +6,6 @@ import { getAcrosticByStation, getAllAcrostics } from "@/lib/bkend";
 import { isLoggedIn, clearToken } from "@/lib/auth";
 import SubwayMap from "@/components/SubwayMap";
 import CityTabs from "@/components/CityTabs";
-import AcrosticModal from "@/components/AcrosticModal";
 import AcrosticEditor from "@/components/AcrosticEditor";
 import LoginForm from "@/components/LoginForm";
 import { SEOUL_LINES, SEOUL_STATIONS, SEOUL_LINE_ROUTES } from "@/data/seoul-subway";
@@ -25,7 +24,6 @@ export default function Home() {
   const [loadingAcrostic, setLoadingAcrostic] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [editing, setEditing] = useState(false);
   const [selectedLine, setSelectedLine] = useState<string | null>(null);
 
   // Build station data from local TS modules
@@ -58,7 +56,6 @@ export default function Home() {
 
   async function handleStationClick(station: Station) {
     setSelectedStation(station);
-    setEditing(false);
     setLoadingAcrostic(true);
     const acrostic = await getAcrosticByStation(station.id);
     setCurrentAcrostic(acrostic);
@@ -68,7 +65,6 @@ export default function Home() {
   function handleCloseModal() {
     setSelectedStation(null);
     setCurrentAcrostic(null);
-    setEditing(false);
   }
 
   function handleLoginSuccess() {
@@ -168,33 +164,13 @@ export default function Home() {
         <LoginForm onSuccess={handleLoginSuccess} onCancel={() => setShowLogin(false)} />
       )}
 
-      {selectedStation && !editing && (
-        <AcrosticModal
-          station={selectedStation}
-          acrostic={currentAcrostic}
-          loading={loadingAcrostic}
-          onClose={handleCloseModal}
-        />
-      )}
-
-      {selectedStation && editing && (
+      {selectedStation && (
         <AcrosticEditor
           station={selectedStation}
-          acrostic={currentAcrostic}
+          acrostic={loadingAcrostic ? null : currentAcrostic}
           onClose={handleCloseModal}
           onSaved={handleSaved}
         />
-      )}
-
-      {selectedStation && !editing && loggedIn && !loadingAcrostic && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60]">
-          <button
-            onClick={() => setEditing(true)}
-            className="px-6 py-2 bg-emerald-600 text-white text-sm rounded-full shadow-lg hover:bg-emerald-700 transition-colors"
-          >
-            {currentAcrostic ? "수정하기" : "N행시 작성하기"}
-          </button>
-        </div>
       )}
     </main>
   );

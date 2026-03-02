@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import { MapContainer, TileLayer, Polyline, CircleMarker, Tooltip, useMap } from "react-leaflet";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { MapContainer, TileLayer, Polyline, CircleMarker, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import type { Map as LeafletMap } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Station, City } from "@/types/subway";
@@ -38,6 +38,16 @@ function CityChanger({ city }: { city: City }) {
   return null;
 }
 
+function ZoomTracker({ onZoomChange }: { onZoomChange: (zoom: number) => void }) {
+  const map = useMapEvents({
+    zoomend: () => onZoomChange(map.getZoom()),
+  });
+  useEffect(() => {
+    onZoomChange(map.getZoom());
+  }, [map, onZoomChange]);
+  return null;
+}
+
 export default function SubwayLeafletMap({
   city,
   stations,
@@ -49,6 +59,8 @@ export default function SubwayLeafletMap({
   onStationClick,
 }: LeafletMapProps) {
   const center = CITY_CENTER[city];
+  const [zoom, setZoom] = useState(center.zoom);
+  const showLabels = zoom >= 13 || selectedLine !== null;
 
   // Build polyline coordinates for each line
   const polylines = useMemo(() => {
@@ -90,6 +102,7 @@ export default function SubwayLeafletMap({
       maxZoom={16}
     >
       <CityChanger city={city} />
+      <ZoomTracker onZoomChange={setZoom} />
       <TileLayer
         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         attribution='&copy; <a href="https://carto.com/">CARTO</a>'
@@ -135,13 +148,9 @@ export default function SubwayLeafletMap({
               direction="top"
               offset={[0, -8]}
               className="subway-tooltip"
+              permanent={showLabels}
             >
-              <span className="font-medium text-xs">{station.name}</span>
-              {station.lines.length > 1 && (
-                <span className="text-[10px] text-gray-500 ml-1">
-                  ({station.lines.map(l => lines[l]?.name ?? l).join(", ")})
-                </span>
-              )}
+              <span className="font-medium text-[10px]">{station.name}</span>
             </Tooltip>
           </CircleMarker>
         );

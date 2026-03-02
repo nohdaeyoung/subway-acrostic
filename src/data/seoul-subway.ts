@@ -402,6 +402,8 @@ export const SEOUL_STATIONS: StationData[] = [
 
   // ===== 신분당선 =====
   { id: "s-sinsa_sb", name: "신사", lat: 37.5168, lng: 127.0199, lines: ["shinbundang"] },
+  { id: "s-nonhyeon_sb", name: "논현", lat: 37.5110, lng: 127.0213, lines: ["shinbundang"] },
+  { id: "s-sinnonhyeon", name: "신논현", lat: 37.5045, lng: 127.0249, lines: ["shinbundang", "9"] },
   // gangnam already defined
   // yangjae already defined
   { id: "s-yangjae_citizen", name: "양재시민의숲", lat: 37.4703, lng: 127.0404, lines: ["shinbundang"] },
@@ -413,6 +415,7 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-suji", name: "수지구청", lat: 37.3224, lng: 127.0942, lines: ["shinbundang"] },
   { id: "s-seongbok", name: "성복", lat: 37.3110, lng: 127.0748, lines: ["shinbundang"] },
   { id: "s-sangcheon", name: "상현", lat: 37.2976, lng: 127.0693, lines: ["shinbundang"] },
+  { id: "s-gwanggyo_jungang", name: "광교중앙", lat: 37.2886, lng: 127.0515, lines: ["shinbundang"] },
   { id: "s-gwanggyo", name: "광교", lat: 37.3021, lng: 127.0443, lines: ["shinbundang"] },
 
   // ===== 경의중앙선 (주요역) =====
@@ -668,7 +671,7 @@ export const SEOUL_LINE_ROUTES: Record<string, string[][]> = {
   "7": [["s-jangam", "s-dobongsan", "s-nowon", "s-junggye", "s-hagye7", "s-gongneung", "s-taereung", "s-meogeol", "s-junghwa", "s-mangu", "s-myeonmok", "s-sagajeong", "s-yongmasan", "s-junggok", "s-gunja", "s-eorinyi", "s-geondae", "s-ttukseomyuwon", "s-cheongdam", "s-gangnamgu", "s-hak", "s-nonhyeon", "s-banpo", "s-gosok", "s-naebang", "s-total", "s-namsung", "s-sungbuk", "s-sangdo", "s-jangseungbae", "s-sinpung", "s-boramae7", "s-sindaebang3", "s-namguro", "s-daelim", "s-gasandigital", "s-cheolsan", "s-gwangmyeong", "s-chungan", "s-onsu"]],
   "8": [["s-amsa", "s-cheonho", "s-gangdong8", "s-mongchon", "s-jamsil", "s-seokchon", "s-songpa", "s-garak", "s-moran"]],
   "9": [["s-gaehwa9", "s-gimpo", "s-airport9", "s-sinmok", "s-yeomchang", "s-dangsan", "s-seonyudo", "s-noryangjin", "s-noryangjin9", "s-dongjak", "s-guhban", "s-sinbanpo", "s-gosok", "s-sapyeong", "s-bongeunsa", "s-jonghap", "s-samjeon", "s-seokchon9", "s-songpa9", "s-hangangjung", "s-olympic", "s-bokhun"]],
-  shinbundang: [["s-sinsa_sb", "s-gangnam", "s-yangjae", "s-yangjae_citizen", "s-cheonggyesan", "s-pangyo", "s-jeongja", "s-migeum", "s-dongcheon", "s-suji", "s-seongbok", "s-sangcheon", "s-gwanggyo"]],
+  shinbundang: [["s-sinsa_sb", "s-nonhyeon_sb", "s-sinnonhyeon", "s-gangnam", "s-yangjae", "s-yangjae_citizen", "s-cheonggyesan", "s-pangyo", "s-jeongja", "s-migeum", "s-dongcheon", "s-suji", "s-seongbok", "s-sangcheon", "s-gwanggyo_jungang", "s-gwanggyo"]],
   gyeongui: [["s-munsan", "s-geumchon", "s-ilsan", "s-daegok", "s-neunggok", "s-haengsin", "s-ganmae", "s-dmc", "s-gasan_g", "s-hongdae", "s-gongdeok", "s-seoulstation", "s-ichon", "s-oksu", "s-wangsimni", "s-mangu", "s-mangu_g", "s-yangwon", "s-guri", "s-dunnae", "s-yangjeong_g", "s-deokso"]],
   suin: [["s-cheongnyangni", "s-wangsimni", "s-seolleung", "s-gangnamgu", "s-dogok", "s-suseo", "s-bokjeong", "s-moran", "s-imae", "s-jeongja", "s-sunae", "s-ori", "s-jukjeon", "s-bojeong", "s-giheung", "s-mangpo", "s-suwon"]],
   arex: [["s-incheonairport2", "s-incheonairport1", "s-geomam", "s-gyeyang", "s-gimpo", "s-dmc", "s-hongdae", "s-gongdeok", "s-seoulstation"]],

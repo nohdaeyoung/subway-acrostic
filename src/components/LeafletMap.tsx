@@ -60,7 +60,7 @@ export default function SubwayLeafletMap({
 }: LeafletMapProps) {
   const center = CITY_CENTER[city];
   const [zoom, setZoom] = useState(center.zoom);
-  const showLabels = true;
+  const showLabels = zoom >= 13 || selectedLine !== null;
 
   // Build polyline coordinates for each line
   const polylines = useMemo(() => {
@@ -85,6 +85,12 @@ export default function SubwayLeafletMap({
     }
     return result;
   }, [lineRoutes, lines, stationDataMap]);
+
+  // Filter visible stations
+  const visibleStations = useMemo(
+    () => stations.filter((s) => selectedLine === null || s.lines.includes(selectedLine)),
+    [stations, selectedLine]
+  );
 
   // Check if a station is a transfer station (multiple lines)
   function isTransfer(station: Station): boolean {
@@ -124,7 +130,7 @@ export default function SubwayLeafletMap({
       )}
 
       {/* Draw station markers */}
-      {stations.filter((s) => selectedLine === null || s.lines.includes(selectedLine)).map((station) => {
+      {visibleStations.map((station) => {
         const hasAcrostic = acrosticStationIds.has(station.id);
         const transfer = isTransfer(station);
         const lineColor = lines[station.lines[0]]?.color ?? "#888";

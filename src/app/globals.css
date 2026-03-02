@@ -32,6 +32,11 @@ body {
   border-top-color: #e5e7eb !important;
 }
 
+/* Keep leaflet map below modals */
+.leaflet-container {
+  z-index: 0 !important;
+}
+
 /* Leaflet controls style */
 .leaflet-control-zoom a {
   font-size: 16px !important;

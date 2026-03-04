@@ -26,7 +26,7 @@ interface SubwayMapProps {
 
 export default function SubwayMap(props: SubwayMapProps) {
   return (
-    <div className="w-full h-[calc(100vh-180px)] min-h-[500px] rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+    <div className="w-full h-full overflow-hidden">
       <LeafletMap {...props} />
     </div>
   );

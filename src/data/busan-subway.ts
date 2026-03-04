@@ -1,4 +1,4 @@
-import type { LineInfo, StationData } from "./seoul-subway";
+import type { LineInfo, StationData } from "@/data/subway-types";
 
 export const BUSAN_LINES: Record<string, LineInfo> = {
   "1": { id: "1", name: "1호선", color: "#F06A2E" },
@@ -9,7 +9,7 @@ export const BUSAN_LINES: Record<string, LineInfo> = {
 };
 
 export const BUSAN_STATIONS: StationData[] = [
-  // ===== Line 1 (노포~신평) =====
+  // ===== Line 1 (노포~다대포해수욕장) =====
   { id: "b-nopo", name: "노포", lat: 35.2836, lng: 129.0950, lines: ["1"] },
   { id: "b-beomeosa", name: "범어사", lat: 35.2731, lng: 129.0930, lines: ["1"] },
   { id: "b-namsan", name: "남산", lat: 35.2654, lng: 129.0926, lines: ["1"] },
@@ -19,12 +19,12 @@ export const BUSAN_STATIONS: StationData[] = [
   { id: "b-busandae", name: "부산대학교", lat: 35.2298, lng: 129.0870, lines: ["1"] },
   { id: "b-oncheonjang", name: "온천장", lat: 35.2205, lng: 129.0870, lines: ["1"] },
   { id: "b-myeongnyun", name: "명륜", lat: 35.2125, lng: 129.0800, lines: ["1"] },
-  { id: "b-dongrae", name: "동래", lat: 35.2054, lng: 129.0780, lines: ["1", "4"] },
-  { id: "b-gyodae", name: "교대", lat: 35.1938, lng: 129.0796, lines: ["1"] },
-  { id: "b-yeonsan", name: "연산", lat: 35.1861, lng: 129.0820, lines: ["1", "2", "3"] },
-  { id: "b-sicheong", name: "시청", lat: 35.1798, lng: 129.0770, lines: ["1", "2"] },
-  { id: "b-yangjeong", name: "양정", lat: 35.1730, lng: 129.0710, lines: ["1", "2"] },
-  { id: "b-bujeon", name: "부전", lat: 35.1646, lng: 129.0600, lines: ["1", "2", "donghae"] },
+  { id: "b-dongrae", name: "동래", lat: 35.2054, lng: 129.0780, lines: ["1", "4"] }, // 1·4호선 환승
+  { id: "b-gyodae", name: "교대", lat: 35.1938, lng: 129.0796, lines: ["1", "donghae"] },
+  { id: "b-yeonsan", name: "연산", lat: 35.1861, lng: 129.0820, lines: ["1", "3"] },
+  { id: "b-sicheong", name: "시청", lat: 35.1798, lng: 129.0770, lines: ["1"] },
+  { id: "b-yangjeong", name: "양정", lat: 35.1730, lng: 129.0710, lines: ["1"] },
+  { id: "b-bujeon", name: "부전", lat: 35.1646, lng: 129.0600, lines: ["1", "donghae"] },
   { id: "b-seomyeon", name: "서면", lat: 35.1578, lng: 129.0592, lines: ["1", "2"] },
   { id: "b-beomnaegol", name: "범내골", lat: 35.1473, lng: 129.0590, lines: ["1"] },
   { id: "b-beomil", name: "범일", lat: 35.1414, lng: 129.0590, lines: ["1"] },
@@ -40,29 +40,54 @@ export const BUSAN_STATIONS: StationData[] = [
   { id: "b-seodata", name: "서대신", lat: 35.1108, lng: 129.0119, lines: ["1"] },
   { id: "b-daeti", name: "대티", lat: 35.1031, lng: 128.9997, lines: ["1"] },
   { id: "b-goejeong", name: "괴정", lat: 35.1000, lng: 128.9925, lines: ["1"] },
-  { id: "b-sinpyeong", name: "신평", lat: 35.0956, lng: 128.9606, lines: ["1"] },
+  { id: "b-saha", name: "사하", lat: 35.0998, lng: 128.9831, lines: ["1"] },
+  { id: "b-dangni", name: "당리", lat: 35.1035, lng: 128.9738, lines: ["1"] },
+  { id: "b-hadan", name: "하단", lat: 35.1062, lng: 128.9668, lines: ["1"] },
+  { id: "b-sinpyeong", name: "신평", lat: 35.0952, lng: 128.9607, lines: ["1"] },
+  { id: "b-dongmae", name: "동매", lat: 35.0898, lng: 128.9733, lines: ["1"] },
+  { id: "b-jangnim", name: "장림", lat: 35.0819, lng: 128.9774, lines: ["1"] },
+  { id: "b-sinjangnim", name: "신장림", lat: 35.0746, lng: 128.9768, lines: ["1"] },
+  { id: "b-natgae", name: "낫개", lat: 35.0653, lng: 128.9797, lines: ["1"] },
+  { id: "b-dadaepohang", name: "다대포항", lat: 35.0578, lng: 128.9713, lines: ["1"] },
+  { id: "b-dadaepobeach", name: "다대포해수욕장", lat: 35.0482, lng: 128.9660, lines: ["1"] },
 
   // ===== Line 2 (장산~양산) =====
   { id: "b-jangsan", name: "장산", lat: 35.1699, lng: 129.1770, lines: ["2"] },
   { id: "b-jungdong", name: "중동", lat: 35.1666, lng: 129.1678, lines: ["2"] },
   { id: "b-haeundae", name: "해운대", lat: 35.1637, lng: 129.1589, lines: ["2"] },
   { id: "b-dongbaek", name: "동백", lat: 35.1610, lng: 129.1488, lines: ["2"] },
-  { id: "b-bexco", name: "벡스코", lat: 35.1686, lng: 129.1389, lines: ["2"] },
+  { id: "b-bexco", name: "벡스코", lat: 35.1686, lng: 129.1389, lines: ["2", "donghae"] },
   { id: "b-centumcity", name: "센텀시티", lat: 35.1686, lng: 129.1312, lines: ["2"] },
-  { id: "b-suyeong", name: "수영", lat: 35.1673, lng: 129.1150, lines: ["2", "3"] },
+  { id: "b-minlak", name: "민락", lat: 35.1674, lng: 129.1217, lines: ["2"] },
+  { id: "b-suyeong", name: "수영", lat: 35.1654, lng: 129.1147, lines: ["2", "3"] },
   { id: "b-gwangan", name: "광안", lat: 35.1579, lng: 129.1132, lines: ["2"] },
   { id: "b-geumnyeonsan", name: "금련산", lat: 35.1498, lng: 129.1110, lines: ["2"] },
   { id: "b-namcheon", name: "남천", lat: 35.1421, lng: 129.1080, lines: ["2"] },
   { id: "b-kyungsung", name: "경성대·부경대", lat: 35.1376, lng: 129.1010, lines: ["2"] },
   { id: "b-daeyeon", name: "대연", lat: 35.1351, lng: 129.0920, lines: ["2"] },
   { id: "b-motgol", name: "못골", lat: 35.1348, lng: 129.0848, lines: ["2"] },
-  { id: "b-munhyeon", name: "문현", lat: 35.1391, lng: 129.0674, lines: ["2"] },
   { id: "b-jigegeol", name: "지게골", lat: 35.1357, lng: 129.0742, lines: ["2"] },
+  { id: "b-munhyeon", name: "문현", lat: 35.1391, lng: 129.0674, lines: ["2"] },
+  { id: "b-bifc", name: "국제금융센터·부산은행", lat: 35.1457, lng: 129.0667, lines: ["2"] },
   { id: "b-jeonpo", name: "전포", lat: 35.1529, lng: 129.0654, lines: ["2"] },
-  // seomyeon/bujeon/yangjeong/sicheong/yeonsan already defined in Line 1 section
-  // mulmangeol/geojae/sajik/minam/deokcheon/gunam/gupo defined in Line 3 section
-  { id: "b-hwamyeong", name: "화명", lat: 35.2345, lng: 129.0080, lines: ["2"] },
-  { id: "b-sujeong", name: "수정", lat: 35.2233, lng: 129.0092, lines: ["2"] },
+  // seomyeon already defined in Line 1 section (lines: ["1","2"])
+  { id: "b-buam", name: "부암", lat: 35.1567, lng: 129.0485, lines: ["2"] },
+  { id: "b-gaya", name: "가야", lat: 35.1558, lng: 129.0427, lines: ["2"] },
+  { id: "b-dongui", name: "동의대", lat: 35.1540, lng: 129.0321, lines: ["2"] },
+  { id: "b-gaegeum", name: "개금", lat: 35.1524, lng: 129.0209, lines: ["2"] },
+  { id: "b-naengjeong", name: "냉정", lat: 35.1513, lng: 129.0124, lines: ["2"] },
+  { id: "b-jwacheon", name: "주례", lat: 35.1505, lng: 129.0032, lines: ["2"] },
+  { id: "b-gamjeon", name: "감전", lat: 35.1557, lng: 128.9909, lines: ["2"] },
+  { id: "b-sasang", name: "사상", lat: 35.1625, lng: 128.9890, lines: ["2"] },
+  { id: "b-deokpo", name: "덕포", lat: 35.1739, lng: 128.9840, lines: ["2"] },
+  { id: "b-moderok", name: "모덕", lat: 35.1804, lng: 128.9856, lines: ["2"] },
+  { id: "b-mora", name: "모라", lat: 35.1896, lng: 128.9886, lines: ["2"] },
+  { id: "b-gunam", name: "구남", lat: 35.1977, lng: 128.9955, lines: ["2"] },
+  { id: "b-gumyeong", name: "구명", lat: 35.2028, lng: 128.9995, lines: ["2"] },
+  // deokcheon defined in Line 3 section (lines: ["2","3"])
+  { id: "b-sujeong", name: "수정", lat: 35.2220, lng: 129.0089, lines: ["2"] },
+  { id: "b-hwamyeong", name: "화명", lat: 35.2359, lng: 129.0138, lines: ["2"] },
+  { id: "b-yulni", name: "율리", lat: 35.2470, lng: 129.0130, lines: ["2"] },
   { id: "b-dongwon", name: "동원", lat: 35.2586, lng: 129.0124, lines: ["2"] },
   { id: "b-geumgok", name: "금곡", lat: 35.2673, lng: 129.0169, lines: ["2"] },
   { id: "b-hodongg", name: "호포", lat: 35.2810, lng: 129.0170, lines: ["2"] },
@@ -71,35 +96,28 @@ export const BUSAN_STATIONS: StationData[] = [
   { id: "b-namsangjung", name: "남양산", lat: 35.3254, lng: 129.0190, lines: ["2"] },
   { id: "b-yangsan", name: "양산", lat: 35.3386, lng: 129.0270, lines: ["2"] },
 
-  // 2호선에서 제거된 역 (실제 소속 노선 없음 — 김해경전철 등 별도 노선)
-  { id: "b-gaegeum", name: "개금", lat: 35.1509, lng: 129.0321, lines: [] },
-  { id: "b-deokpo", name: "덕포", lat: 35.1627, lng: 128.9885, lines: [] },
-  { id: "b-sasang", name: "사상", lat: 35.1524, lng: 128.9813, lines: [] },
-  { id: "b-gamjeon", name: "감전", lat: 35.1550, lng: 128.9686, lines: [] },
-  { id: "b-jwacheon", name: "주례", lat: 35.1569, lng: 128.9624, lines: [] },
-  { id: "b-yulni", name: "율리", lat: 35.2083, lng: 129.0010, lines: [] },
-
   // ===== Line 3 (수영~대저) =====
   // suyeong already defined
   { id: "b-manmi", name: "망미", lat: 35.1715, lng: 129.1082, lines: ["3"] },
   { id: "b-baesan", name: "배산", lat: 35.1735, lng: 129.0955, lines: ["3"] },
-  { id: "b-mulmangeol", name: "물만골", lat: 35.1766, lng: 129.0858, lines: ["2", "3"] },
-  // yeonsan already defined (Lines 1+2+3)
-  { id: "b-geojae", name: "거제", lat: 35.1898, lng: 129.0745, lines: ["2", "3"] },
+  { id: "b-mulmangeol", name: "물만골", lat: 35.1766, lng: 129.0858, lines: ["3"] },
+  // yeonsan already defined (lines: ["1","3"])
+  { id: "b-geojae", name: "거제", lat: 35.1898, lng: 129.0745, lines: ["3", "donghae"] },
   { id: "b-jonghap_b", name: "종합운동장", lat: 35.1913, lng: 129.0678, lines: ["3"] },
-  { id: "b-sajik", name: "사직", lat: 35.1991, lng: 129.0650, lines: ["2", "3"] },
-  { id: "b-minam", name: "미남", lat: 35.2064, lng: 129.0690, lines: ["2", "3", "4"] },
+  { id: "b-sajik", name: "사직", lat: 35.1991, lng: 129.0650, lines: ["3"] },
+  { id: "b-minam", name: "미남", lat: 35.2064, lng: 129.0690, lines: ["3", "4"] },
   { id: "b-mandeok", name: "만덕", lat: 35.2130, lng: 129.0368, lines: ["3"] },
-  { id: "b-baeul", name: "배울", lat: 35.1837, lng: 129.0300, lines: ["3"] },
-  { id: "b-deokcheon", name: "덕천", lat: 35.2101, lng: 129.0050, lines: ["2", "3"] },
-  { id: "b-gunam", name: "구남", lat: 35.1977, lng: 128.9955, lines: ["2"] },
-  { id: "b-gupo", name: "구포", lat: 35.2067, lng: 128.9964, lines: ["2", "3"] },
+  { id: "b-namsanjeong", name: "남산정", lat: 35.2133, lng: 129.0239, lines: ["3"] },
+  { id: "b-sukdeung", name: "숙등", lat: 35.2120, lng: 129.0128, lines: ["3"] },
+  { id: "b-deokcheon", name: "덕천", lat: 35.2107, lng: 129.0080, lines: ["2", "3"] },
+  { id: "b-gupo", name: "구포", lat: 35.2067, lng: 128.9964, lines: ["3"] },
   { id: "b-gangseo", name: "강서구청", lat: 35.2112, lng: 128.9820, lines: ["3"] },
+  { id: "b-cheoyukgongwon", name: "체육공원", lat: 35.2125, lng: 128.9694, lines: ["3"] },
   { id: "b-daejeo", name: "대저", lat: 35.2131, lng: 128.9628, lines: ["3"] },
 
   // ===== Line 4 (미남~안평) =====
   // minam already defined
-  { id: "b-dongrae4", name: "동래", lat: 35.2054, lng: 129.0780, lines: ["4"] },
+  // dongrae: b-dongrae (1·4호선 환승역, line 1 섹션에 정의됨)
   { id: "b-suanbo", name: "수안", lat: 35.2018, lng: 129.0838, lines: ["4"] },
   { id: "b-nakmin", name: "낙민", lat: 35.2004, lng: 129.0908, lines: ["4"] },
   { id: "b-chungnyeol", name: "충렬사", lat: 35.1997, lng: 129.0976, lines: ["4"] },
@@ -112,22 +130,28 @@ export const BUSAN_STATIONS: StationData[] = [
   { id: "b-anpyeong", name: "안평", lat: 35.2373, lng: 129.1718, lines: ["4"] },
 
   // ===== 동해선 (부전~태화강) =====
-  // bujeon already defined
-  { id: "b-geoje_d", name: "거제해맞이", lat: 35.1822, lng: 129.0690, lines: ["donghae"] },
-  { id: "b-geoyeo", name: "거여", lat: 35.1524, lng: 129.0748, lines: ["donghae"] },
-  { id: "b-centum_d", name: "센텀", lat: 35.1795, lng: 129.1245, lines: ["donghae"] },
-  { id: "b-sinhaeundae", name: "신해운대", lat: 35.1817, lng: 129.1770, lines: ["donghae"] },
-  { id: "b-songjeong_d", name: "송정", lat: 35.1775, lng: 129.1917, lines: ["donghae"] },
-  { id: "b-gijang", name: "기장", lat: 35.2440, lng: 129.2176, lines: ["donghae"] },
-  { id: "b-ilgwang", name: "일광", lat: 35.2665, lng: 129.2328, lines: ["donghae"] },
-  { id: "b-jwacheon_dh", name: "좌천", lat: 35.3120, lng: 129.2451, lines: ["donghae"] },
-  { id: "b-wolnae", name: "월내", lat: 35.3262, lng: 129.2750, lines: ["donghae"] },
-  { id: "b-seosaeng", name: "서생", lat: 35.3448, lng: 129.2923, lines: ["donghae"] },
-  { id: "b-onsan", name: "온산", lat: 35.4214, lng: 129.3511, lines: ["donghae"] },
-  { id: "b-deokha", name: "덕하", lat: 35.4955, lng: 129.3090, lines: ["donghae"] },
-  { id: "b-taehwagang", name: "태화강", lat: 35.5391, lng: 129.3542, lines: ["donghae"] },
-  // 정관은 동해선 미운행 구간 (별도 노선)
-  { id: "b-jeonggwan", name: "정관", lat: 35.3239, lng: 129.1757, lines: [] },
+  // bujeon already defined (lines: ["1","donghae"])
+  { id: "b-geoje_d", name: "거제해맞이", lat: 35.1821, lng: 129.0693, lines: ["donghae"] },
+  // geojae already defined (lines: ["3","donghae"])
+  // gyodae already defined (lines: ["1","donghae"])
+  { id: "b-dongrae_dh", name: "동래", lat: 35.1970, lng: 129.0922, lines: ["donghae"] },
+  { id: "b-anlak", name: "안락", lat: 35.1960, lng: 129.1015, lines: ["donghae"] },
+  { id: "b-busanwondong", name: "부산원동", lat: 35.1936, lng: 129.1142, lines: ["donghae"] },
+  { id: "b-jaesong", name: "재송", lat: 35.1874, lng: 129.1202, lines: ["donghae"] },
+  { id: "b-centum_d", name: "센텀", lat: 35.1785, lng: 129.1253, lines: ["donghae"] },
+  { id: "b-sinhaeundae", name: "신해운대", lat: 35.1814, lng: 129.1777, lines: ["donghae"] },
+  { id: "b-songjeong_d", name: "송정", lat: 35.1884, lng: 129.2024, lines: ["donghae"] },
+  { id: "b-osiria", name: "오시리아", lat: 35.1966, lng: 129.2095, lines: ["donghae"] },
+  { id: "b-gijang", name: "기장", lat: 35.2453, lng: 129.2189, lines: ["donghae"] },
+  { id: "b-ilgwang", name: "일광", lat: 35.2693, lng: 129.2336, lines: ["donghae"] },
+  { id: "b-jwacheon_dh", name: "좌천", lat: 35.3124, lng: 129.2458, lines: ["donghae"] },
+  { id: "b-wolnae", name: "월내", lat: 35.3286, lng: 129.2771, lines: ["donghae"] },
+  { id: "b-seosaeng", name: "서생", lat: 35.3468, lng: 129.2931, lines: ["donghae"] },
+  { id: "b-namchang", name: "남창", lat: 35.4206, lng: 129.2817, lines: ["donghae"] },
+  { id: "b-mangyang", name: "망양", lat: 35.4572, lng: 129.2881, lines: ["donghae"] },
+  { id: "b-deokha", name: "덕하", lat: 35.4947, lng: 129.3034, lines: ["donghae"] },
+  { id: "b-gaeunpo", name: "개운포", lat: 35.5082, lng: 129.3220, lines: ["donghae"] },
+  { id: "b-taehwagang", name: "태화강", lat: 35.5383, lng: 129.3536, lines: ["donghae"] },
 ];
 
 export const BUSAN_LINE_ROUTES: Record<string, string[][]> = {
@@ -140,30 +164,41 @@ export const BUSAN_LINE_ROUTES: Record<string, string[][]> = {
     "b-beomnaegol", "b-beomil", "b-jwacheon_b", "b-busanjin",
     "b-choryang", "b-busanstation", "b-jungang",
     "b-nampo", "b-jagalchi", "b-toseong",
-    "b-dongdae", "b-seodata", "b-daeti", "b-goejeong", "b-sinpyeong",
+    "b-dongdae", "b-seodata", "b-daeti", "b-goejeong",
+    "b-saha", "b-dangni", "b-hadan", "b-sinpyeong",
+    "b-dongmae", "b-jangnim", "b-sinjangnim", "b-natgae",
+    "b-dadaepohang", "b-dadaepobeach",
   ]],
   "2": [[
     "b-jangsan", "b-jungdong", "b-haeundae", "b-dongbaek",
-    "b-bexco", "b-centumcity", "b-suyeong",
+    "b-bexco", "b-centumcity", "b-minlak", "b-suyeong",
     "b-gwangan", "b-geumnyeonsan", "b-namcheon",
-    "b-kyungsung", "b-daeyeon", "b-motgol", "b-munhyeon",
-    "b-jigegeol", "b-jeonpo", "b-seomyeon",
-    "b-bujeon", "b-yangjeong", "b-sicheong", "b-yeonsan",
-    "b-mulmangeol", "b-geojae", "b-sajik", "b-minam",
-    "b-deokcheon", "b-gunam", "b-gupo",
-    "b-hwamyeong", "b-sujeong", "b-dongwon", "b-geumgok",
-    "b-hodongg", "b-jeungsan_b", "b-busan_uni", "b-namsangjung", "b-yangsan",
+    "b-kyungsung", "b-daeyeon", "b-motgol",
+    "b-jigegeol", "b-munhyeon", "b-bifc", "b-jeonpo", "b-seomyeon",
+    "b-buam", "b-gaya", "b-dongui", "b-gaegeum", "b-naengjeong",
+    "b-jwacheon", "b-gamjeon", "b-sasang", "b-deokpo",
+    "b-moderok", "b-mora", "b-gunam", "b-gumyeong",
+    "b-deokcheon", "b-sujeong", "b-hwamyeong", "b-yulni",
+    "b-dongwon", "b-geumgok", "b-hodongg", "b-jeungsan_b",
+    "b-busan_uni", "b-namsangjung", "b-yangsan",
   ]],
   "3": [[
     "b-suyeong", "b-manmi", "b-baesan", "b-mulmangeol",
     "b-yeonsan", "b-geojae", "b-jonghap_b", "b-sajik",
-    "b-minam", "b-mandeok", "b-baeul",
-    "b-deokcheon", "b-gupo", "b-gangseo", "b-daejeo",
+    "b-minam", "b-mandeok", "b-namsanjeong", "b-sukdeung",
+    "b-deokcheon", "b-gupo", "b-gangseo", "b-cheoyukgongwon", "b-daejeo",
   ]],
   "4": [[
-    "b-minam", "b-dongrae4", "b-suanbo", "b-nakmin",
+    "b-minam", "b-dongrae", "b-suanbo", "b-nakmin",
     "b-chungnyeol", "b-myeongjang", "b-seobu", "b-geumsa",
     "b-bansong", "b-seokdae", "b-youngsan", "b-anpyeong",
   ]],
-  donghae: [["b-bujeon", "b-geoje_d", "b-geoyeo", "b-centum_d", "b-sinhaeundae", "b-songjeong_d", "b-gijang", "b-ilgwang", "b-jwacheon_dh", "b-wolnae", "b-seosaeng", "b-onsan", "b-deokha", "b-taehwagang"]],
+  donghae: [[
+    "b-bujeon", "b-geoje_d", "b-geojae", "b-gyodae",
+    "b-dongrae_dh", "b-anlak", "b-busanwondong",
+    "b-jaesong", "b-centum_d", "b-bexco",
+    "b-sinhaeundae", "b-songjeong_d", "b-osiria", "b-gijang",
+    "b-ilgwang", "b-jwacheon_dh", "b-wolnae", "b-seosaeng",
+    "b-namchang", "b-mangyang", "b-deokha", "b-gaeunpo", "b-taehwagang",
+  ]],
 };

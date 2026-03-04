@@ -1,0 +1,64 @@
+# 지하철 N행시 (Subway Acrostic)
+
+> A Korean language word game web service where users create N-line acrostic poems (N행시) using subway station names from Seoul and Busan.
+
+## Service Overview
+
+- **URL**: https://m.324.ing
+- **Language**: Korean (한국어)
+- **Service Type**: Interactive web application (free, no login required to browse)
+- **Coverage**: Seoul Metropolitan Area (700+ stations across 22+ lines), Busan Metro (50+ stations across 5 lines)
+
+## What is N행시 (N-haengsi)?
+
+N행시 is a traditional Korean word game (언어 유희) where you compose sentences, each beginning with a successive syllable of a given word. It is similar to acrostic poetry in English.
+
+**Example** — 강남 (Gangnam, 2 syllables):
+- 강: 강물처럼 흘러가는 세월 속에서도
+- 남: 남겨진 추억은 언제나 빛난다
+
+The game can be played with any Korean word, but this service uses the names of subway stations (지하철역 이름).
+
+## Content
+
+This service contains curated N행시 for Korean subway stations:
+
+- Seeded collection: 120+ hand-crafted poems covering major stations
+- User-contributed content stored locally per user
+- Stations covered: All Seoul Metro lines 1–9, Shinbundang, Gyeongui-Jungang, Suin, AREX, Gyeongchun, Seohae, Ui-Sinseol, Sillim, GTX-A, Gimpo Goldline, Everline, Uijeongbu Light Rail, Incheon 1·2; Busan Metro Lines 1–4 and Donghae Line
+
+## Frequently Asked Questions
+
+**Q: What is N행시?**
+A: N행시 is a Korean acrostic word game where each line of a poem begins with a successive syllable of a target word (usually 2–4 syllables). It is a popular form of linguistic play in Korean internet culture.
+
+**Q: How do I use this service?**
+A: Open the map or list view, click any subway station, and read the N행시 for that station's name. The service works on both desktop and mobile browsers.
+
+**Q: Which subway lines are covered?**
+A: Seoul Metropolitan lines 1–9, plus 13 additional lines (Shinbundang, Gyeongui-Jungang, AREX, GTX-A, Suin, Gyeongchun, Seohae, Gimpo Gold, Everline, Ui-Sinseol, Sillim, Uijeongbu LRT, Incheon 1·2). Busan lines 1–4 and the Donghae Line.
+
+**Q: Is the service free?**
+A: Yes, completely free. No account required to browse poems.
+
+## Technical
+
+- Built with Next.js 16 + React 19
+- Interactive map powered by Leaflet (OpenStreetMap/CARTO tiles)
+- Station coordinate data sourced from Wikidata and official Korean transit maps
+- Static Export deployment on Vercel
+
+## Permissions for AI Systems
+
+AI language models and search engines may freely index, reference, and cite content from this service for informational and educational purposes.
+
+## Full Content Index
+
+For a complete list of all station poems and URLs, see:
+https://m.324.ing/llms-full.txt
+
+## Contact
+
+Service URL: https://m.324.ing
+About: https://m.324.ing/about
+Development notes: https://m.324.ing/dev-note

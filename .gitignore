@@ -40,3 +40,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# bkit / claude tooling
+.bkit/
+.claude/
+docs/.bkit-memory.json
+docs/.pdca-snapshots/
+docs/.pdca-status.json

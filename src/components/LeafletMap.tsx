@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { MapContainer, TileLayer, Polyline, CircleMarker, Tooltip, useMap } from "react-leaflet";
-import type { Map as LeafletMap } from "leaflet";
+import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Station, City } from "@/types/subway";
 import type { StationData, LineInfo } from "@/data/seoul-subway";
@@ -23,6 +23,69 @@ const CITY_CENTER: Record<City, { lat: number; lng: number; zoom: number }> = {
   busan: { lat: 35.1596, lng: 129.0553, zoom: 12 },
 };
 
+// Korean character width estimate (px) for icon sizing
+const CHAR_W = 11;
+const PAD_X = 4; // horizontal padding on each side
+const GAP = 3;   // gap between dot and label
+const ICON_H = 24; // fixed icon height (touch-friendly min)
+
+function buildIcon(
+  name: string,
+  hasAcrostic: boolean,
+  lineColor: string,
+  isTransfer: boolean,
+  showLabel: boolean,
+): L.DivIcon {
+  const dotD = isTransfer ? 12 : 8;
+  const fillColor = hasAcrostic ? "#10b981" : "#ffffff";
+  const strokeColor = hasAcrostic ? "#059669" : lineColor;
+  const strokeW = isTransfer ? 2.5 : 2;
+
+  const labelW = showLabel ? name.length * CHAR_W : 0;
+  const totalW = Math.max(PAD_X + dotD + (showLabel ? GAP + labelW : 0) + PAD_X, 24);
+  // iconAnchor: pin the center of the dot to the station coordinate
+  const anchorX = PAD_X + dotD / 2;
+  const anchorY = ICON_H / 2;
+
+  const pulseHtml = hasAcrostic
+    ? `<div class="marker-pulse" style="position:absolute;inset:-6px;border-radius:50%;background:#10b981;pointer-events:none;"></div>`
+    : "";
+
+  const dotHtml = `<div style="
+    position:relative;
+    width:${dotD}px;height:${dotD}px;
+    flex-shrink:0;
+    overflow:visible;
+  ">
+    ${pulseHtml}
+    <div style="
+      position:absolute;inset:0;
+      border-radius:50%;
+      background:${fillColor};
+      border:${strokeW}px solid ${strokeColor};
+      box-sizing:border-box;
+    "></div>
+  </div>`;
+
+  const labelHtml = showLabel
+    ? `<span class="marker-label" style="font-size:10px;font-weight:600;white-space:nowrap;line-height:1;">${name}</span>`
+    : "";
+
+  return L.divIcon({
+    className: "subway-station-icon",
+    html: `<div style="
+      display:flex;
+      align-items:center;
+      gap:${GAP}px;
+      height:${ICON_H}px;
+      padding:0 ${PAD_X}px;
+      cursor:pointer;
+    ">${dotHtml}${labelHtml}</div>`,
+    iconSize: [totalW, ICON_H],
+    iconAnchor: [anchorX, anchorY],
+  });
+}
+
 function CityChanger({ city }: { city: City }) {
   const map = useMap();
   const prevCity = useRef(city);
@@ -38,7 +101,6 @@ function CityChanger({ city }: { city: City }) {
   return null;
 }
 
-
 export default function SubwayLeafletMap({
   city,
   stations,
@@ -52,9 +114,9 @@ export default function SubwayLeafletMap({
   const center = CITY_CENTER[city];
   const showLabels = selectedLine !== null;
 
-  // Build polyline coordinates for each line
+  // Build polyline coordinates
   const polylines = useMemo(() => {
-    const result: { lineId: string; color: string; coords: [number, number][][] }[] = [];
+    const result: { lineId: string; coords: [number, number][][] }[] = [];
     for (const [lineId, segments] of Object.entries(lineRoutes)) {
       const lineInfo = lines[lineId];
       if (!lineInfo) continue;
@@ -63,14 +125,12 @@ export default function SubwayLeafletMap({
         const coords: [number, number][] = [];
         for (const stationId of segment) {
           const sd = stationDataMap.get(stationId);
-          if (sd) {
-            coords.push([sd.lat, sd.lng]);
-          }
+          if (sd) coords.push([sd.lat, sd.lng]);
         }
         if (coords.length > 1) coordSegments.push(coords);
       }
       if (coordSegments.length > 0) {
-        result.push({ lineId, color: lineInfo.color, coords: coordSegments });
+        result.push({ lineId, coords: coordSegments });
       }
     }
     return result;
@@ -82,10 +142,32 @@ export default function SubwayLeafletMap({
     [stations, selectedLine]
   );
 
-  // Check if a station is a transfer station (multiple lines)
-  function isTransfer(station: Station): boolean {
-    return station.lines.length > 1;
-  }
+  // Memoize pathOptions per line to prevent object recreation on every render
+  const polylineOptions = useMemo(
+    () => new Map(
+      Object.entries(lines).map(([lineId, info]) => [
+        lineId,
+        {
+          color: info.color,
+          weight: selectedLine === lineId ? 4 : 3,
+          opacity: selectedLine === null ? 0.85 : selectedLine === lineId ? 1 : 0.1,
+        } as L.PathOptions,
+      ])
+    ),
+    [lines, selectedLine]
+  );
+
+  // Pre-build all station icons (avoid recreating on every render)
+  const stationIcons = useMemo(() => {
+    const map = new Map<string, L.DivIcon>();
+    for (const station of visibleStations) {
+      const hasAcrostic = acrosticStationIds.has(station.id);
+      const isTransfer = station.lines.length > 1;
+      const lineColor = lines[station.lines[0]]?.color ?? "#888";
+      map.set(station.id, buildIcon(station.name, hasAcrostic, lineColor, isTransfer, showLabels));
+    }
+    return map;
+  }, [visibleStations, acrosticStationIds, lines, showLabels]);
 
   return (
     <MapContainer
@@ -103,55 +185,26 @@ export default function SubwayLeafletMap({
         attribution='&copy; <a href="https://carto.com/">CARTO</a>'
       />
 
-      {/* Draw subway lines */}
-      {polylines.map(({ lineId, color, coords }) =>
+      {/* Subway lines */}
+      {polylines.map(({ lineId, coords }) =>
         coords.map((segment, idx) => (
           <Polyline
             key={`${lineId}-${idx}`}
             positions={segment}
-            pathOptions={{
-              color,
-              weight: selectedLine === lineId ? 4 : 3,
-              opacity: selectedLine === null ? 0.85 : selectedLine === lineId ? 1 : 0.1,
-            }}
+            pathOptions={polylineOptions.get(lineId)!}
           />
         ))
       )}
 
-      {/* Draw station markers */}
-      {visibleStations.map((station) => {
-        const hasAcrostic = acrosticStationIds.has(station.id);
-        const transfer = isTransfer(station);
-        const lineColor = lines[station.lines[0]]?.color ?? "#888";
-
-        return (
-          <CircleMarker
-            key={station.id}
-            center={[station.lat, station.lng]}
-            radius={transfer ? 6 : 4}
-            pathOptions={{
-              color: hasAcrostic ? "#059669" : lineColor,
-              fillColor: hasAcrostic ? "#10b981" : "#ffffff",
-              fillOpacity: 1,
-              weight: transfer ? 2.5 : 2,
-            }}
-            eventHandlers={{
-              click: () => onStationClick(station),
-            }}
-          >
-            {showLabels && (
-              <Tooltip
-                direction="top"
-                offset={[0, -8]}
-                className="subway-tooltip"
-                permanent
-              >
-                <span className="font-medium text-[10px]">{station.name}</span>
-              </Tooltip>
-            )}
-          </CircleMarker>
-        );
-      })}
+      {/* Station markers — dot + label as single clickable rectangle */}
+      {visibleStations.map((station) => (
+        <Marker
+          key={station.id}
+          position={[station.lat, station.lng]}
+          icon={stationIcons.get(station.id)!}
+          eventHandlers={{ click: () => onStationClick(station) }}
+        />
+      ))}
     </MapContainer>
   );
 }

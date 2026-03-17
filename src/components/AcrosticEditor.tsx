@@ -25,6 +25,7 @@ interface AcrosticEditorProps {
   loggedIn: boolean;
   onClose: () => void;
   onSaved: () => void;
+  onRandomView?: () => void;
 }
 
 export default function AcrosticEditor({
@@ -34,6 +35,7 @@ export default function AcrosticEditor({
   loggedIn,
   onClose,
   onSaved,
+  onRandomView,
 }: AcrosticEditorProps) {
   const chars = station.name.split("");
   const [lines, setLines] = useState<string[]>(chars.map(() => ""));
@@ -285,6 +287,23 @@ export default function AcrosticEditor({
             </>
           ) : (
             <>
+              {onRandomView && (
+                <button
+                  onClick={onRandomView}
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg font-serif transition-all active:scale-[0.97]"
+                  style={{
+                    background: "var(--bg-deep)",
+                    color: "var(--bg-card)",
+                    fontWeight: 700,
+                  }}
+                >
+                  <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
+                    <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
+                  </svg>
+                  랜덤 감상
+                </button>
+              )}
               <div className="flex-1" />
               {loggedIn && (
                 <button

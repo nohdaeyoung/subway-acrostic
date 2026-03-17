@@ -459,6 +459,7 @@ export default function Home() {
           loggedIn={loggedIn}
           onClose={handleCloseModal}
           onSaved={handleSaved}
+          onRandomView={handleRandomView}
         />
       )}
       {toast && <Toast message={toast} />}

@@ -50,9 +50,9 @@ export function useSubwayPageState() {
     ...BUSAN_STATIONS.map((sd) => toStation(sd, "busan")),
   ], []);
 
-  const loadAcrostics = useCallback(() => {
+  const loadAcrostics = useCallback(async () => {
     try {
-      const acrostics = getAllAcrostics();
+      const acrostics = await getAllAcrostics();
       setAllAcrostics(acrostics);
       setAcrosticStationIds(new Set(acrostics.map((a) => a.stationId)));
     } catch {
@@ -67,12 +67,12 @@ export function useSubwayPageState() {
   // W-17: 도시 전환 시 노선 선택 초기화 (미초기화 시 빈 지도 버그)
   useEffect(() => { setSelectedLine(null); }, [city]);
 
-  const handleStationClick = useCallback((station: Station) => {
+  const handleStationClick = useCallback(async (station: Station) => {
     if (station.city !== city) setCity(station.city);
     setSelectedStation(station);
     setLoadingAcrostic(true);
     try {
-      const acrostic = getAcrosticByStation(station.id);
+      const acrostic = await getAcrosticByStation(station.id);
       setCurrentAcrostic(acrostic);
     } catch {
       setCurrentAcrostic(null);

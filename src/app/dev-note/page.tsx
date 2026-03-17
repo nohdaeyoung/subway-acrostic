@@ -17,8 +17,47 @@ export const metadata: Metadata = {
 
 const devLog = [
   {
+    version: "v2.1",
+    title: "Google 로그인",
+    date: "2026-03-17",
+    items: [
+      "Firebase Auth 기반 Google 로그인 추가",
+      "로그인 팝업에 Google 버튼 + 비밀번호 병렬 구성",
+      "허용 이메일 환경변수(ADMIN_GOOGLE_EMAIL)로 접근 제어",
+    ],
+  },
+  {
+    version: "v2.0",
+    title: "서버 DB 전환",
+    date: "2026-03-17",
+    items: [
+      "localStorage → Firebase Firestore로 데이터 저장소 전환",
+      "크로스 디바이스 N행시 동기화 지원",
+      "119개 seed 데이터 Firestore 마이그레이션",
+      "bkend.ts 전면 재작성 (Firestore 직접 호출)",
+    ],
+  },
+  {
+    version: "v1.9",
+    title: "다크모드 제거",
+    date: "2026-03-17",
+    items: [
+      "다크모드 전체 제거 — 라이트 모드 전용으로 전환",
+    ],
+  },
+  {
+    version: "v1.8",
+    title: "랜덤 버튼 분리 · 실시간 열차",
+    date: "2026-03-17",
+    items: [
+      "랜덤 역 버튼을 보기/쓰기 두 가지 모드로 분리",
+      "서울 지하철 실시간 열차 위치 표시 기능 추가",
+    ],
+  },
+  {
     version: "v1.7",
     title: "세부 데이터 수정",
+    date: "2026-03-02",
     items: [
       "서울 8호선 별내선 라우트 순서 수정",
       "서울 5호선 하남선 누락 역 4개 추가",
@@ -32,6 +71,7 @@ const devLog = [
   {
     version: "v1.6",
     title: "데이터 정확도 개선",
+    date: "2026-03-02",
     items: [
       "의정부 경전철 15개역 좌표 전면 수정 (Wikidata 기반)",
       "5호선에서 마곡나루역 제거 (9호선/공항철도 전용)",
@@ -46,6 +86,7 @@ const devLog = [
   {
     version: "v1.5",
     title: "인프라 변경",
+    date: "2026-03-02",
     items: [
       "bkend.ai 의존성 제거 → localStorage + 환경변수 인증으로 전환",
     ],
@@ -53,6 +94,7 @@ const devLog = [
   {
     version: "v1.4",
     title: "노선 데이터 확장",
+    date: "2026-03-02",
     items: [
       "신분당선 ID 충돌 수정 (s-sangcheon → s-sanghyeon)",
       "신분당선 누락역 3개 추가 (논현, 신논현, 광교중앙)",
@@ -65,6 +107,7 @@ const devLog = [
   {
     version: "v1.3",
     title: "UI/UX 및 성능 최적화",
+    date: "2026-03-02",
     items: [
       "노선 선택 UI 반응형 적용 (모바일 select / 데스크톱 버튼)",
       "라인 선택 시에만 역명 표시",
@@ -77,6 +120,7 @@ const devLog = [
   {
     version: "v1.2",
     title: "핵심 기능 추가",
+    date: "2026-03-02",
     items: [
       "역 클릭 시 N행시 에디터 열기 + 역명 지도 표시",
       "노선 범례 클릭으로 노선 필터 기능 추가",
@@ -87,6 +131,7 @@ const devLog = [
   {
     version: "v1.1",
     title: "지도 기반 리디자인",
+    date: "2026-03-02",
     items: [
       "Leaflet 기반 실제 지도 위에 전체 지하철 노선도 리디자인",
       "서울 1~9호선 + 주요 광역 노선 초기 구현",
@@ -95,6 +140,7 @@ const devLog = [
   {
     version: "v1.0",
     title: "초기 구현",
+    date: "2026-03-02",
     items: [
       "지하철 N행시 웹서비스 초기 구현",
       "역 이름으로 N행시 작성·열람 기본 기능",
@@ -160,7 +206,7 @@ export default function DevNotePage() {
             개발 이력
           </h2>
           <ol className="relative border-l border-gray-200 space-y-8">
-            {devLog.map(({ version, title, items }) => (
+            {devLog.map(({ version, title, date, items }) => (
               <li key={version} className="ml-6">
                 <span className="absolute -left-2.5 mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 ring-4 ring-gray-50">
                   <span className="h-1.5 w-1.5 rounded-full bg-white" />
@@ -168,6 +214,7 @@ export default function DevNotePage() {
                 <div className="flex items-baseline gap-3 mb-2">
                   <span className="text-xs font-mono font-bold text-gray-400">{version}</span>
                   <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
+                  <span className="text-xs text-gray-400">{date}</span>
                 </div>
                 <ul className="space-y-1">
                   {items.map((item) => (

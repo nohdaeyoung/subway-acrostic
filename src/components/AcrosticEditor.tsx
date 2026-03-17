@@ -63,14 +63,14 @@ export default function AcrosticEditor({
       if (e.key === "Escape") {
         if (showDeleteConfirm) {
           setShowDeleteConfirm(false);
-        } else {
+        } else if (!isEditing) {
           onClose();
         }
       }
     }
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
-  }, [onClose, showDeleteConfirm]);
+  }, [onClose, showDeleteConfirm, isEditing]);
 
   useFocusTrap(modalRef);
 
@@ -131,7 +131,7 @@ export default function AcrosticEditor({
   return (
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50"
-      onClick={onClose}
+      onClick={isEditing ? undefined : onClose}
     >
       <div
         ref={modalRef}
@@ -232,11 +232,7 @@ export default function AcrosticEditor({
               )}
               <div className="flex-1" />
               <button
-                onClick={() => {
-                  if (acrostic) setLines(acrostic.lines);
-                  else setLines(chars.map(() => ""));
-                  setIsEditing(false);
-                }}
+                onClick={onClose}
                 disabled={saving}
                 className="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100:bg-gray-700 rounded-xl transition-colors disabled:opacity-50"
               >

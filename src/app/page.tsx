@@ -34,6 +34,19 @@ export default function Home() {
 
   const { trains } = useTrainPositions(city, realtimeEnabled);
 
+  // 현재 도시 역 수 & 진척도
+  const cityStations = useMemo(
+    () => allStations.filter((s) => s.city === city),
+    [allStations, city]
+  );
+  const cityWritten = useMemo(
+    () => cityStations.filter((s) => acrosticStationIds.has(s.id)).length,
+    [cityStations, acrosticStationIds]
+  );
+  const progressPct = cityStations.length > 0
+    ? Math.round((cityWritten / cityStations.length) * 100)
+    : 0;
+
   // 랜덤 보기: N행시가 있는 역만
   function handleRandomView() {
     const withAcrostic = allStations.filter((s) => acrosticStationIds.has(s.id));
@@ -170,12 +183,13 @@ export default function Home() {
           <div className="flex gap-3 text-xs text-gray-400">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-              있음 ({acrosticStationIds.size})
+              있음 ({cityWritten})
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-white border border-gray-300 inline-block" />
               없음
             </span>
+            <span className="text-emerald-600 font-medium">{progressPct}%</span>
           </div>
         </div>
       </header>

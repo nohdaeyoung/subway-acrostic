@@ -16,7 +16,7 @@ export function useTrainPositions(city: City, enabled: boolean) {
 
     async function fetchTrains() {
       try {
-        const res = await fetch("/api/trains");
+        const res = await fetch(`/api/trains?t=${Date.now()}`);
         if (!res.ok) return;
         const data: TrainPosition[] = await res.json();
         setTrains(data);

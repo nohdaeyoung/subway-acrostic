@@ -75,5 +75,7 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json(trains);
+  return NextResponse.json(trains, {
+    headers: { "Cache-Control": "no-store, max-age=0" },
+  });
 }

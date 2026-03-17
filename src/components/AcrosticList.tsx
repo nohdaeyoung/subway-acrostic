@@ -81,10 +81,10 @@ export default function AcrosticList({
   return (
     <div className="h-full flex flex-col">
       {/* Search input */}
-      <div className="shrink-0 px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <div className="shrink-0 px-4 py-3 border-b border-gray-100 bg-white">
         <div className="relative">
           <svg
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 pointer-events-none"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
             aria-hidden="true"
             fill="none"
             viewBox="0 0 20 20"
@@ -102,12 +102,12 @@ export default function AcrosticList({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="역 이름으로 검색"
-            className="w-full pl-9 pr-8 py-2 text-sm bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-shadow"
+            className="w-full pl-9 pr-8 py-2 text-sm bg-gray-50 text-gray-800 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder:text-gray-400:text-gray-500 transition-shadow"
           />
           {trimmed && (
             <button
               onClick={() => setQuery("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 rounded-full"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-gray-400 hover:text-gray-600:text-gray-300 rounded-full"
               aria-label="검색 초기화"
             >
               <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -120,8 +120,8 @@ export default function AcrosticList({
 
       {/* Content */}
       {filteredItems.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center gap-2 text-gray-400 dark:text-gray-600">
-          <svg aria-hidden="true" className="w-10 h-10 text-gray-200 dark:text-gray-700" fill="none" viewBox="0 0 24 24">
+        <div className="flex-1 flex flex-col items-center justify-center gap-2 text-gray-400">
+          <svg aria-hidden="true" className="w-10 h-10 text-gray-200" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"
               d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
           </svg>
@@ -140,15 +140,15 @@ export default function AcrosticList({
             return (
               <div key={lineKey} className="mb-4">
                 {/* Line header */}
-                <div className="sticky top-0 z-10 flex items-center gap-2 px-4 py-2.5 bg-white/85 dark:bg-gray-900/85 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800">
+                <div className="sticky top-0 z-10 flex items-center gap-2 px-4 py-2.5 bg-white/85 backdrop-blur-sm border-b border-gray-100">
                   <span
                     className="w-2.5 h-2.5 rounded-full shrink-0"
                     style={{ backgroundColor: lineColor }}
                   />
-                  <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                  <span className="text-xs font-semibold text-gray-700">
                     {lineName}
                   </span>
-                  <span className="text-xs text-gray-400 dark:text-gray-600 ml-auto">
+                  <span className="text-xs text-gray-400 ml-auto">
                     {lineItems.length}
                   </span>
                 </div>
@@ -161,14 +161,14 @@ export default function AcrosticList({
                       <button
                         key={acrostic._id}
                         onClick={() => onStationClick(station)}
-                        className="text-left bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.08)] dark:shadow-none dark:ring-1 dark:ring-white/8 hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] dark:hover:ring-white/16 hover:-translate-y-0.5 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 active:scale-[0.98]"
+                        className="text-left bg-white rounded-2xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)]:ring-white/16 hover:-translate-y-0.5 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 active:scale-[0.98]"
                       >
                         <div className="flex items-center gap-2 mb-3">
                           <span
                             className="w-2 h-2 rounded-full shrink-0"
                             style={{ backgroundColor: lineColor }}
                           />
-                          <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                          <span className="text-sm font-semibold text-gray-900">
                             {stationLabel(station.name)}
                           </span>
                         </div>
@@ -184,7 +184,7 @@ export default function AcrosticList({
                               >
                                 {char}
                               </span>
-                              <span className="text-sm text-gray-600 dark:text-gray-400 leading-5">
+                              <span className="text-sm text-gray-600 leading-5">
                                 {acrostic.lines[i] || ""}
                               </span>
                             </div>

@@ -106,25 +106,25 @@ const devLog = [
 
 export default function DevNotePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center gap-4">
+      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center gap-4">
         <Link
           href="/"
-          className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors text-sm"
+          className="text-gray-400 hover:text-gray-600:text-gray-300 transition-colors text-sm"
         >
           ← 홈으로
         </Link>
-        <h1 className="text-lg font-bold text-gray-900 dark:text-gray-50">개발 노트</h1>
-        <span className="text-sm text-gray-400 dark:text-gray-500">지하철 N행시 개발 기록</span>
+        <h1 className="text-lg font-bold text-gray-900">개발 노트</h1>
+        <span className="text-sm text-gray-400">지하철 N행시 개발 기록</span>
       </header>
 
       {/* Content */}
       <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-10">
         {/* Project summary */}
         <section className="mb-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4">지하철 N행시</h2>
-          <div className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed space-y-3">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">지하철 N행시</h2>
+          <div className="text-gray-500 text-sm leading-relaxed space-y-3">
             <p>
               제작자는 지하철역 이름으로 N행시를 쓰는 것이 취미입니다. 계기는 경험수집잡화점의 온라인 모임에서 시작되었습니다. 그 후에도 지속해서 관심을 가지고 작성하고 있습니다. 현재는 농담으로 죽고 싶은 생각이 들 때마다 한편씩 쓴다고 합니다.
             </p>
@@ -146,33 +146,33 @@ export default function DevNotePage() {
           ].map(({ label, value }) => (
             <div
               key={label}
-              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-5 text-center"
+              className="bg-white rounded-xl border border-gray-200 px-4 py-5 text-center"
             >
-              <div className="text-2xl font-bold text-gray-900 dark:text-gray-50">{value}</div>
-              <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">{label}</div>
+              <div className="text-2xl font-bold text-gray-900">{value}</div>
+              <div className="text-xs text-gray-400 mt-1">{label}</div>
             </div>
           ))}
         </section>
 
         {/* Dev log */}
         <section>
-          <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-6">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-6">
             개발 이력
           </h2>
-          <ol className="relative border-l border-gray-200 dark:border-gray-700 space-y-8">
+          <ol className="relative border-l border-gray-200 space-y-8">
             {devLog.map(({ version, title, items }) => (
               <li key={version} className="ml-6">
-                <span className="absolute -left-2.5 mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 dark:bg-gray-100 ring-4 ring-gray-50 dark:ring-gray-900">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white dark:bg-gray-900" />
+                <span className="absolute -left-2.5 mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 ring-4 ring-gray-50">
+                  <span className="h-1.5 w-1.5 rounded-full bg-white" />
                 </span>
                 <div className="flex items-baseline gap-3 mb-2">
-                  <span className="text-xs font-mono font-bold text-gray-400 dark:text-gray-500">{version}</span>
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+                  <span className="text-xs font-mono font-bold text-gray-400">{version}</span>
+                  <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
                 </div>
                 <ul className="space-y-1">
                   {items.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gray-300 dark:bg-gray-600" />
+                    <li key={item} className="flex items-start gap-2 text-sm text-gray-500">
+                      <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gray-300" />
                       {item}
                     </li>
                   ))}
@@ -184,7 +184,7 @@ export default function DevNotePage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-6 py-4 text-center text-xs text-gray-400 dark:text-gray-500">
+      <footer className="border-t border-gray-200 bg-white px-6 py-4 text-center text-xs text-gray-400">
         © {new Date().getFullYear()} 지하철 N행시. All rights reserved.
       </footer>
     </div>

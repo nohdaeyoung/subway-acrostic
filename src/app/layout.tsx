@@ -16,9 +16,6 @@ const geistMono = Geist_Mono({
 
 const BASE_URL = "https://m.324.ing";
 
-// Dark mode init script — runs before first paint to prevent FOUC
-const themeScript = `(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark')}catch(e){}})();`;
-
 // Verification codes are set via Vercel environment variables.
 // GOOGLE_SITE_VERIFICATION and NAVER_SITE_VERIFICATION
 // These are read at build time and baked into the static HTML,
@@ -86,10 +83,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <head>
-        {/* Dark mode init — must run before paint to prevent flash */}
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+      <head />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AdminScripts />
         <WebAppJsonLd />

@@ -135,7 +135,7 @@ export default function AcrosticEditor({
     >
       <div
         ref={modalRef}
-        className="modal-animate bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-sm sm:mx-4 max-h-[90dvh] overflow-y-auto p-6 relative"
+        className="modal-animate bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-sm sm:mx-4 max-h-[90dvh] overflow-y-auto p-6 relative"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -144,7 +144,7 @@ export default function AcrosticEditor({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+          className="absolute top-3 right-3 p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100:text-gray-300:bg-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
           aria-label="닫기"
         >
           <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -154,26 +154,26 @@ export default function AcrosticEditor({
 
         {/* Header */}
         <div className="mb-4">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">
+          <h2 className="text-xl font-bold text-gray-900">
             🚇 {stationLabel(station.name)}
             {isEditing && (
-              <span className="text-sm font-normal text-gray-400 dark:text-gray-500"> (편집)</span>
+              <span className="text-sm font-normal text-gray-400"> (편집)</span>
             )}
           </h2>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
+          <p className="text-sm text-gray-400 mt-0.5">
             {station.lines.map((id) => getLineName(id, station.city)).join(" · ")}
           </p>
         </div>
 
-        <div className="border-t border-gray-100 dark:border-gray-700 pt-4">
+        <div className="border-t border-gray-100 pt-4">
           {loading ? (
-            <p className="text-gray-400 dark:text-gray-500 text-center py-4">불러오는 중...</p>
+            <p className="text-gray-400 text-center py-4">불러오는 중...</p>
           ) : isEditing ? (
             <div className="space-y-3">
               {chars.map((char, i) => (
                 <div key={`${char}-${i}`} className="flex flex-col gap-1">
                   <div className="flex items-center gap-3">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold text-sm shrink-0">
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm shrink-0">
                       {char}
                     </span>
                     <input
@@ -181,10 +181,10 @@ export default function AcrosticEditor({
                       value={lines[i] || ""}
                       onChange={(e) => updateLine(i, e.target.value)}
                       placeholder={`${char}...`}
-                      className={`flex-1 border rounded-xl px-3 py-2 text-sm bg-white dark:bg-gray-700/60 dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-shadow ${
+                      className={`flex-1 border rounded-xl px-3 py-2 text-sm bg-white:text-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-shadow ${
                         fieldErrors[i]
                           ? "border-red-400 focus:ring-red-400"
-                          : "border-gray-200 dark:border-gray-600 focus:ring-emerald-500"
+                          : "border-gray-200 focus:ring-emerald-500"
                       }`}
                     />
                   </div>
@@ -198,17 +198,17 @@ export default function AcrosticEditor({
             <div className="space-y-3">
               {chars.map((char, i) => (
                 <div key={`${char}-${i}`} className="flex items-start gap-3">
-                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold text-sm shrink-0">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm shrink-0">
                     {char}
                   </span>
-                  <span className="text-gray-800 dark:text-gray-200 pt-1 leading-relaxed">
+                  <span className="text-gray-800 pt-1 leading-relaxed">
                     {acrostic.lines[i] || ""}
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-400 dark:text-gray-500 text-center py-4">
+            <p className="text-gray-400 text-center py-4">
               아직 N행시가 없습니다
             </p>
           )}
@@ -225,7 +225,7 @@ export default function AcrosticEditor({
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
                   disabled={saving}
-                  className="px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors disabled:opacity-50"
+                  className="px-4 py-2 text-sm text-red-500 hover:bg-red-50:bg-red-900/20 rounded-xl transition-colors disabled:opacity-50"
                 >
                   삭제
                 </button>
@@ -238,7 +238,7 @@ export default function AcrosticEditor({
                   setIsEditing(false);
                 }}
                 disabled={saving}
-                className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100:bg-gray-700 rounded-xl transition-colors disabled:opacity-50"
               >
                 취소
               </button>
@@ -256,7 +256,7 @@ export default function AcrosticEditor({
               {loggedIn && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="px-6 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors"
+                  className="px-6 py-2 text-sm bg-gray-100 text-gray-700 hover:bg-gray-200:bg-gray-600 rounded-xl transition-colors"
                 >
                   수정
                 </button>
@@ -267,18 +267,18 @@ export default function AcrosticEditor({
 
         {/* Delete confirm overlay */}
         {showDeleteConfirm && (
-          <div className="absolute inset-0 bg-white/95 dark:bg-gray-800/95 rounded-t-2xl sm:rounded-2xl flex flex-col items-center justify-center p-8 z-10">
-            <p className="text-gray-900 dark:text-gray-100 font-semibold text-center mb-2">
+          <div className="absolute inset-0 bg-white/95 rounded-t-2xl sm:rounded-2xl flex flex-col items-center justify-center p-8 z-10">
+            <p className="text-gray-900 font-semibold text-center mb-2">
               정말 삭제하시겠습니까?
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">
+            <p className="text-sm text-gray-500 text-center mb-6">
               삭제한 N행시는 복구할 수 없습니다.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={saving}
-                className="px-5 py-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors disabled:opacity-50"
+                className="px-5 py-2 text-sm text-gray-600 bg-gray-100 hover:bg-gray-200:bg-gray-600 rounded-xl transition-colors disabled:opacity-50"
               >
                 취소
               </button>

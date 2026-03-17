@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import SubwayMap from "@/components/SubwayMap";
 import CityTabs from "@/components/CityTabs";
 import AcrosticEditor from "@/components/AcrosticEditor";
@@ -10,38 +10,9 @@ import Toast from "@/components/Toast";
 import { useSubwayPageState } from "@/hooks/useSubwayPageState";
 import { useTrainPositions } from "@/hooks/useTrainPositions";
 
-function SunIcon() {
-  return (
-    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-    </svg>
-  );
-}
-
-function MoonIcon() {
-  return (
-    <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-  );
-}
-
 export default function Home() {
-  // Dark mode toggle
-  const [isDark, setIsDark] = useState(false);
   const [lineDropOpen, setLineDropOpen] = useState(false);
   const [realtimeEnabled, setRealtimeEnabled] = useState(false);
-
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains("dark"));
-  }, []);
-
-  function toggleTheme() {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-  }
 
   const {
     city, setCity,
@@ -105,14 +76,14 @@ export default function Home() {
 
   // Desktop line filter — flex-wrap (allows 2 rows when narrow)
   const lineFilterPills = (
-    <div className="flex flex-wrap items-center gap-1.5 px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shrink-0 relative">
+    <div className="flex flex-wrap items-center gap-1.5 px-4 py-2 bg-white border-b border-gray-100 shrink-0 relative">
       <button
         onClick={() => setSelectedLine(null)}
         aria-pressed={selectedLine === null}
         className={`text-[11px] whitespace-nowrap px-2.5 py-1 rounded-full transition-all shrink-0 font-medium ${
           selectedLine === null
-            ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
-            : "text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+            ? "bg-gray-900 text-white"
+            : "text-gray-500 hover:bg-gray-100:bg-gray-800"
         }`}
       >
         전체
@@ -127,10 +98,10 @@ export default function Home() {
             aria-pressed={selectedLine === line.id}
             className={`flex items-center gap-1 text-[11px] whitespace-nowrap px-2.5 py-1 rounded-full transition-all shrink-0 ${
               selectedLine === line.id
-                ? "bg-gray-900 text-white font-medium dark:bg-gray-100 dark:text-gray-900"
+                ? "bg-gray-900 text-white font-medium"
                 : isActive
-                  ? "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                  : "text-gray-300 hover:bg-gray-100 dark:text-gray-600 dark:hover:bg-gray-800"
+                  ? "text-gray-600 hover:bg-gray-100:bg-gray-800"
+                  : "text-gray-300 hover:bg-gray-100:bg-gray-800"
             }`}
           >
             <span
@@ -153,10 +124,10 @@ export default function Home() {
         aria-pressed={realtimeEnabled}
         className={`ml-auto flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-all shrink-0 ${
           city !== "seoul"
-            ? "opacity-50 cursor-not-allowed text-gray-400 border-gray-200 dark:border-gray-700"
+            ? "opacity-50 cursor-not-allowed text-gray-400 border-gray-200"
             : realtimeEnabled
               ? "bg-emerald-500 text-white border-emerald-500"
-              : "text-gray-400 border-gray-200 dark:border-gray-700 hover:border-emerald-400 hover:text-emerald-500"
+              : "text-gray-400 border-gray-200 hover:border-emerald-400 hover:text-emerald-500"
         }`}
       >
         {realtimeEnabled && (
@@ -168,34 +139,25 @@ export default function Home() {
   );
 
   return (
-    <main className="flex flex-col h-[100dvh] bg-gray-50 dark:bg-gray-950">
+    <main className="flex flex-col h-[100dvh] bg-gray-50">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-[0_1px_4px_rgba(0,0,0,0.05)] shrink-0">
-        {/* Row 1: 서비스명 + 테마토글 + 관리자 */}
+      <header className="bg-white border-b border-gray-100 shadow-[0_1px_4px_rgba(0,0,0,0.05)] shrink-0">
+        {/* Row 1: 서비스명 + 관리자 */}
         <div className="flex items-center justify-between px-4 h-12">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-50 tracking-tight">지하철 N행시</h1>
+          <h1 className="text-xl font-bold text-gray-900 tracking-tight">지하철 N행시</h1>
           <div className="flex items-center gap-1.5">
-            {/* Dark mode toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-              aria-label={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
-            >
-              {isDark ? <SunIcon /> : <MoonIcon />}
-            </button>
-            {/* Admin */}
             {loggedIn ? (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">관리자</span>
-                <a href="/admin" className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">설정</a>
-                <button onClick={handleLogout} className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                <span className="text-xs text-emerald-600 font-medium">관리자</span>
+                <a href="/admin" className="text-xs text-gray-400 hover:text-gray-700:text-gray-300 transition-colors">설정</a>
+                <button onClick={handleLogout} className="text-xs text-gray-400 hover:text-gray-700:text-gray-300 transition-colors">
                   로그아웃
                 </button>
               </div>
             ) : (
               <button
                 onClick={() => setShowLogin(true)}
-                className="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                className="text-xs text-gray-400 hover:text-gray-700:text-gray-300 transition-colors"
               >
                 관리자
               </button>
@@ -205,13 +167,13 @@ export default function Home() {
         {/* Row 2: CityTabs + 범례 */}
         <div className="flex items-center justify-between px-4 pb-2.5">
           <CityTabs activeCity={city} onChange={setCity} />
-          <div className="flex gap-3 text-xs text-gray-400 dark:text-gray-500">
+          <div className="flex gap-3 text-xs text-gray-400">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
               있음 ({acrosticStationIds.size})
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 inline-block" />
+              <span className="w-2 h-2 rounded-full bg-white border border-gray-300 inline-block" />
               없음
             </span>
           </div>
@@ -219,14 +181,14 @@ export default function Home() {
       </header>
 
       {/* Mobile only: ViewMode toggle */}
-      <div className="md:hidden flex items-center gap-1 px-4 py-2 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shrink-0">
+      <div className="md:hidden flex items-center gap-1 px-4 py-2 border-b border-gray-100 bg-white shrink-0">
         <button
           onClick={() => setViewMode("list")}
           aria-pressed={viewMode === "list"}
           className={`px-3 py-1.5 text-sm rounded-xl transition-all ${
             viewMode === "list"
-              ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 font-medium"
-              : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              ? "bg-gray-900 text-white font-medium"
+              : "text-gray-500 hover:bg-gray-100:bg-gray-800"
           }`}
         >
           목록
@@ -236,8 +198,8 @@ export default function Home() {
           aria-pressed={viewMode === "map"}
           className={`px-3 py-1.5 text-sm rounded-xl transition-all ${
             viewMode === "map"
-              ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 font-medium"
-              : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              ? "bg-gray-900 text-white font-medium"
+              : "text-gray-500 hover:bg-gray-100:bg-gray-800"
           }`}
         >
           지도
@@ -246,12 +208,12 @@ export default function Home() {
 
       {/* Mobile only: line select (map mode) */}
       {viewMode === "map" && (
-        <div className="md:hidden px-4 py-2 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shrink-0 relative z-20">
+        <div className="md:hidden px-4 py-2 border-b border-gray-100 bg-white shrink-0 relative z-20">
           <div className="flex items-center gap-2">
           {/* Trigger */}
           <button
             onClick={() => setLineDropOpen((v) => !v)}
-            className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
+            className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
           >
             <span className="flex items-center gap-2">
               {selectedLine ? (
@@ -260,7 +222,7 @@ export default function Home() {
                   <span className="font-medium">{lines[selectedLine]?.name}</span>
                 </>
               ) : (
-                <span className="text-gray-500 dark:text-gray-400">전체 노선</span>
+                <span className="text-gray-500">전체 노선</span>
               )}
             </span>
             <svg
@@ -279,18 +241,18 @@ export default function Home() {
               {/* Backdrop */}
               <div className="fixed inset-0 z-10" onClick={() => setLineDropOpen(false)} />
               {/* Layer */}
-              <div className="absolute left-4 right-4 top-full mt-1 z-20 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+              <div className="absolute left-4 right-4 top-full mt-1 z-20 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                 <div className="max-h-64 overflow-y-auto">
                   {/* 전체 노선 */}
                   <button
                     onClick={() => { setSelectedLine(null); setLineDropOpen(false); }}
                     className={`w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-colors ${
                       selectedLine === null
-                        ? "bg-gray-50 dark:bg-gray-700 font-medium text-gray-900 dark:text-gray-100"
-                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/60"
+                        ? "bg-gray-50 font-medium text-gray-900"
+                        : "text-gray-600 hover:bg-gray-50:bg-gray-700/60"
                     }`}
                   >
-                    <span className="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-500 shrink-0" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-gray-300 shrink-0" />
                     전체 노선
                     {selectedLine === null && (
                       <svg aria-hidden="true" className="ml-auto w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -307,8 +269,8 @@ export default function Home() {
                         onClick={() => { setSelectedLine(line.id); setLineDropOpen(false); }}
                         className={`w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-colors ${
                           selectedLine === line.id
-                            ? "bg-gray-50 dark:bg-gray-700 font-medium text-gray-900 dark:text-gray-100"
-                            : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/60"
+                            ? "bg-gray-50 font-medium text-gray-900"
+                            : "text-gray-600 hover:bg-gray-50:bg-gray-700/60"
                         }`}
                       >
                         <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: line.color }} />
@@ -335,10 +297,10 @@ export default function Home() {
             aria-pressed={realtimeEnabled}
             className={`flex items-center gap-1 text-xs px-2.5 py-2 rounded-xl border transition-all shrink-0 ${
               city !== "seoul"
-                ? "opacity-50 cursor-not-allowed text-gray-400 border-gray-200 dark:border-gray-700"
+                ? "opacity-50 cursor-not-allowed text-gray-400 border-gray-200"
                 : realtimeEnabled
                   ? "bg-emerald-500 text-white border-emerald-500"
-                  : "text-gray-400 border-gray-200 dark:border-gray-700 hover:border-emerald-400 hover:text-emerald-500"
+                  : "text-gray-400 border-gray-200 hover:border-emerald-400 hover:text-emerald-500"
             }`}
           >
             {realtimeEnabled && (
@@ -362,7 +324,7 @@ export default function Home() {
             />
           ) : (
             <div className="p-4 flex flex-col gap-3">
-              <div className="w-full aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+              <div className="w-full aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200">
                 <SubwayMap
                   city={city}
                   stations={stations}
@@ -403,7 +365,7 @@ export default function Home() {
 
         {/* Desktop: 2-column */}
         <div className="hidden md:flex h-full">
-          <aside className="w-80 xl:w-96 border-r border-gray-100 dark:border-gray-800 flex flex-col bg-white dark:bg-gray-900 shrink-0">
+          <aside className="w-80 xl:w-96 border-r border-gray-100 flex flex-col bg-white shrink-0">
             <AcrosticList
               acrostics={listAcrostics}
               stations={allStations}
@@ -413,7 +375,7 @@ export default function Home() {
           <div className="flex-1 flex flex-col min-w-0">
             {lineFilterPills}
             <div className="flex-1 p-6 flex flex-col gap-4 overflow-auto">
-              <div className="w-full aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+              <div className="w-full aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200">
                 <SubwayMap
                   city={city}
                   stations={stations}
@@ -454,10 +416,10 @@ export default function Home() {
       </div>
 
       {/* Footer — 2× height */}
-      <footer className="flex items-center justify-center gap-4 px-4 py-4 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shrink-0 text-xs text-gray-400 dark:text-gray-600">
+      <footer className="flex items-center justify-center gap-4 px-4 py-4 border-t border-gray-100 bg-white shrink-0 text-xs text-gray-400">
         <span>© {new Date().getFullYear()} 지하철 N행시</span>
-        <a href="/about" className="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">소개</a>
-        <a href="/dev-note" className="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">개발 노트</a>
+        <a href="/about" className="hover:text-gray-600:text-gray-400 transition-colors">소개</a>
+        <a href="/dev-note" className="hover:text-gray-600:text-gray-400 transition-colors">개발 노트</a>
       </footer>
 
       {showLogin && !selectedStation && (

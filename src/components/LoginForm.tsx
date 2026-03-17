@@ -48,17 +48,17 @@ export default function LoginForm({ onSuccess, onCancel }: LoginFormProps) {
     >
       <div
         ref={modalRef}
-        className="modal-animate bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm mx-4 p-6"
+        className="modal-animate bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 p-6"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-label="관리자 로그인"
       >
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50 mb-6">관리자 로그인</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-6">관리자 로그인</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="admin-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label htmlFor="admin-password" className="block text-sm font-medium text-gray-700 mb-1">
               비밀번호
             </label>
             <input
@@ -68,7 +68,7 @@ export default function LoginForm({ onSuccess, onCancel }: LoginFormProps) {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoFocus
-              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
             />
           </div>
 
@@ -78,7 +78,7 @@ export default function LoginForm({ onSuccess, onCancel }: LoginFormProps) {
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+              className="flex-1 px-4 py-2 text-sm text-gray-600 hover:bg-gray-100:bg-gray-700 rounded-xl transition-colors"
             >
               취소
             </button>

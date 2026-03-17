@@ -1,3 +1,6 @@
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/lib/firebase";
+
 const TOKEN_KEY = "subway-admin-token";
 
 export async function login(password: string): Promise<boolean> {
@@ -13,6 +16,30 @@ export async function login(password: string): Promise<boolean> {
     return true;
   } catch {
     return false;
+  }
+}
+
+export async function loginWithGoogle(): Promise<{ success: boolean; error?: string }> {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const idToken = await result.user.getIdToken();
+
+    const res = await fetch("/api/auth/google", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      return { success: false, error: data.error || "로그인에 실패했습니다." };
+    }
+
+    const { token } = await res.json();
+    localStorage.setItem(TOKEN_KEY, token);
+    return { success: true };
+  } catch {
+    return { success: false, error: "Google 로그인에 실패했습니다." };
   }
 }
 

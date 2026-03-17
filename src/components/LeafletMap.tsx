@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import type { Station, City } from "@/types/subway";
+import type { Station, City, TrainPosition } from "@/types/subway";
 import type { StationData, LineInfo } from "@/data/seoul-subway";
 
 interface LeafletMapProps {
@@ -16,6 +16,7 @@ interface LeafletMapProps {
   acrosticStationIds: Set<string>;
   selectedLine: string | null;
   onStationClick: (station: Station) => void;
+  trainPositions?: TrainPosition[];
 }
 
 const CITY_CENTER: Record<City, { lat: number; lng: number; zoom: number }> = {
@@ -86,6 +87,35 @@ function buildIcon(
   });
 }
 
+// Leaflet 네이티브 API로 열차 마커를 직접 그리는 레이어
+// zIndexOffset: 1000 으로 역 마커 위에 렌더링
+function TrainLayer({ trainPositions, lines }: { trainPositions: TrainPosition[]; lines: Record<string, LineInfo> }) {
+  const map = useMap();
+
+  useEffect(() => {
+    const markers = trainPositions.map((train) => {
+      const color = lines[train.lineId]?.color ?? "#888";
+      const arrow = train.direction === "up" ? "▲" : "▼";
+      const icon = L.divIcon({
+        className: "train-icon",
+        html: `<div style="width:16px;height:16px;background:${color};border:2px solid white;border-radius:3px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,.5);pointer-events:none;"><span style="color:white;font-size:8px;font-weight:bold;line-height:1;">${arrow}</span></div>`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+      });
+      return L.marker([train.lat, train.lng], {
+        icon,
+        zIndexOffset: 1000,
+      }).addTo(map);
+    });
+
+    return () => {
+      markers.forEach((m) => m.remove());
+    };
+  }, [trainPositions, lines, map]);
+
+  return null;
+}
+
 function CityChanger({ city }: { city: City }) {
   const map = useMap();
   const prevCity = useRef(city);
@@ -101,6 +131,7 @@ function CityChanger({ city }: { city: City }) {
   return null;
 }
 
+
 export default function SubwayLeafletMap({
   city,
   stations,
@@ -110,6 +141,7 @@ export default function SubwayLeafletMap({
   acrosticStationIds,
   selectedLine,
   onStationClick,
+  trainPositions,
 }: LeafletMapProps) {
   const center = CITY_CENTER[city];
   const showLabels = selectedLine !== null;
@@ -169,6 +201,7 @@ export default function SubwayLeafletMap({
     return map;
   }, [visibleStations, acrosticStationIds, lines, showLabels]);
 
+
   return (
     <MapContainer
       center={[center.lat, center.lng]}
@@ -205,6 +238,9 @@ export default function SubwayLeafletMap({
           eventHandlers={{ click: () => onStationClick(station) }}
         />
       ))}
+
+      {/* Train position markers — Leaflet 네이티브 API, z-index 650 pane */}
+      <TrainLayer trainPositions={trainPositions ?? []} lines={lines} />
     </MapContainer>
   );
 }

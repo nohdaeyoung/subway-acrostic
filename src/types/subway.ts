@@ -16,3 +16,13 @@ export interface Acrostic {
 }
 
 export type City = "seoul" | "busan";
+
+export interface TrainPosition {
+  trainNo: string;
+  lineId: string;      // "1"~"8"
+  statnNm: string;     // 현재 역명 (한국어)
+  stationId: string;   // "s-xxx"
+  lat: number;
+  lng: number;
+  direction: "up" | "down";  // 0=상행/내선, 1=하행/외선
+}

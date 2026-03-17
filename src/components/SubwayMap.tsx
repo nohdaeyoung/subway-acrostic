@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { Station, City } from "@/types/subway";
+import type { Station, City, TrainPosition } from "@/types/subway";
 import type { StationData, LineInfo } from "@/data/seoul-subway";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
@@ -22,6 +22,7 @@ interface SubwayMapProps {
   acrosticStationIds: Set<string>;
   selectedLine: string | null;
   onStationClick: (station: Station) => void;
+  trainPositions?: TrainPosition[];
 }
 
 export default function SubwayMap(props: SubwayMapProps) {

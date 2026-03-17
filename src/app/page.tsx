@@ -8,6 +8,7 @@ import AcrosticList from "@/components/AcrosticList";
 import LoginForm from "@/components/LoginForm";
 import Toast from "@/components/Toast";
 import { useSubwayPageState } from "@/hooks/useSubwayPageState";
+import { useTrainPositions } from "@/hooks/useTrainPositions";
 
 function SunIcon() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
   // Dark mode toggle
   const [isDark, setIsDark] = useState(false);
   const [lineDropOpen, setLineDropOpen] = useState(false);
+  const [realtimeEnabled, setRealtimeEnabled] = useState(false);
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains("dark"));
@@ -59,10 +61,21 @@ export default function Home() {
     handleSaved,
   } = useSubwayPageState();
 
-  // 선택된 호선 기준으로 사이드바 N행시 목록 필터링
+  const { trains } = useTrainPositions(city, realtimeEnabled);
+
+  // 랜덤 보기: N행시가 있는 역만
+  function handleRandomView() {
+    const withAcrostic = allStations.filter((s) => acrosticStationIds.has(s.id));
+    if (withAcrostic.length === 0) return;
+    const random = withAcrostic[Math.floor(Math.random() * withAcrostic.length)];
+    handleStationClick(random);
+  }
+
+  // 랜덤 쓰기: N행시가 없는 역만
   function handleRandomStation() {
-    if (allStations.length === 0) return;
-    const random = allStations[Math.floor(Math.random() * allStations.length)];
+    const missing = allStations.filter((s) => !acrosticStationIds.has(s.id));
+    if (missing.length === 0) return;
+    const random = missing[Math.floor(Math.random() * missing.length)];
     handleStationClick(random);
   }
 
@@ -92,7 +105,7 @@ export default function Home() {
 
   // Desktop line filter — flex-wrap (allows 2 rows when narrow)
   const lineFilterPills = (
-    <div className="flex flex-wrap items-center gap-1.5 px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shrink-0">
+    <div className="flex flex-wrap items-center gap-1.5 px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shrink-0 relative">
       <button
         onClick={() => setSelectedLine(null)}
         aria-pressed={selectedLine === null}
@@ -133,6 +146,24 @@ export default function Home() {
           </button>
         );
       })}
+      {/* 실시간 토글 버튼 */}
+      <button
+        onClick={() => setRealtimeEnabled((v) => !v)}
+        disabled={city !== "seoul"}
+        aria-pressed={realtimeEnabled}
+        className={`ml-auto flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-all shrink-0 ${
+          city !== "seoul"
+            ? "opacity-50 cursor-not-allowed text-gray-400 border-gray-200 dark:border-gray-700"
+            : realtimeEnabled
+              ? "bg-emerald-500 text-white border-emerald-500"
+              : "text-gray-400 border-gray-200 dark:border-gray-700 hover:border-emerald-400 hover:text-emerald-500"
+        }`}
+      >
+        {realtimeEnabled && (
+          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+        )}
+        실시간
+      </button>
     </div>
   );
 
@@ -216,10 +247,11 @@ export default function Home() {
       {/* Mobile only: line select (map mode) */}
       {viewMode === "map" && (
         <div className="md:hidden px-4 py-2 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shrink-0 relative z-20">
+          <div className="flex items-center gap-2">
           {/* Trigger */}
           <button
             onClick={() => setLineDropOpen((v) => !v)}
-            className="w-full flex items-center justify-between px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
+            className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
           >
             <span className="flex items-center gap-2">
               {selectedLine ? (
@@ -296,6 +328,25 @@ export default function Home() {
               </div>
             </>
           )}
+          {/* 모바일 실시간 토글 */}
+          <button
+            onClick={() => setRealtimeEnabled((v) => !v)}
+            disabled={city !== "seoul"}
+            aria-pressed={realtimeEnabled}
+            className={`flex items-center gap-1 text-xs px-2.5 py-2 rounded-xl border transition-all shrink-0 ${
+              city !== "seoul"
+                ? "opacity-50 cursor-not-allowed text-gray-400 border-gray-200 dark:border-gray-700"
+                : realtimeEnabled
+                  ? "bg-emerald-500 text-white border-emerald-500"
+                  : "text-gray-400 border-gray-200 dark:border-gray-700 hover:border-emerald-400 hover:text-emerald-500"
+            }`}
+          >
+            {realtimeEnabled && (
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            )}
+            실시간
+          </button>
+          </div>
         </div>
       )}
 
@@ -321,18 +372,31 @@ export default function Home() {
                   acrosticStationIds={acrosticStationIds}
                   selectedLine={selectedLine}
                   onStationClick={handleStationClick}
+                  trainPositions={trains}
                 />
               </div>
-              <button
-                onClick={handleRandomStation}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-sm font-medium transition-all"
-              >
-                <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
-                  <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
-                </svg>
-                랜덤 쓰기
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleRandomView}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-medium transition-all"
+                >
+                  <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
+                    <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
+                  </svg>
+                  랜덤 보기
+                </button>
+                <button
+                  onClick={handleRandomStation}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-sm font-medium transition-all"
+                >
+                  <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
+                    <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
+                  </svg>
+                  랜덤 쓰기
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -359,18 +423,31 @@ export default function Home() {
                   acrosticStationIds={acrosticStationIds}
                   selectedLine={selectedLine}
                   onStationClick={handleStationClick}
+                  trainPositions={trains}
                 />
               </div>
-              <button
-                onClick={handleRandomStation}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-sm font-medium transition-all shrink-0"
-              >
-                <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
-                  <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
-                </svg>
-                랜덤 쓰기
-              </button>
+              <div className="flex gap-2 shrink-0">
+                <button
+                  onClick={handleRandomView}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-medium transition-all"
+                >
+                  <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
+                    <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
+                  </svg>
+                  랜덤 보기
+                </button>
+                <button
+                  onClick={handleRandomStation}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-sm font-medium transition-all"
+                >
+                  <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
+                    <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
+                  </svg>
+                  랜덤 쓰기
+                </button>
+              </div>
             </div>
           </div>
         </div>

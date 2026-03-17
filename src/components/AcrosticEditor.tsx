@@ -130,12 +130,17 @@ export default function AcrosticEditor({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      style={{ background: "rgba(28, 24, 21, 0.5)" }}
       onClick={isEditing ? undefined : onClose}
     >
       <div
         ref={modalRef}
-        className="modal-animate bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-sm sm:mx-4 max-h-[90dvh] overflow-y-auto p-6 relative"
+        className="modal-animate w-full sm:max-w-sm sm:mx-4 max-h-[90dvh] overflow-y-auto p-6 relative rounded-t-2xl sm:rounded-2xl"
+        style={{
+          background: "var(--bg-card)",
+          boxShadow: "0 -4px 30px rgba(42, 33, 24, 0.15), 0 0 0 1px var(--border-soft)",
+        }}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -144,7 +149,8 @@ export default function AcrosticEditor({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100:text-gray-300:bg-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+          className="absolute top-3 right-3 p-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2"
+          style={{ color: "var(--text-ghost)" }}
           aria-label="닫기"
         >
           <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -153,27 +159,38 @@ export default function AcrosticEditor({
         </button>
 
         {/* Header */}
-        <div className="mb-4">
-          <h2 className="text-xl font-bold text-gray-900">
-            🚇 {stationLabel(station.name)}
+        <div className="mb-5">
+          <h2 className="font-serif text-xl" style={{ color: "var(--text-ink)", fontWeight: 800 }}>
+            {stationLabel(station.name)}
             {isEditing && (
-              <span className="text-sm font-normal text-gray-400"> (편집)</span>
+              <span className="text-sm font-sans" style={{ color: "var(--text-ghost)", fontWeight: 400, marginLeft: "8px" }}>집필</span>
             )}
           </h2>
-          <p className="text-sm text-gray-400 mt-0.5">
+          <p className="text-xs mt-1" style={{ color: "var(--text-faded)", letterSpacing: "0.05em" }}>
             {station.lines.map((id) => getLineName(id, station.city)).join(" · ")}
           </p>
         </div>
 
-        <div className="border-t border-gray-100 pt-4">
+        <div style={{ borderTop: "1px solid var(--border-soft)", paddingTop: "16px" }}>
           {loading ? (
-            <p className="text-gray-400 text-center py-4">불러오는 중...</p>
+            <p className="text-center py-6 font-serif" style={{ color: "var(--text-ghost)" }}>
+              불러오는 중...
+            </p>
           ) : isEditing ? (
+            /* ─── 편집 모드 ─── */
             <div className="space-y-3">
               {chars.map((char, i) => (
                 <div key={`${char}-${i}`} className="flex flex-col gap-1">
                   <div className="flex items-center gap-3">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm shrink-0">
+                    <span
+                      className="font-serif text-lg shrink-0"
+                      style={{
+                        color: "var(--accent-vermillion)",
+                        fontWeight: 800,
+                        width: "1.5em",
+                        textAlign: "center",
+                      }}
+                    >
                       {char}
                     </span>
                     <input
@@ -181,43 +198,56 @@ export default function AcrosticEditor({
                       value={lines[i] || ""}
                       onChange={(e) => updateLine(i, e.target.value)}
                       placeholder={`${char}...`}
-                      className={`flex-1 border rounded-xl px-3 py-2 text-sm bg-white:text-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-shadow ${
-                        fieldErrors[i]
-                          ? "border-red-400 focus:ring-red-400"
-                          : "border-gray-200 focus:ring-emerald-500"
-                      }`}
+                      className="flex-1 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 transition-shadow"
+                      style={{
+                        background: "var(--bg-paper)",
+                        color: "var(--text-ink)",
+                        border: `1px solid ${fieldErrors[i] ? "#b05a5a" : "var(--border-rule)"}`,
+                      }}
                     />
                   </div>
                   {fieldErrors[i] && (
-                    <p className="text-xs text-red-500 pl-11">{fieldErrors[i]}</p>
+                    <p className="text-xs pl-10" style={{ color: "#b05a5a" }}>{fieldErrors[i]}</p>
                   )}
                 </div>
               ))}
             </div>
           ) : acrostic ? (
-            <div className="space-y-3">
+            /* ─── 감상 모드 ─── */
+            <div className="space-y-3 py-2">
               {chars.map((char, i) => (
                 <div key={`${char}-${i}`} className="flex items-start gap-3">
-                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm shrink-0">
+                  <span
+                    className="font-serif text-lg shrink-0 mt-0.5"
+                    style={{
+                      color: "var(--accent-vermillion)",
+                      fontWeight: 800,
+                      width: "1.2em",
+                      textAlign: "center",
+                    }}
+                  >
                     {char}
                   </span>
-                  <span className="text-gray-800 pt-1 leading-relaxed">
+                  <span className="font-serif leading-relaxed pt-0.5" style={{ color: "var(--text-body)", fontSize: "15px" }}>
                     {acrostic.lines[i] || ""}
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-400 text-center py-4">
+            <p className="text-center py-6 font-serif" style={{ color: "var(--text-ghost)" }}>
               아직 N행시가 없습니다
             </p>
           )}
         </div>
 
         {error && (
-          <p role="alert" aria-live="polite" className="mt-3 text-sm text-red-500 text-center">{error}</p>
+          <p role="alert" aria-live="polite" className="mt-3 text-sm text-center" style={{ color: "#b05a5a" }}>
+            {error}
+          </p>
         )}
 
+        {/* Actions */}
         <div className="mt-6 flex gap-2">
           {isEditing ? (
             <>
@@ -225,7 +255,8 @@ export default function AcrosticEditor({
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
                   disabled={saving}
-                  className="px-4 py-2 text-sm text-red-500 hover:bg-red-50:bg-red-900/20 rounded-xl transition-colors disabled:opacity-50"
+                  className="px-4 py-2 text-sm rounded-lg transition-colors disabled:opacity-50"
+                  style={{ color: "#b05a5a" }}
                 >
                   삭제
                 </button>
@@ -234,14 +265,20 @@ export default function AcrosticEditor({
               <button
                 onClick={onClose}
                 disabled={saving}
-                className="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100:bg-gray-700 rounded-xl transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm rounded-lg transition-colors disabled:opacity-50"
+                style={{ color: "var(--text-faded)" }}
               >
                 취소
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-6 py-2 text-sm bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                className="px-6 py-2 text-sm rounded-lg font-serif transition-colors disabled:opacity-50"
+                style={{
+                  background: "var(--accent-vermillion)",
+                  color: "#fff",
+                  fontWeight: 700,
+                }}
               >
                 {saving ? "저장 중..." : "저장"}
               </button>
@@ -252,7 +289,13 @@ export default function AcrosticEditor({
               {loggedIn && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="px-6 py-2 text-sm bg-gray-100 text-gray-700 hover:bg-gray-200:bg-gray-600 rounded-xl transition-colors"
+                  className="px-6 py-2 text-sm rounded-lg font-serif transition-colors"
+                  style={{
+                    background: "var(--bg-paper)",
+                    color: "var(--text-body)",
+                    border: "1px solid var(--border-rule)",
+                    fontWeight: 700,
+                  }}
                 >
                   수정
                 </button>
@@ -263,25 +306,30 @@ export default function AcrosticEditor({
 
         {/* Delete confirm overlay */}
         {showDeleteConfirm && (
-          <div className="absolute inset-0 bg-white/95 rounded-t-2xl sm:rounded-2xl flex flex-col items-center justify-center p-8 z-10">
-            <p className="text-gray-900 font-semibold text-center mb-2">
+          <div
+            className="absolute inset-0 rounded-t-2xl sm:rounded-2xl flex flex-col items-center justify-center p-8 z-10"
+            style={{ background: "rgba(250, 247, 242, 0.97)" }}
+          >
+            <p className="font-serif text-center mb-2" style={{ color: "var(--text-ink)", fontWeight: 700 }}>
               정말 삭제하시겠습니까?
             </p>
-            <p className="text-sm text-gray-500 text-center mb-6">
+            <p className="text-sm text-center mb-6" style={{ color: "var(--text-faded)" }}>
               삭제한 N행시는 복구할 수 없습니다.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
                 disabled={saving}
-                className="px-5 py-2 text-sm text-gray-600 bg-gray-100 hover:bg-gray-200:bg-gray-600 rounded-xl transition-colors disabled:opacity-50"
+                className="px-5 py-2 text-sm rounded-lg transition-colors disabled:opacity-50"
+                style={{ background: "var(--bg-paper)", color: "var(--text-body)", border: "1px solid var(--border-rule)" }}
               >
                 취소
               </button>
               <button
                 onClick={handleDelete}
                 disabled={saving}
-                className="px-5 py-2 text-sm bg-red-600 text-white hover:bg-red-700 rounded-xl transition-colors disabled:opacity-50"
+                className="px-5 py-2 text-sm rounded-lg transition-colors disabled:opacity-50"
+                style={{ background: "#b05a5a", color: "#fff" }}
               >
                 {saving ? "삭제 중..." : "삭제"}
               </button>

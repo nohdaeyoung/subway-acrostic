@@ -1,45 +1,70 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 시집(詩集) 컬러 팔레트 — "역에서 쓰다" */
+  --bg-paper: #f0ebe3;
+  --bg-card: #faf7f2;
+  --bg-deep: #2a2118;
+  --text-ink: #1c1815;
+  --text-body: #4a3f35;
+  --text-faded: #9a8e82;
+  --text-ghost: #c4b8ab;
+  --accent-vermillion: #c24b2e;
+  --accent-vermillion-hover: #a83d24;
+  --accent-moss: #4a6b3a;
+  --border-rule: #ddd4c6;
+  --border-soft: #ebe5da;
+
+  --font-serif: var(--font-nanum-myeongjo), "Nanum Myeongjo", serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-paper);
+  --color-foreground: var(--text-ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg-paper);
+  color: var(--text-ink);
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Custom station DivIcon — strip Leaflet default marker styles */
+/* ─── 시집 타이포그래피 ─── */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+/* ─── 종이 텍스쳐 배경 ─── */
+.bg-paper {
+  background-color: var(--bg-paper);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(194, 75, 46, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(74, 107, 58, 0.03) 0%, transparent 50%);
+}
+
+/* ─── Leaflet ─── */
 .subway-station-icon {
   background: transparent !important;
   border: none !important;
   overflow: visible !important;
 }
-
 .subway-station-icon + .leaflet-marker-shadow {
   display: none !important;
 }
-
 .leaflet-container {
   z-index: 0 !important;
-  background: #f9fafb;
+  background: #ede8df;
 }
-
 .leaflet-control-zoom a {
   font-size: 16px !important;
-  color: #374151 !important;
+  color: var(--text-body) !important;
+  background: var(--bg-card) !important;
+  border-color: var(--border-rule) !important;
 }
 
-/* Hide scrollbar */
+/* ─── 스크롤바 ─── */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -47,11 +72,9 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
-
-/* Sidebar thin scrollbar */
 .sidebar-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+  scrollbar-color: rgba(42, 33, 24, 0.12) transparent;
 }
 .sidebar-scroll::-webkit-scrollbar {
   width: 4px;
@@ -60,20 +83,19 @@ body {
   background: transparent;
 }
 .sidebar-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(42, 33, 24, 0.12);
   border-radius: 999px;
 }
 .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.24);
+  background: rgba(42, 33, 24, 0.24);
 }
 
-/* Marker label */
+/* ─── 역 마커 ─── */
 .marker-label {
-  color: #111827;
-  text-shadow: 0 0 3px #fff, 0 0 3px #fff;
+  color: var(--text-ink);
+  text-shadow: 0 0 3px var(--bg-paper), 0 0 3px var(--bg-paper);
 }
 
-/* Station marker pulse animation */
 @keyframes marker-pulse {
   0%   { transform: scale(1);   opacity: 0.55; }
   100% { transform: scale(2.4); opacity: 0;    }
@@ -83,10 +105,7 @@ body {
   transform-origin: center;
 }
 
-/* Modal animation
- * Mobile  : slide up from bottom
- * Desktop : fade-in + subtle scale (sm: 640px+)
- */
+/* ─── 모달 애니메이션 ─── */
 @keyframes modal-slide-up {
   from { transform: translateY(60px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
@@ -95,13 +114,49 @@ body {
   from { opacity: 0; transform: scale(0.96) translateY(-6px); }
   to   { opacity: 1; transform: scale(1)    translateY(0);    }
 }
-
 .modal-animate {
-  animation: modal-slide-up 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: modal-slide-up 280ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 @media (min-width: 640px) {
   .modal-animate {
-    animation: modal-fade-scale 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    animation: modal-fade-scale 280ms cubic-bezier(0.16, 1, 0.3, 1);
   }
+}
+
+/* ─── 시집 카드 호버 ─── */
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.poem-card {
+  animation: card-enter 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─── 구분선 (시집 페이지 구분) ─── */
+.divider-ornament::after {
+  content: "◇";
+  display: block;
+  text-align: center;
+  color: var(--text-ghost);
+  font-size: 10px;
+  letter-spacing: 8px;
+  margin-top: 12px;
+}
+
+/* ─── 주홍 인장 효과 ─── */
+.stamp-accent {
+  color: var(--accent-vermillion);
+  text-shadow: 0 0 8px rgba(194, 75, 46, 0.15);
+}
+
+/* ─── 진척도 바 ─── */
+.progress-track {
+  background: var(--border-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  background: linear-gradient(90deg, var(--accent-vermillion), #d4754a);
+  border-radius: 999px;
+  transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
 }

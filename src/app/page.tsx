@@ -80,17 +80,17 @@ export default function Home() {
     return allAcrostics.filter((a) => lineStationIds.has(a.stationId));
   }, [allAcrostics, allStations, selectedLine, city]);
 
-  // Desktop line filter — flex-wrap (allows 2 rows when narrow)
+  // Desktop line filter pills
   const lineFilterPills = (
-    <div className="flex flex-wrap items-center gap-1.5 px-4 py-2 bg-white border-b border-gray-100 shrink-0 relative">
+    <div className="flex flex-wrap items-center gap-1.5 px-5 py-2.5 shrink-0 relative" style={{ borderBottom: "1px solid var(--border-soft)" }}>
       <button
         onClick={() => setSelectedLine(null)}
         aria-pressed={selectedLine === null}
-        className={`text-[11px] whitespace-nowrap px-2.5 py-1 rounded-full transition-all shrink-0 font-medium ${
-          selectedLine === null
-            ? "bg-gray-900 text-white"
-            : "text-gray-500 hover:bg-gray-100:bg-gray-800"
-        }`}
+        className="text-[11px] whitespace-nowrap px-2.5 py-1 rounded-full transition-all shrink-0 font-medium"
+        style={{
+          background: selectedLine === null ? "var(--bg-deep)" : "transparent",
+          color: selectedLine === null ? "var(--bg-card)" : "var(--text-faded)",
+        }}
       >
         전체
       </button>
@@ -102,13 +102,11 @@ export default function Home() {
             key={line.id}
             onClick={() => setSelectedLine((prev) => (prev === line.id ? null : line.id))}
             aria-pressed={selectedLine === line.id}
-            className={`flex items-center gap-1 text-[11px] whitespace-nowrap px-2.5 py-1 rounded-full transition-all shrink-0 ${
-              selectedLine === line.id
-                ? "bg-gray-900 text-white font-medium"
-                : isActive
-                  ? "text-gray-600 hover:bg-gray-100:bg-gray-800"
-                  : "text-gray-300 hover:bg-gray-100:bg-gray-800"
-            }`}
+            className="flex items-center gap-1 text-[11px] whitespace-nowrap px-2.5 py-1 rounded-full transition-all shrink-0"
+            style={{
+              background: selectedLine === line.id ? "var(--bg-deep)" : "transparent",
+              color: selectedLine === line.id ? "var(--bg-card)" : isActive ? "var(--text-body)" : "var(--text-ghost)",
+            }}
           >
             <span
               className="w-2 h-2 rounded-full inline-block shrink-0"
@@ -116,25 +114,26 @@ export default function Home() {
             />
             {line.name}
             {count > 0 && (
-              <span className={`${selectedLine === line.id ? "opacity-70" : "text-emerald-500"}`}>
+              <span style={{ color: selectedLine === line.id ? "var(--text-ghost)" : "var(--accent-vermillion)", opacity: 0.8 }}>
                 {count}
               </span>
             )}
           </button>
         );
       })}
-      {/* 실시간 토글 버튼 */}
+      {/* 실시간 토글 */}
       <button
         onClick={() => setRealtimeEnabled((v) => !v)}
         disabled={city !== "seoul"}
         aria-pressed={realtimeEnabled}
-        className={`ml-auto flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-all shrink-0 ${
-          city !== "seoul"
-            ? "opacity-50 cursor-not-allowed text-gray-400 border-gray-200"
-            : realtimeEnabled
-              ? "bg-emerald-500 text-white border-emerald-500"
-              : "text-gray-400 border-gray-200 hover:border-emerald-400 hover:text-emerald-500"
-        }`}
+        className="ml-auto flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-all shrink-0"
+        style={{
+          opacity: city !== "seoul" ? 0.4 : 1,
+          cursor: city !== "seoul" ? "not-allowed" : "pointer",
+          background: realtimeEnabled ? "var(--accent-vermillion)" : "transparent",
+          color: realtimeEnabled ? "#fff" : "var(--text-faded)",
+          borderColor: realtimeEnabled ? "var(--accent-vermillion)" : "var(--border-rule)",
+        }}
       >
         {realtimeEnabled && (
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
@@ -145,183 +144,199 @@ export default function Home() {
   );
 
   return (
-    <main className="flex flex-col h-[100dvh] bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100 shadow-[0_1px_4px_rgba(0,0,0,0.05)] shrink-0">
-        {/* Row 1: 서비스명 + 관리자 */}
-        <div className="flex items-center justify-between px-4 h-12">
-          <h1 className="text-xl font-bold text-gray-900 tracking-tight">지하철 N행시</h1>
-          <div className="flex items-center gap-1.5">
+    <main className="flex flex-col h-[100dvh] bg-paper">
+      {/* ─── Header ─── */}
+      <header className="shrink-0" style={{ borderBottom: "1px solid var(--border-rule)" }}>
+        {/* Row 1: 타이틀 + 관리자 */}
+        <div className="flex items-center justify-between px-5 h-14">
+          <div className="flex items-baseline gap-3">
+            <h1 className="font-serif text-xl tracking-tight" style={{ color: "var(--text-ink)", fontWeight: 800 }}>
+              지하철 N행시
+            </h1>
+            <span className="hidden sm:inline text-[11px] tracking-[0.15em] uppercase" style={{ color: "var(--text-ghost)", fontFamily: "var(--font-serif)" }}>
+              驛에서 쓰다
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
             {loggedIn ? (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-emerald-600 font-medium">관리자</span>
-                <a href="/admin" className="text-xs text-gray-400 hover:text-gray-700:text-gray-300 transition-colors">설정</a>
-                <button onClick={handleLogout} className="text-xs text-gray-400 hover:text-gray-700:text-gray-300 transition-colors">
+              <>
+                <span className="text-xs font-medium stamp-accent">관리자</span>
+                <a href="/admin" className="text-xs transition-colors" style={{ color: "var(--text-faded)" }}>설정</a>
+                <button onClick={handleLogout} className="text-xs transition-colors" style={{ color: "var(--text-faded)" }}>
                   로그아웃
                 </button>
-              </div>
+              </>
             ) : (
               <button
                 onClick={() => setShowLogin(true)}
-                className="text-xs text-gray-400 hover:text-gray-700:text-gray-300 transition-colors"
+                className="text-xs transition-colors"
+                style={{ color: "var(--text-ghost)" }}
               >
                 관리자
               </button>
             )}
           </div>
         </div>
-        {/* Row 2: CityTabs + 범례 */}
-        <div className="flex items-center justify-between px-4 pb-2.5">
+
+        {/* Row 2: 도시 + 진척도 */}
+        <div className="flex items-center justify-between px-5 pb-3">
           <CityTabs activeCity={city} onChange={setCity} />
-          <div className="flex gap-3 text-xs text-gray-400">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-              있음 ({totalWritten})
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-white border border-gray-300 inline-block" />
-              없음
-            </span>
-            <span className="text-emerald-600 font-medium">{progressPct}%</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 text-xs" style={{ color: "var(--text-faded)" }}>
+              <span className="font-serif" style={{ color: "var(--accent-vermillion)", fontWeight: 700 }}>
+                {totalWritten}
+              </span>
+              <span>/</span>
+              <span>{allStations.length}역</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="progress-track w-16 h-1.5">
+                <div className="progress-fill h-full" style={{ width: `${progressPct}%` }} />
+              </div>
+              <span className="text-[11px] font-medium" style={{ color: "var(--accent-vermillion)" }}>
+                {progressPct}%
+              </span>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile only: ViewMode toggle */}
-      <div className="md:hidden flex items-center gap-1 px-4 py-2 border-b border-gray-100 bg-white shrink-0">
+      {/* ─── Mobile: 뷰 모드 토글 ─── */}
+      <div className="md:hidden flex items-center gap-1 px-5 py-2 shrink-0" style={{ background: "var(--bg-card)", borderBottom: "1px solid var(--border-soft)" }}>
         <button
           onClick={() => setViewMode("list")}
           aria-pressed={viewMode === "list"}
-          className={`px-3 py-1.5 text-sm rounded-xl transition-all ${
-            viewMode === "list"
-              ? "bg-gray-900 text-white font-medium"
-              : "text-gray-500 hover:bg-gray-100:bg-gray-800"
-          }`}
+          className="px-3 py-1.5 text-sm rounded-lg transition-all font-serif"
+          style={{
+            background: viewMode === "list" ? "var(--bg-deep)" : "transparent",
+            color: viewMode === "list" ? "var(--bg-card)" : "var(--text-faded)",
+            fontWeight: viewMode === "list" ? 700 : 400,
+          }}
         >
-          목록
+          시집
         </button>
         <button
           onClick={() => setViewMode("map")}
           aria-pressed={viewMode === "map"}
-          className={`px-3 py-1.5 text-sm rounded-xl transition-all ${
-            viewMode === "map"
-              ? "bg-gray-900 text-white font-medium"
-              : "text-gray-500 hover:bg-gray-100:bg-gray-800"
-          }`}
+          className="px-3 py-1.5 text-sm rounded-lg transition-all font-serif"
+          style={{
+            background: viewMode === "map" ? "var(--bg-deep)" : "transparent",
+            color: viewMode === "map" ? "var(--bg-card)" : "var(--text-faded)",
+            fontWeight: viewMode === "map" ? 700 : 400,
+          }}
         >
-          지도
+          노선도
         </button>
       </div>
 
-      {/* Mobile only: line select (map mode) */}
+      {/* ─── Mobile: 노선 선택 (지도 모드) ─── */}
       {viewMode === "map" && (
-        <div className="md:hidden px-4 py-2 border-b border-gray-100 bg-white shrink-0 relative z-20">
+        <div className="md:hidden px-5 py-2 shrink-0 relative z-20" style={{ background: "var(--bg-card)", borderBottom: "1px solid var(--border-soft)" }}>
           <div className="flex items-center gap-2">
-          {/* Trigger */}
-          <button
-            onClick={() => setLineDropOpen((v) => !v)}
-            className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
-          >
-            <span className="flex items-center gap-2">
-              {selectedLine ? (
-                <>
-                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: lines[selectedLine]?.color }} />
-                  <span className="font-medium">{lines[selectedLine]?.name}</span>
-                </>
-              ) : (
-                <span className="text-gray-500">전체 노선</span>
-              )}
-            </span>
-            <svg
-              aria-hidden="true"
-              width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-              className={`shrink-0 text-gray-400 transition-transform duration-200 ${lineDropOpen ? "rotate-180" : ""}`}
+            <button
+              onClick={() => setLineDropOpen((v) => !v)}
+              className="flex-1 flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors"
+              style={{ border: "1px solid var(--border-rule)", background: "var(--bg-card)", color: "var(--text-body)" }}
             >
-              <path d="M6 9l6 6 6-6"/>
-            </svg>
-          </button>
+              <span className="flex items-center gap-2">
+                {selectedLine ? (
+                  <>
+                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: lines[selectedLine]?.color }} />
+                    <span className="font-medium">{lines[selectedLine]?.name}</span>
+                  </>
+                ) : (
+                  <span style={{ color: "var(--text-faded)" }}>전체 노선</span>
+                )}
+              </span>
+              <svg
+                aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                className={`shrink-0 transition-transform duration-200 ${lineDropOpen ? "rotate-180" : ""}`}
+                style={{ color: "var(--text-ghost)" }}
+              >
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
 
-          {/* Dropdown */}
-          {lineDropOpen && (
-            <>
-              {/* Backdrop */}
-              <div className="fixed inset-0 z-10" onClick={() => setLineDropOpen(false)} />
-              {/* Layer */}
-              <div className="absolute left-4 right-4 top-full mt-1 z-20 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <div className="max-h-64 overflow-y-auto">
-                  {/* 전체 노선 */}
-                  <button
-                    onClick={() => { setSelectedLine(null); setLineDropOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-colors ${
-                      selectedLine === null
-                        ? "bg-gray-50 font-medium text-gray-900"
-                        : "text-gray-600 hover:bg-gray-50:bg-gray-700/60"
-                    }`}
-                  >
-                    <span className="w-2.5 h-2.5 rounded-full bg-gray-300 shrink-0" />
-                    전체 노선
-                    {selectedLine === null && (
-                      <svg aria-hidden="true" className="ml-auto w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 6L9 17l-5-5"/>
-                      </svg>
-                    )}
-                  </button>
-                  {/* 각 노선 */}
-                  {Object.values(lines).map((line) => {
-                    const count = lineAcrosticCount.get(line.id) ?? 0;
-                    return (
-                      <button
-                        key={line.id}
-                        onClick={() => { setSelectedLine(line.id); setLineDropOpen(false); }}
-                        className={`w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-colors ${
-                          selectedLine === line.id
-                            ? "bg-gray-50 font-medium text-gray-900"
-                            : "text-gray-600 hover:bg-gray-50:bg-gray-700/60"
-                        }`}
-                      >
-                        <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: line.color }} />
-                        <span className="flex-1">{line.name}</span>
-                        {count > 0 && (
-                          <span className="text-xs text-emerald-500 font-medium">{count}</span>
-                        )}
-                        {selectedLine === line.id && (
-                          <svg aria-hidden="true" className="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20 6L9 17l-5-5"/>
-                          </svg>
-                        )}
-                      </button>
-                    );
-                  })}
+            {lineDropOpen && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setLineDropOpen(false)} />
+                <div className="absolute left-5 right-5 top-full mt-1 z-20 rounded-xl shadow-xl overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-rule)" }}>
+                  <div className="max-h-64 overflow-y-auto">
+                    <button
+                      onClick={() => { setSelectedLine(null); setLineDropOpen(false); }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-colors"
+                      style={{
+                        background: selectedLine === null ? "var(--bg-paper)" : "transparent",
+                        color: selectedLine === null ? "var(--text-ink)" : "var(--text-body)",
+                        fontWeight: selectedLine === null ? 600 : 400,
+                      }}
+                    >
+                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: "var(--text-ghost)" }} />
+                      전체 노선
+                      {selectedLine === null && (
+                        <svg aria-hidden="true" className="ml-auto w-4 h-4" style={{ color: "var(--accent-vermillion)" }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 6L9 17l-5-5"/>
+                        </svg>
+                      )}
+                    </button>
+                    {Object.values(lines).map((line) => {
+                      const count = lineAcrosticCount.get(line.id) ?? 0;
+                      return (
+                        <button
+                          key={line.id}
+                          onClick={() => { setSelectedLine(line.id); setLineDropOpen(false); }}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-colors"
+                          style={{
+                            background: selectedLine === line.id ? "var(--bg-paper)" : "transparent",
+                            color: selectedLine === line.id ? "var(--text-ink)" : "var(--text-body)",
+                            fontWeight: selectedLine === line.id ? 600 : 400,
+                          }}
+                        >
+                          <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: line.color }} />
+                          <span className="flex-1">{line.name}</span>
+                          {count > 0 && (
+                            <span className="text-xs font-medium" style={{ color: "var(--accent-vermillion)" }}>{count}</span>
+                          )}
+                          {selectedLine === line.id && (
+                            <svg aria-hidden="true" className="w-4 h-4" style={{ color: "var(--accent-vermillion)" }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M20 6L9 17l-5-5"/>
+                            </svg>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            </>
-          )}
-          {/* 모바일 실시간 토글 */}
-          <button
-            onClick={() => setRealtimeEnabled((v) => !v)}
-            disabled={city !== "seoul"}
-            aria-pressed={realtimeEnabled}
-            className={`flex items-center gap-1 text-xs px-2.5 py-2 rounded-xl border transition-all shrink-0 ${
-              city !== "seoul"
-                ? "opacity-50 cursor-not-allowed text-gray-400 border-gray-200"
-                : realtimeEnabled
-                  ? "bg-emerald-500 text-white border-emerald-500"
-                  : "text-gray-400 border-gray-200 hover:border-emerald-400 hover:text-emerald-500"
-            }`}
-          >
-            {realtimeEnabled && (
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              </>
             )}
-            실시간
-          </button>
+
+            {/* 모바일 실시간 토글 */}
+            <button
+              onClick={() => setRealtimeEnabled((v) => !v)}
+              disabled={city !== "seoul"}
+              aria-pressed={realtimeEnabled}
+              className="flex items-center gap-1 text-xs px-2.5 py-2 rounded-lg border transition-all shrink-0"
+              style={{
+                opacity: city !== "seoul" ? 0.4 : 1,
+                cursor: city !== "seoul" ? "not-allowed" : "pointer",
+                background: realtimeEnabled ? "var(--accent-vermillion)" : "transparent",
+                color: realtimeEnabled ? "#fff" : "var(--text-faded)",
+                borderColor: realtimeEnabled ? "var(--accent-vermillion)" : "var(--border-rule)",
+              }}
+            >
+              {realtimeEnabled && (
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              )}
+              실시간
+            </button>
           </div>
         </div>
       )}
 
-      {/* Content */}
+      {/* ─── Content ─── */}
       <div className="flex-1 min-h-0">
-        {/* Mobile: toggle */}
+        {/* Mobile */}
         <div className="md:hidden h-full">
           {viewMode === "list" ? (
             <AcrosticList
@@ -331,7 +346,7 @@ export default function Home() {
             />
           ) : (
             <div className="p-4 flex flex-col gap-3">
-              <div className="w-full aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200">
+              <div className="w-full aspect-[3/2] rounded-xl overflow-hidden" style={{ border: "1px solid var(--border-rule)" }}>
                 <SubwayMap
                   city={city}
                   stations={stations}
@@ -347,23 +362,24 @@ export default function Home() {
               <div className="flex gap-2">
                 <button
                   onClick={handleRandomView}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-medium transition-all"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-serif transition-all active:scale-[0.98]"
+                  style={{ background: "var(--bg-deep)", color: "var(--bg-card)", fontWeight: 700 }}
                 >
-                  <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
                     <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
                   </svg>
-                  랜덤 보기
+                  랜덤 감상
                 </button>
                 <button
                   onClick={handleRandomStation}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-sm font-medium transition-all"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-serif transition-all active:scale-[0.98]"
+                  style={{ background: "var(--accent-vermillion)", color: "#fff", fontWeight: 700 }}
                 >
-                  <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
-                    <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
+                  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20h9M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838.838-2.872a2 2 0 0 1 .506-.855z"/>
                   </svg>
-                  랜덤 쓰기
+                  랜덤 집필
                 </button>
               </div>
             </div>
@@ -372,17 +388,17 @@ export default function Home() {
 
         {/* Desktop: 2-column */}
         <div className="hidden md:flex h-full">
-          <aside className="w-80 xl:w-96 border-r border-gray-100 flex flex-col bg-white shrink-0">
+          <aside className="w-80 xl:w-96 flex flex-col shrink-0" style={{ borderRight: "1px solid var(--border-rule)", background: "var(--bg-card)" }}>
             <AcrosticList
               acrostics={listAcrostics}
               stations={allStations}
               onStationClick={handleStationClick}
             />
           </aside>
-          <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-1 flex flex-col min-w-0" style={{ background: "var(--bg-paper)" }}>
             {lineFilterPills}
             <div className="flex-1 p-6 flex flex-col gap-4 overflow-auto">
-              <div className="w-full aspect-[3/2] rounded-2xl overflow-hidden border border-gray-200">
+              <div className="w-full aspect-[3/2] rounded-xl overflow-hidden" style={{ border: "1px solid var(--border-rule)" }}>
                 <SubwayMap
                   city={city}
                   stations={stations}
@@ -398,23 +414,24 @@ export default function Home() {
               <div className="flex gap-2 shrink-0">
                 <button
                   onClick={handleRandomView}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-medium transition-all"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-serif transition-all active:scale-[0.98]"
+                  style={{ background: "var(--bg-deep)", color: "var(--bg-card)", fontWeight: 700 }}
                 >
                   <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
                     <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
                   </svg>
-                  랜덤 보기
+                  랜덤 감상
                 </button>
                 <button
                   onClick={handleRandomStation}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-sm font-medium transition-all"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-serif transition-all active:scale-[0.98]"
+                  style={{ background: "var(--accent-vermillion)", color: "#fff", fontWeight: 700 }}
                 >
                   <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="16 3 21 3 21 8"/><polyline points="4 20 9 20 4 15"/>
-                    <path d="M21 3l-7 7M3 21l7-7M21 16v5h-5M3 8V3h5"/>
+                    <path d="M12 20h9M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838.838-2.872a2 2 0 0 1 .506-.855z"/>
                   </svg>
-                  랜덤 쓰기
+                  랜덤 집필
                 </button>
               </div>
             </div>
@@ -422,11 +439,13 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer — 2× height */}
-      <footer className="flex items-center justify-center gap-4 px-4 py-4 border-t border-gray-100 bg-white shrink-0 text-xs text-gray-400">
-        <span>© {new Date().getFullYear()} 지하철 N행시</span>
-        <a href="/about" className="hover:text-gray-600:text-gray-400 transition-colors">소개</a>
-        <a href="/dev-note" className="hover:text-gray-600:text-gray-400 transition-colors">개발 노트</a>
+      {/* ─── Footer ─── */}
+      <footer className="flex items-center justify-center gap-4 px-5 py-4 shrink-0 text-xs" style={{ borderTop: "1px solid var(--border-rule)", background: "var(--bg-card)", color: "var(--text-ghost)" }}>
+        <span className="font-serif">© {new Date().getFullYear()} 지하철 N행시</span>
+        <span style={{ color: "var(--border-rule)" }}>·</span>
+        <a href="/about" className="transition-colors hover:opacity-70">소개</a>
+        <span style={{ color: "var(--border-rule)" }}>·</span>
+        <a href="/dev-note" className="transition-colors hover:opacity-70">개발 노트</a>
       </footer>
 
       {showLogin && !selectedStation && (

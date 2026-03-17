@@ -44,7 +44,6 @@ export default function AcrosticList({
         .map((a) => ({ acrostic: a, station: stationMap.get(a.stationId) }))
         .filter((item): item is GroupedItem => item.station !== undefined)
         .sort((a, b) => {
-          // 북→남(lat 내림차순), 동위도면 서→동(lng 오름차순)
           if (b.station.lat !== a.station.lat) return b.station.lat - a.station.lat;
           return a.station.lng - b.station.lng;
         }),
@@ -80,20 +79,16 @@ export default function AcrosticList({
 
   return (
     <div className="h-full flex flex-col">
-      {/* Search input */}
-      <div className="shrink-0 px-4 py-3 border-b border-gray-100 bg-white">
+      {/* Search */}
+      <div className="shrink-0 px-5 py-3" style={{ borderBottom: "1px solid var(--border-soft)" }}>
         <div className="relative">
           <svg
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-            aria-hidden="true"
-            fill="none"
-            viewBox="0 0 20 20"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+            style={{ color: "var(--text-ghost)" }}
+            aria-hidden="true" fill="none" viewBox="0 0 20 20"
           >
             <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="1.8"
+              stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8"
               d="M19 19l-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
             />
           </svg>
@@ -102,12 +97,19 @@ export default function AcrosticList({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="역 이름으로 검색"
-            className="w-full pl-9 pr-8 py-2 text-sm bg-gray-50 text-gray-800 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder:text-gray-400:text-gray-500 transition-shadow"
+            className="w-full pl-9 pr-8 py-2 text-sm rounded-lg focus:outline-none focus:ring-2 transition-shadow"
+            style={{
+              background: "var(--bg-paper)",
+              color: "var(--text-ink)",
+              border: "1px solid var(--border-rule)",
+              // focus ring handled by Tailwind
+            }}
           />
           {trimmed && (
             <button
               onClick={() => setQuery("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-gray-400 hover:text-gray-600:text-gray-300 rounded-full"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full"
+              style={{ color: "var(--text-ghost)" }}
               aria-label="검색 초기화"
             >
               <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -120,12 +122,9 @@ export default function AcrosticList({
 
       {/* Content */}
       {filteredItems.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center gap-2 text-gray-400">
-          <svg aria-hidden="true" className="w-10 h-10 text-gray-200" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" strokeLinecap="round" strokeWidth="1.5"
-              d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/>
-          </svg>
-          <span className="text-sm">
+        <div className="flex-1 flex flex-col items-center justify-center gap-3" style={{ color: "var(--text-ghost)" }}>
+          <span className="font-serif text-3xl" style={{ color: "var(--border-rule)" }}>詩</span>
+          <span className="text-sm font-serif">
             {trimmed ? `"${trimmed}" 검색 결과 없음` : "아직 N행시가 없습니다"}
           </span>
         </div>
@@ -138,53 +137,62 @@ export default function AcrosticList({
             const lineColor = lineInfo?.color ?? "#888";
 
             return (
-              <div key={lineKey} className="mb-4">
+              <div key={lineKey} className="mb-2">
                 {/* Line header */}
-                <div className="sticky top-0 z-10 flex items-center gap-2 px-4 py-2.5 bg-white/85 backdrop-blur-sm border-b border-gray-100">
+                <div
+                  className="sticky top-0 z-10 flex items-center gap-2 px-5 py-2.5 backdrop-blur-sm"
+                  style={{ background: "rgba(250, 247, 242, 0.88)", borderBottom: "1px solid var(--border-soft)" }}
+                >
                   <span
-                    className="w-2.5 h-2.5 rounded-full shrink-0"
+                    className="w-2 h-2 rounded-full shrink-0"
                     style={{ backgroundColor: lineColor }}
                   />
-                  <span className="text-xs font-semibold text-gray-700">
+                  <span className="text-[11px] font-medium tracking-[0.05em]" style={{ color: "var(--text-body)" }}>
                     {lineName}
                   </span>
-                  <span className="text-xs text-gray-400 ml-auto">
-                    {lineItems.length}
+                  <span className="text-[11px] ml-auto" style={{ color: "var(--text-ghost)" }}>
+                    {lineItems.length}편
                   </span>
                 </div>
 
-                {/* Cards */}
-                <div className="grid grid-cols-1 gap-3 px-4 py-3">
-                  {lineItems.map(({ acrostic, station }) => {
+                {/* Poem cards */}
+                <div className="px-5 py-3 space-y-3">
+                  {lineItems.map(({ acrostic, station }, idx) => {
                     const chars = station.name.split("");
                     return (
                       <button
                         key={acrostic._id}
                         onClick={() => onStationClick(station)}
-                        className="text-left bg-white rounded-2xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)]:ring-white/16 hover:-translate-y-0.5 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 active:scale-[0.98]"
+                        className="poem-card w-full text-left rounded-xl p-4 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 active:scale-[0.98]"
+                        style={{
+                          background: "var(--bg-card)",
+                          border: "1px solid var(--border-soft)",
+                          boxShadow: "0 1px 3px rgba(42, 33, 24, 0.06)",
+                          animationDelay: `${idx * 50}ms`,
+                        }}
                       >
+                        {/* Station name */}
                         <div className="flex items-center gap-2 mb-3">
                           <span
-                            className="w-2 h-2 rounded-full shrink-0"
+                            className="w-1.5 h-5 rounded-full shrink-0"
                             style={{ backgroundColor: lineColor }}
                           />
-                          <span className="text-sm font-semibold text-gray-900">
+                          <span className="text-sm font-serif" style={{ color: "var(--text-ink)", fontWeight: 700 }}>
                             {stationLabel(station.name)}
                           </span>
                         </div>
-                        <div className="space-y-1.5">
+
+                        {/* Poem lines */}
+                        <div className="space-y-1">
                           {chars.map((char, i) => (
-                            <div key={`${acrostic._id}-${i}`} className="flex items-start gap-2">
+                            <div key={`${acrostic._id}-${i}`} className="flex items-start gap-2.5">
                               <span
-                                className="inline-flex items-center justify-center w-6 h-6 rounded-full font-bold text-xs shrink-0 mt-0.5"
-                                style={{
-                                  backgroundColor: `${lineColor}22`,
-                                  color: lineColor,
-                                }}
+                                className="font-serif text-sm shrink-0 mt-0.5"
+                                style={{ color: "var(--accent-vermillion)", fontWeight: 800, minWidth: "1em", textAlign: "center" }}
                               >
                                 {char}
                               </span>
-                              <span className="text-sm text-gray-600 leading-5">
+                              <span className="text-sm leading-relaxed" style={{ color: "var(--text-body)" }}>
                                 {acrostic.lines[i] || ""}
                               </span>
                             </div>

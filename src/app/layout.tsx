@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Nanum_Myeongjo } from "next/font/google";
 import "./globals.css";
 import { WebAppJsonLd, FaqJsonLd } from "@/components/JsonLd";
 import AdminScripts from "@/components/AdminScripts";
@@ -12,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const nanumMyeongjo = Nanum_Myeongjo({
+  variable: "--font-nanum-myeongjo",
+  subsets: ["latin"],
+  weight: ["400", "700", "800"],
 });
 
 const BASE_URL = "https://m.324.ing";
@@ -84,7 +90,7 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head />
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${nanumMyeongjo.variable} antialiased`}>
         <AdminScripts />
         <WebAppJsonLd />
         <FaqJsonLd />

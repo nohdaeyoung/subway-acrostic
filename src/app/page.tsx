@@ -9,6 +9,7 @@ import LoginForm from "@/components/LoginForm";
 import Toast from "@/components/Toast";
 import { useSubwayPageState } from "@/hooks/useSubwayPageState";
 import { useTrainPositions } from "@/hooks/useTrainPositions";
+import { useCurvePoints } from "@/hooks/useCurvePoints";
 
 export default function Home() {
   const [lineDropOpen, setLineDropOpen] = useState(false);
@@ -33,6 +34,8 @@ export default function Home() {
   } = useSubwayPageState();
 
   const { trains } = useTrainPositions(city, realtimeEnabled);
+  const { curvePoints, upsert: upsertCurvePoint, remove: removeCurvePoint } = useCurvePoints();
+  const [curveEditMode, setCurveEditMode] = useState(false);
 
   // 전체 역 기준 진척도
   const totalWritten = acrosticStationIds.size;
@@ -151,7 +154,7 @@ export default function Home() {
         <div className="flex items-center justify-between px-5 h-14">
           <div className="flex items-baseline gap-3">
             <h1 className="font-serif text-xl tracking-tight" style={{ color: "var(--text-ink)", fontWeight: 800 }}>
-              지하철 N행시
+              지하철역 시짓기 놀이
             </h1>
             <span className="hidden sm:inline text-[11px] tracking-[0.15em] uppercase" style={{ color: "var(--text-ghost)", fontFamily: "var(--font-serif)" }}>
               驛에서 쓰다
@@ -161,6 +164,17 @@ export default function Home() {
             {loggedIn ? (
               <>
                 <span className="text-xs font-medium stamp-accent">관리자</span>
+                <button
+                  onClick={() => setCurveEditMode((v) => !v)}
+                  className="text-xs px-2 py-0.5 rounded-full border transition-all"
+                  style={{
+                    background: curveEditMode ? "var(--accent-vermillion)" : "transparent",
+                    color: curveEditMode ? "#fff" : "var(--text-faded)",
+                    borderColor: curveEditMode ? "var(--accent-vermillion)" : "var(--border-rule)",
+                  }}
+                >
+                  {curveEditMode ? "곡선 편집 중" : "곡선 편집"}
+                </button>
                 <a href="/admin" className="text-xs transition-colors" style={{ color: "var(--text-faded)" }}>설정</a>
                 <button onClick={handleLogout} className="text-xs transition-colors" style={{ color: "var(--text-faded)" }}>
                   로그아웃
@@ -357,6 +371,11 @@ export default function Home() {
                   selectedLine={selectedLine}
                   onStationClick={handleStationClick}
                   trainPositions={trains}
+                  isAdmin={loggedIn && curveEditMode}
+                  curvePoints={curvePoints}
+                  onCurvePointAdd={upsertCurvePoint}
+                  onCurvePointUpdate={upsertCurvePoint}
+                  onCurvePointDelete={removeCurvePoint}
                 />
               </div>
               <div className="flex gap-2">
@@ -409,6 +428,11 @@ export default function Home() {
                   selectedLine={selectedLine}
                   onStationClick={handleStationClick}
                   trainPositions={trains}
+                  isAdmin={loggedIn && curveEditMode}
+                  curvePoints={curvePoints}
+                  onCurvePointAdd={upsertCurvePoint}
+                  onCurvePointUpdate={upsertCurvePoint}
+                  onCurvePointDelete={removeCurvePoint}
                 />
               </div>
               <div className="flex gap-2 shrink-0">
@@ -441,7 +465,7 @@ export default function Home() {
 
       {/* ─── Footer ─── */}
       <footer className="flex items-center justify-center gap-4 px-5 py-4 shrink-0 text-xs" style={{ borderTop: "1px solid var(--border-rule)", background: "var(--bg-card)", color: "var(--text-ghost)" }}>
-        <span className="font-serif">© {new Date().getFullYear()} 지하철 N행시</span>
+        <span className="font-serif">© {new Date().getFullYear()} 지하철역 시짓기 놀이</span>
         <span style={{ color: "var(--border-rule)" }}>·</span>
         <a href="/about" className="transition-colors hover:opacity-70">소개</a>
         <span style={{ color: "var(--border-rule)" }}>·</span>

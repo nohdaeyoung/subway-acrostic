@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { Station, City, TrainPosition } from "@/types/subway";
+import type { Station, City, TrainPosition, CurvePoint } from "@/types/subway";
 import type { StationData, LineInfo } from "@/data/seoul-subway";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
@@ -23,6 +23,11 @@ interface SubwayMapProps {
   selectedLine: string | null;
   onStationClick: (station: Station) => void;
   trainPositions?: TrainPosition[];
+  isAdmin?: boolean;
+  curvePoints?: Map<string, CurvePoint>;
+  onCurvePointAdd?: (cp: CurvePoint) => void;
+  onCurvePointUpdate?: (cp: CurvePoint) => void;
+  onCurvePointDelete?: (cp: CurvePoint) => void;
 }
 
 export default function SubwayMap(props: SubwayMapProps) {

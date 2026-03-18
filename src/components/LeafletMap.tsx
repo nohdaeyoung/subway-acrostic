@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useCallback } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import type { Station, City, TrainPosition } from "@/types/subway";
+import type { Station, City, TrainPosition, CurvePoint } from "@/types/subway";
 import type { StationData, LineInfo } from "@/data/seoul-subway";
+import { curvePointKey } from "@/lib/curvePoints";
 
 interface LeafletMapProps {
   city: City;
@@ -17,6 +18,11 @@ interface LeafletMapProps {
   selectedLine: string | null;
   onStationClick: (station: Station) => void;
   trainPositions?: TrainPosition[];
+  isAdmin?: boolean;
+  curvePoints?: Map<string, CurvePoint>;
+  onCurvePointAdd?: (cp: CurvePoint) => void;
+  onCurvePointUpdate?: (cp: CurvePoint) => void;
+  onCurvePointDelete?: (cp: CurvePoint) => void;
 }
 
 const CITY_CENTER: Record<City, { lat: number; lng: number; zoom: number }> = {
@@ -29,6 +35,42 @@ const CHAR_W = 11;
 const PAD_X = 4; // horizontal padding on each side
 const GAP = 3;   // gap between dot and label
 const ICON_H = 24; // fixed icon height (touch-friendly min)
+
+/** Quadratic Bezier 보간: P0→P1(control)→P2, steps개 점 생성 */
+function interpolateBezier(
+  p0: [number, number],
+  control: [number, number],
+  p2: [number, number],
+  steps: number = 20,
+): [number, number][] {
+  const pts: [number, number][] = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const u = 1 - t;
+    pts.push([
+      u * u * p0[0] + 2 * u * t * control[0] + t * t * p2[0],
+      u * u * p0[1] + 2 * u * t * control[1] + t * t * p2[1],
+    ]);
+  }
+  return pts;
+}
+
+/** 점 P에서 선분 AB까지의 최단 거리 (제곱) */
+function distSqToSegment(
+  p: [number, number],
+  a: [number, number],
+  b: [number, number],
+): number {
+  const dx = b[0] - a[0];
+  const dy = b[1] - a[1];
+  const lenSq = dx * dx + dy * dy;
+  if (lenSq === 0) return (p[0] - a[0]) ** 2 + (p[1] - a[1]) ** 2;
+  let t = ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / lenSq;
+  t = Math.max(0, Math.min(1, t));
+  const px = a[0] + t * dx;
+  const py = a[1] + t * dy;
+  return (p[0] - px) ** 2 + (p[1] - py) ** 2;
+}
 
 function buildIcon(
   name: string,
@@ -87,8 +129,24 @@ function buildIcon(
   });
 }
 
+// 컨트롤 포인트 드래그 마커 아이콘
+function buildControlPointIcon(): L.DivIcon {
+  return L.divIcon({
+    className: "curve-control-point",
+    html: `<div style="
+      width:14px;height:14px;
+      background:#e85d04;
+      border:2px solid #fff;
+      border-radius:50%;
+      box-shadow:0 2px 6px rgba(0,0,0,0.4);
+      cursor:grab;
+    "></div>`,
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
+  });
+}
+
 // Leaflet 네이티브 API로 열차 마커를 직접 그리는 레이어
-// zIndexOffset: 1000 으로 역 마커 위에 렌더링
 function TrainLayer({ trainPositions, lines }: { trainPositions: TrainPosition[]; lines: Record<string, LineInfo> }) {
   const map = useMap();
 
@@ -112,6 +170,66 @@ function TrainLayer({ trainPositions, lines }: { trainPositions: TrainPosition[]
       markers.forEach((m) => m.remove());
     };
   }, [trainPositions, lines, map]);
+
+  return null;
+}
+
+/** 관리자 모드: 컨트롤 포인트 드래그 마커 레이어 */
+function CurveEditLayer({
+  curvePoints,
+  onUpdate,
+  onDelete,
+}: {
+  curvePoints: Map<string, CurvePoint>;
+  onUpdate: (cp: CurvePoint) => void;
+  onDelete: (cp: CurvePoint) => void;
+}) {
+  const map = useMap();
+  const markersRef = useRef<L.Marker[]>([]);
+
+  useEffect(() => {
+    // 기존 마커 제거
+    markersRef.current.forEach((m) => m.remove());
+    markersRef.current = [];
+
+    const icon = buildControlPointIcon();
+
+    for (const cp of curvePoints.values()) {
+      const marker = L.marker([cp.controlLat, cp.controlLng], {
+        icon,
+        draggable: true,
+        zIndexOffset: 2000,
+      }).addTo(map);
+
+      // 드래그 끝나면 위치 업데이트
+      marker.on("dragend", () => {
+        const pos = marker.getLatLng();
+        onUpdate({ ...cp, controlLat: pos.lat, controlLng: pos.lng });
+      });
+
+      // 우클릭으로 삭제
+      marker.on("contextmenu", (e) => {
+        const ev = e as L.LeafletMouseEvent;
+        ev.originalEvent.preventDefault();
+        ev.originalEvent.stopPropagation();
+        onDelete(cp);
+      });
+
+      // 툴팁
+      marker.bindTooltip("드래그: 곡선 조정 · 우클릭: 삭제", {
+        direction: "top",
+        offset: [0, -10],
+        className: "curve-tooltip",
+      });
+
+      markersRef.current.push(marker);
+    }
+
+    return () => {
+      markersRef.current.forEach((m) => m.remove());
+      markersRef.current = [];
+    };
+  }, [curvePoints, map, onUpdate, onDelete]);
 
   return null;
 }
@@ -142,31 +260,75 @@ export default function SubwayLeafletMap({
   selectedLine,
   onStationClick,
   trainPositions,
+  isAdmin,
+  curvePoints,
+  onCurvePointAdd,
+  onCurvePointUpdate,
+  onCurvePointDelete,
 }: LeafletMapProps) {
   const center = CITY_CENTER[city];
   const showLabels = selectedLine !== null;
 
-  // Build polyline coordinates
-  const polylines = useMemo(() => {
-    const result: { lineId: string; coords: [number, number][][] }[] = [];
+  // 각 노선의 역 좌표 + segmentIndex + stationId 정보를 구축
+  const polylineData = useMemo(() => {
+    const result: {
+      lineId: string;
+      segmentIndex: number;
+      stationIds: string[];
+      coords: [number, number][];
+    }[] = [];
     for (const [lineId, segments] of Object.entries(lineRoutes)) {
       const lineInfo = lines[lineId];
       if (!lineInfo) continue;
-      const coordSegments: [number, number][][] = [];
-      for (const segment of segments) {
+      for (let si = 0; si < segments.length; si++) {
+        const segment = segments[si];
         const coords: [number, number][] = [];
+        const ids: string[] = [];
         for (const stationId of segment) {
           const sd = stationDataMap.get(stationId);
-          if (sd) coords.push([sd.lat, sd.lng]);
+          if (sd) {
+            coords.push([sd.lat, sd.lng]);
+            ids.push(stationId);
+          }
         }
-        if (coords.length > 1) coordSegments.push(coords);
-      }
-      if (coordSegments.length > 0) {
-        result.push({ lineId, coords: coordSegments });
+        if (coords.length > 1) {
+          result.push({ lineId, segmentIndex: si, stationIds: ids, coords });
+        }
       }
     }
     return result;
   }, [lineRoutes, lines, stationDataMap]);
+
+  // 곡선 포인트 적용하여 최종 폴리라인 좌표 계산
+  const polylines = useMemo(() => {
+    return polylineData.map(({ lineId, segmentIndex, stationIds, coords }) => {
+      const finalCoords: [number, number][] = [];
+      for (let i = 0; i < coords.length; i++) {
+        if (i === 0) {
+          finalCoords.push(coords[i]);
+          continue;
+        }
+        // 이전 역 → 현재 역 사이에 곡선 포인트가 있는지 확인
+        const key = curvePointKey(lineId, segmentIndex, stationIds[i - 1], stationIds[i]);
+        const cp = curvePoints?.get(key);
+        if (cp) {
+          // Bezier 보간 (시작점은 이미 추가됨, 끝점 포함)
+          const bezierPts = interpolateBezier(
+            coords[i - 1],
+            [cp.controlLat, cp.controlLng],
+            coords[i],
+          );
+          // 첫 점(시작)은 이미 추가했으므로 건너뜀
+          for (let j = 1; j < bezierPts.length; j++) {
+            finalCoords.push(bezierPts[j]);
+          }
+        } else {
+          finalCoords.push(coords[i]);
+        }
+      }
+      return { lineId, coords: finalCoords };
+    });
+  }, [polylineData, curvePoints]);
 
   // Filter visible stations
   const visibleStations = useMemo(
@@ -174,7 +336,7 @@ export default function SubwayLeafletMap({
     [stations, selectedLine]
   );
 
-  // Memoize pathOptions per line to prevent object recreation on every render
+  // Memoize pathOptions per line
   const polylineOptions = useMemo(
     () => new Map(
       Object.entries(lines).map(([lineId, info]) => [
@@ -189,7 +351,52 @@ export default function SubwayLeafletMap({
     [lines, selectedLine]
   );
 
-  // Pre-build all station icons (avoid recreating on every render)
+  // 관리자 모드: 노선 클릭 시 곡선 포인트 추가
+  const handlePolylineClick = useCallback(
+    (
+      e: L.LeafletMouseEvent,
+      lineId: string,
+      segmentIndex: number,
+      stationIds: string[],
+      coords: [number, number][],
+    ) => {
+      if (!isAdmin || !onCurvePointAdd) return;
+
+      const clickLatLng: [number, number] = [e.latlng.lat, e.latlng.lng];
+
+      // 가장 가까운 역 간 구간 찾기
+      let bestIdx = 0;
+      let bestDist = Infinity;
+      for (let i = 0; i < coords.length - 1; i++) {
+        const d = distSqToSegment(clickLatLng, coords[i], coords[i + 1]);
+        if (d < bestDist) {
+          bestDist = d;
+          bestIdx = i;
+        }
+      }
+
+      const fromId = stationIds[bestIdx];
+      const toId = stationIds[bestIdx + 1];
+      const key = curvePointKey(lineId, segmentIndex, fromId, toId);
+
+      // 이미 곡선 포인트가 있으면 무시
+      if (curvePoints?.has(key)) return;
+
+      const newCp: CurvePoint = {
+        id: key,
+        lineId,
+        segmentIndex,
+        fromStationId: fromId,
+        toStationId: toId,
+        controlLat: e.latlng.lat,
+        controlLng: e.latlng.lng,
+      };
+      onCurvePointAdd(newCp);
+    },
+    [isAdmin, onCurvePointAdd, curvePoints],
+  );
+
+  // Pre-build all station icons
   const stationIcons = useMemo(() => {
     const map = new Map<string, L.DivIcon>();
     for (const station of visibleStations) {
@@ -200,6 +407,21 @@ export default function SubwayLeafletMap({
     }
     return map;
   }, [visibleStations, acrosticStationIds, lines, showLabels]);
+
+  // 관리자 모드 폴리라인 옵션 (클릭 가능하도록 weight 넓힘)
+  const adminPolylineOptions = useMemo(() => {
+    if (!isAdmin) return null;
+    return new Map(
+      Object.entries(lines).map(([lineId, info]) => [
+        lineId,
+        {
+          color: info.color,
+          weight: 12,
+          opacity: 0,
+        } as L.PathOptions,
+      ])
+    );
+  }, [isAdmin, lines]);
 
 
   return (
@@ -218,18 +440,30 @@ export default function SubwayLeafletMap({
         attribution='&copy; <a href="https://carto.com/">CARTO</a>'
       />
 
-      {/* Subway lines */}
-      {polylines.map(({ lineId, coords }) =>
-        coords.map((segment, idx) => (
+      {/* Subway lines (곡선 적용) */}
+      {polylines.map(({ lineId, coords }, idx) => (
+        <Polyline
+          key={`${lineId}-${idx}`}
+          positions={coords}
+          pathOptions={polylineOptions.get(lineId)!}
+        />
+      ))}
+
+      {/* 관리자 모드: 투명 넓은 히트 영역 (클릭 감지용) */}
+      {isAdmin && adminPolylineOptions &&
+        polylineData.map(({ lineId, segmentIndex, stationIds, coords }, idx) => (
           <Polyline
-            key={`${lineId}-${idx}`}
-            positions={segment}
-            pathOptions={polylineOptions.get(lineId)!}
+            key={`hit-${lineId}-${segmentIndex}-${idx}`}
+            positions={coords}
+            pathOptions={adminPolylineOptions.get(lineId)!}
+            eventHandlers={{
+              click: (e) => handlePolylineClick(e, lineId, segmentIndex, stationIds, coords),
+            }}
           />
         ))
-      )}
+      }
 
-      {/* Station markers — dot + label as single clickable rectangle */}
+      {/* Station markers */}
       {visibleStations.map((station) => (
         <Marker
           key={station.id}
@@ -239,8 +473,17 @@ export default function SubwayLeafletMap({
         />
       ))}
 
-      {/* Train position markers — Leaflet 네이티브 API, z-index 650 pane */}
+      {/* Train position markers */}
       <TrainLayer trainPositions={trainPositions ?? []} lines={lines} />
+
+      {/* 관리자 모드: 컨트롤 포인트 마커 */}
+      {isAdmin && curvePoints && onCurvePointUpdate && onCurvePointDelete && (
+        <CurveEditLayer
+          curvePoints={curvePoints}
+          onUpdate={onCurvePointUpdate}
+          onDelete={onCurvePointDelete}
+        />
+      )}
     </MapContainer>
   );
 }

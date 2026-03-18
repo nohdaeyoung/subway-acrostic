@@ -26,3 +26,14 @@ export interface TrainPosition {
   lng: number;
   direction: "up" | "down";  // 0=상행/내선, 1=하행/외선
 }
+
+/** 노선 곡선 컨트롤 포인트 (Quadratic Bezier) */
+export interface CurvePoint {
+  id: string;
+  lineId: string;
+  segmentIndex: number;
+  fromStationId: string;
+  toStationId: string;
+  controlLat: number;
+  controlLng: number;
+}

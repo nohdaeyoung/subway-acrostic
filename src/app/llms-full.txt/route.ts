@@ -11,7 +11,7 @@ const ALL_STATIONS = new Map(
 
 export async function GET() {
   const lines: string[] = [
-    `# 지하철 N행시 (Subway Acrostic) — Full Content Index`,
+    `# 지하철역 시짓기 놀이 (Subway Acrostic) — Full Content Index`,
     `# Generated: ${new Date().toISOString()}`,
     `# URL: ${BASE_URL}/llms-full.txt`,
     ``,

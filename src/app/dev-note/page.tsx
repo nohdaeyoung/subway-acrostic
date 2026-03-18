@@ -4,13 +4,13 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "개발 노트",
   description:
-    "지하철 N행시 서비스의 개발 기록과 버전별 업데이트 이력을 확인하세요. 역 데이터 교정, UI 개선, 인프라 변경 내역을 담고 있습니다.",
+    "지하철역 시짓기 놀이 서비스의 개발 기록과 버전별 업데이트 이력을 확인하세요. 역 데이터 교정, UI 개선, 인프라 변경 내역을 담고 있습니다.",
   alternates: {
     canonical: "/dev-note",
   },
   openGraph: {
-    title: "개발 노트 | 지하철 N행시",
-    description: "지하철 N행시 서비스의 개발 기록과 버전별 업데이트 이력",
+    title: "개발 노트 | 지하철역 시짓기 놀이",
+    description: "지하철역 시짓기 놀이 서비스의 개발 기록과 버전별 업데이트 이력",
     url: "https://m.324.ing/dev-note",
   },
 };
@@ -142,7 +142,7 @@ const devLog = [
     title: "초기 구현",
     date: "2026-03-02",
     items: [
-      "지하철 N행시 웹서비스 초기 구현",
+      "지하철역 시짓기 놀이 웹서비스 초기 구현",
       "역 이름으로 N행시 작성·열람 기본 기능",
       "서울·부산 도시 탭 전환",
       "N행시 목록 / 지도 뷰 모드",
@@ -162,14 +162,14 @@ export default function DevNotePage() {
           ← 홈으로
         </Link>
         <h1 className="text-lg font-bold text-gray-900">개발 노트</h1>
-        <span className="text-sm text-gray-400">지하철 N행시 개발 기록</span>
+        <span className="text-sm text-gray-400">지하철역 시짓기 놀이 개발 기록</span>
       </header>
 
       {/* Content */}
       <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-10">
         {/* Project summary */}
         <section className="mb-10">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">지하철 N행시</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">지하철역 시짓기 놀이</h2>
           <div className="text-gray-500 text-sm leading-relaxed space-y-3">
             <p>
               제작자는 지하철역 이름으로 N행시를 쓰는 것이 취미입니다. 계기는 경험수집잡화점의 온라인 모임에서 시작되었습니다. 그 후에도 지속해서 관심을 가지고 작성하고 있습니다. 현재는 농담으로 죽고 싶은 생각이 들 때마다 한편씩 쓴다고 합니다.
@@ -232,7 +232,7 @@ export default function DevNotePage() {
 
       {/* Footer */}
       <footer className="border-t border-gray-200 bg-white px-6 py-4 text-center text-xs text-gray-400">
-        © {new Date().getFullYear()} 지하철 N행시. All rights reserved.
+        © {new Date().getFullYear()} 지하철역 시짓기 놀이. All rights reserved.
       </footer>
     </div>
   );

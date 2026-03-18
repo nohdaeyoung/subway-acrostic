@@ -9,10 +9,10 @@ const BASE_URL = "https://m.324.ing";
 export const metadata: Metadata = {
   title: "서비스 소개",
   description:
-    "지하철 N행시 서비스 소개. 서울·부산 700개 이상 지하철역 이름으로 만든 삼행시·사행시를 노선도 위에서 감상하세요. N행시란 무엇인지, 어떻게 즐기는지 알아보세요.",
+    "지하철역 시짓기 놀이 서비스 소개. 서울·부산 700개 이상 지하철역 이름으로 만든 삼행시·사행시를 노선도 위에서 감상하세요. N행시란 무엇인지, 어떻게 즐기는지 알아보세요.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "서비스 소개 | 지하철 N행시",
+    title: "서비스 소개 | 지하철역 시짓기 놀이",
     description:
       "서울·부산 700개 이상 지하철역 이름으로 만든 N행시 서비스. 노선도 위에서 역 이름 삼행시·사행시를 감상하세요.",
     url: `${BASE_URL}/about`,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "서비스 소개 | 지하철 N행시",
+    title: "서비스 소개 | 지하철역 시짓기 놀이",
     description: "서울·부산 700개 이상 지하철역 이름으로 만든 N행시 서비스.",
   },
 };
@@ -33,13 +33,13 @@ const seededCount = ACROSTIC_SEEDS.length;
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
-  name: "지하철 N행시 서비스 소개",
+  name: "지하철역 시짓기 놀이 서비스 소개",
   url: `${BASE_URL}/about`,
   description:
     "서울·부산 지하철역 이름으로 만든 N행시(삼행시·사행시) 서비스 소개 페이지",
   mainEntity: {
     "@type": "Organization",
-    name: "지하철 N행시",
+    name: "지하철역 시짓기 놀이",
     url: BASE_URL,
     sameAs: [BASE_URL],
     description:
@@ -75,7 +75,7 @@ export default function AboutPage() {
             href="/"
             className="text-gray-400 hover:text-gray-600:text-gray-300 text-sm transition-colors"
           >
-            ← 지하철 N행시
+            ← 지하철역 시짓기 놀이
           </Link>
           <span className="text-gray-400">/</span>
           <span className="text-sm text-gray-500">서비스 소개</span>
@@ -89,7 +89,7 @@ export default function AboutPage() {
             About
           </p>
           <h1 className="text-3xl font-bold text-gray-900 mb-3">
-            지하철 N행시
+            지하철역 시짓기 놀이
           </h1>
           <p className="text-gray-500 leading-relaxed">
             서울·부산 지하철역 이름으로 만든 N행시를 노선도 위에서 감상하는 한국어 언어유희 서비스입니다.
@@ -228,7 +228,7 @@ export default function AboutPage() {
       </main>
 
       <footer className="border-t border-gray-200 bg-white px-6 py-4 text-center text-xs text-gray-400">
-        © {new Date().getFullYear()} 지하철 N행시. All rights reserved.
+        © {new Date().getFullYear()} 지하철역 시짓기 놀이. All rights reserved.
       </footer>
 
       <script

@@ -50,7 +50,7 @@ export async function generateMetadata({
   if (!line) return {};
 
   const cityLabel = CITY_LABEL[city as City];
-  const title = `${cityLabel} ${line.name} N행시 모음 - 지하철 N행시`;
+  const title = `${cityLabel} ${line.name} N행시 모음 - 지하철역 시짓기 놀이`;
   const description = `${cityLabel} 지하철 ${line.name} 역 이름으로 만든 N행시 모음. ${line.name} 각 역의 개성 있는 삼행시·사행시를 노선도와 함께 감상하세요.`;
   const ogImage = `${BASE_URL}/og?title=${encodeURIComponent(`${cityLabel} ${line.name}`)}&subtitle=${encodeURIComponent("역 이름 N행시 모음")}&tag=${encodeURIComponent(`${cityLabel} 지하철`)}`;
 
@@ -98,7 +98,7 @@ export default async function LinePage({
     name: `${cityLabel} ${line.name} N행시 모음`,
     description: `${cityLabel} 지하철 ${line.name} 각 역 이름으로 만든 N행시 컬렉션`,
     url: `${BASE_URL}/line/${city}/${lineId}`,
-    isPartOf: { "@type": "WebApplication", name: "지하철 N행시", url: BASE_URL },
+    isPartOf: { "@type": "WebApplication", name: "지하철역 시짓기 놀이", url: BASE_URL },
     hasPart: seededStations.map((s) => ({
       "@type": "CreativeWork",
       name: `${stationLabel(s.name)} N행시`,
@@ -132,7 +132,7 @@ export default async function LinePage({
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center gap-3">
           <Link href="/" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">
-            ← 지하철 N행시
+            ← 지하철역 시짓기 놀이
           </Link>
           <span className="text-gray-400">/</span>
           <span className="text-sm text-gray-500">{cityLabel} {line.name}</span>
@@ -219,7 +219,7 @@ export default async function LinePage({
       </main>
 
       <footer className="border-t border-gray-200 bg-white px-6 py-4 text-center text-xs text-gray-400">
-        © {new Date().getFullYear()} 지하철 N행시. All rights reserved.
+        © {new Date().getFullYear()} 지하철역 시짓기 놀이. All rights reserved.
       </footer>
 
       <script

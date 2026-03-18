@@ -4,7 +4,7 @@ export function WebAppJsonLd() {
   const data = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "지하철 N행시",
+    name: "지하철역 시짓기 놀이",
     url: BASE_URL,
     description:
       "서울·부산 지하철역 이름으로 N행시(삼행시·사행시)를 작성하고 노선도 위에서 열람하는 웹 서비스",
@@ -18,7 +18,7 @@ export function WebAppJsonLd() {
     },
     author: {
       "@type": "Organization",
-      name: "지하철 N행시",
+      name: "지하철역 시짓기 놀이",
       url: BASE_URL,
     },
     about: [
@@ -52,7 +52,7 @@ export function FaqJsonLd() {
       },
       {
         "@type": "Question",
-        name: "지하철 N행시는 어떻게 사용하나요?",
+        name: "지하철역 시짓기 놀이는 어떻게 사용하나요?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "지도 뷰 또는 목록 뷰에서 원하는 지하철역을 클릭하면 해당 역 이름으로 작성된 N행시를 바로 볼 수 있습니다. 서울과 부산의 700개 이상 역을 지원합니다.",

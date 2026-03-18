@@ -4,7 +4,7 @@ export const runtime = "edge";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get("title") || "지하철 N행시";
+  const title = searchParams.get("title") || "지하철역 시짓기 놀이";
   const subtitle = searchParams.get("subtitle") || "서울·부산 지하철역 이름으로 쓴 N행시";
   const tag = searchParams.get("tag") || "";
 
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
             fontWeight: 600,
           }}
         >
-          🚇 지하철 N행시 — m.324.ing
+          🚇 지하철역 시짓기 놀이 — m.324.ing
         </div>
       </div>
     ),

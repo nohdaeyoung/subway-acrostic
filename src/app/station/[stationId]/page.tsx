@@ -33,7 +33,7 @@ export async function generateMetadata({
   const chars = station.name.split("");
   const preview = seed.lines[0] ? `"${chars[0]}${seed.lines[0].slice(0, 20)}"` : "";
   const nType = `${chars.length}행시`;
-  const title = `${stationLabel(station.name)} ${nType} - 지하철 N행시`;
+  const title = `${stationLabel(station.name)} ${nType} - 지하철역 시짓기 놀이`;
   const description = `${stationLabel(station.name)} 이름으로 만든 ${nType}. ${preview} — 지하철역 이름으로 쓴 N행시를 노선도 위에서 감상하세요.`;
 
   const ogImage = `${BASE_URL}/og?title=${encodeURIComponent(station.name + "역")}&subtitle=${encodeURIComponent(`${chars.length}행시 · ${preview}`)}&tag=${encodeURIComponent(`${stationId.startsWith("b-") ? "부산" : "서울"} 지하철`)}`;
@@ -92,7 +92,7 @@ export default async function StationPage({
       },
       containedInPlace: { "@type": "Place", name: `${cityLabel}특별시` },
     },
-    isPartOf: { "@type": "WebApplication", name: "지하철 N행시", url: BASE_URL },
+    isPartOf: { "@type": "WebApplication", name: "지하철역 시짓기 놀이", url: BASE_URL },
   };
 
   // JSON-LD: BreadcrumbList
@@ -149,7 +149,7 @@ export default async function StationPage({
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
           <Link href="/" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">
-            ← 지하철 N행시
+            ← 지하철역 시짓기 놀이
           </Link>
           <span className="text-gray-400">/</span>
           <span className="text-sm text-gray-500">{stationLabel(station.name)}</span>
@@ -223,7 +223,7 @@ export default async function StationPage({
       </main>
 
       <footer className="border-t border-gray-200 bg-white px-6 py-4 text-center text-xs text-gray-400">
-        © {new Date().getFullYear()} 지하철 N행시. All rights reserved.
+        © {new Date().getFullYear()} 지하철역 시짓기 놀이. All rights reserved.
       </footer>
 
       <script

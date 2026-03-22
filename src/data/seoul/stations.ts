@@ -359,7 +359,7 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-taereung", name: "태릉입구", lat: 37.6181, lng: 127.0748, lines: ["6", "7"] },
   { id: "s-hwarangdae", name: "화랑대", lat: 37.6204, lng: 127.0844, lines: ["6"] },
   { id: "s-bonghwasan", name: "봉화산", lat: 37.6169, lng: 127.0914, lines: ["6"] },
-  { id: "s-sinnae", name: "신내", lat: 37.6133, lng: 127.1025, lines: ["6"] },
+  { id: "s-sinnae", name: "신내", lat: 37.6133, lng: 127.1025, lines: ["6", "gyeongchun"] },
 
   // ===== Line 7 =====
   // ===== Line 7 북부 연장 =====
@@ -458,7 +458,7 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-gukhoe", name: "국회의사당", lat: 37.5286, lng: 126.9175, lines: ["9"] },
   { id: "s-nodeul", name: "노들", lat: 37.5131, lng: 126.9531, lines: ["9"] },
   { id: "s-heukseok", name: "흑석", lat: 37.5089, lng: 126.9636, lines: ["9"] },
-  { id: "s-seonjeongneung", name: "선정릉", lat: 37.5103, lng: 127.0439, lines: ["9"] },
+  { id: "s-seonjeongneung", name: "선정릉", lat: 37.5103, lng: 127.0439, lines: ["9", "suin"] },
   { id: "s-eonju", name: "언주", lat: 37.5072, lng: 127.0339, lines: ["9"] },
   { id: "s-samsungjungang", name: "삼성중앙", lat: 37.5128, lng: 127.0525, lines: ["9"] },
   { id: "s-dunchonoryun", name: "둔촌오륜", lat: 37.5198, lng: 127.1384, lines: ["9"] },
@@ -569,7 +569,7 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-seoullsup", name: "서울숲", lat: 37.5436, lng: 127.0447, lines: ["suin"] },
   { id: "s-apgujeong_r", name: "압구정로데오", lat: 37.5278, lng: 127.0407, lines: ["suin"] },
   // gangnamgu already defined (lines includes suin)
-  { id: "s-seonjeongneung", name: "선정릉", lat: 37.5107, lng: 127.0437, lines: ["suin"] },
+  // seonjeongneung: merged into 9호선 entry (lines: ["9", "suin"])
   // seolleung already defined (lines includes suin)
   { id: "s-hanti", name: "한티", lat: 37.4963, lng: 127.0529, lines: ["suin"] },
   // dogok already defined (lines includes suin)
@@ -590,7 +590,7 @@ export const SEOUL_STATIONS: StationData[] = [
   { id: "s-ori", name: "오리", lat: 37.3395, lng: 127.1080, lines: ["suin"] },
   { id: "s-jukjeon", name: "죽전", lat: 37.3246, lng: 127.1074, lines: ["suin"] },
   { id: "s-bojeong", name: "보정", lat: 37.3126, lng: 127.1083, lines: ["suin"] },
-  { id: "s-guseong", name: "구성", lat: 37.2990, lng: 127.1058, lines: ["suin"] },
+  { id: "s-guseong", name: "구성", lat: 37.2990, lng: 127.1058, lines: ["suin", "gtxa"] },
   { id: "s-singal", name: "신갈", lat: 37.2862, lng: 127.1114, lines: ["suin"] },
   { id: "s-giheung", name: "기흥", lat: 37.2755, lng: 127.1160, lines: ["suin", "everline"] },
   { id: "s-sanggal", name: "상갈", lat: 37.2616, lng: 127.1089, lines: ["suin"] },
@@ -674,7 +674,7 @@ export const SEOUL_STATIONS: StationData[] = [
   // ===== 경춘선 (new stations) =====
   { id: "s-jungnang", name: "중랑", lat: 37.5969, lng: 127.0716, lines: ["gyeongchun", "gyeongui"] },
   // 상봉, 망우 already defined
-  { id: "s-sinnae", name: "신내", lat: 37.6126, lng: 127.1032, lines: ["gyeongchun"] },
+  // sinnae: merged into 6호선 entry (lines: ["6", "gyeongchun"])
   { id: "s-galmae", name: "갈매", lat: 37.6340, lng: 127.1147, lines: ["gyeongchun"] },
   { id: "s-byeolnae", name: "별내", lat: 37.6422, lng: 127.1272, lines: ["8", "gyeongchun"] },
   { id: "s-toegyewon", name: "퇴계원", lat: 37.6644, lng: 127.1370, lines: ["gyeongchun"] },
@@ -718,7 +718,7 @@ export const SEOUL_STATIONS: StationData[] = [
   // 대곡, 연신내, 서울역, 삼성, 수서 already defined
   { id: "s-changneung", name: "창릉", lat: 37.6370, lng: 126.8700, lines: ["gtxa"] },
   { id: "s-seongnam_gtx", name: "성남", lat: 37.3937, lng: 127.1206, lines: ["gtxa"] },
-  { id: "s-guseong", name: "구성", lat: 37.2994, lng: 127.1058, lines: ["gtxa"] },
+  // guseong: merged into suin entry (lines: ["suin", "gtxa"])
   { id: "s-dongtan", name: "동탄", lat: 37.2004, lng: 127.0956, lines: ["gtxa"] },
 
   // ===== 김포골드라인 =====

@@ -36,7 +36,9 @@ export async function generateMetadata({
   const title = `${stationLabel(station.name)} ${nType} - 지하철역 시짓기 놀이`;
   const description = `${stationLabel(station.name)} 이름으로 만든 ${nType}. ${preview} — 지하철역 이름으로 쓴 N행시를 노선도 위에서 감상하세요.`;
 
-  const ogImage = `${BASE_URL}/og?title=${encodeURIComponent(station.name + "역")}&subtitle=${encodeURIComponent(`${chars.length}행시 · ${preview}`)}&tag=${encodeURIComponent(`${stationId.startsWith("b-") ? "부산" : "서울"} 지하철`)}`;
+  const ogImage = seed
+    ? `${BASE_URL}/og/station/${stationId}`
+    : `${BASE_URL}/og?title=${encodeURIComponent(station.name + "역")}&subtitle=${encodeURIComponent(`${chars.length}행시 · ${preview}`)}&tag=${encodeURIComponent(`${stationId.startsWith("b-") ? "부산" : "서울"} 지하철`)}`;
 
   return {
     title,

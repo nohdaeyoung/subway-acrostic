@@ -18,6 +18,7 @@ const nanumMyeongjo = Nanum_Myeongjo({
   variable: "--font-nanum-myeongjo",
   subsets: ["latin"],
   weight: ["400", "700", "800"],
+  preload: false,
 });
 
 const BASE_URL = "https://m.324.ing";

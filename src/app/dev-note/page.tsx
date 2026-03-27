@@ -231,8 +231,10 @@ export default function DevNotePage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white px-6 py-4 text-center text-xs text-gray-400">
-        © {new Date().getFullYear()} 지하철역 시짓기 놀이. All rights reserved.
+      <footer className="flex items-center justify-center gap-4 px-5 py-4 text-xs" style={{ borderTop: "1px solid var(--border-rule)", background: "var(--bg-card)", color: "var(--text-ghost)" }}>
+        <span>© {new Date().getFullYear()} 지하철역 시짓기 놀이</span>
+        <a href="/" className="transition-colors hover:opacity-70">노선도</a>
+        <a href="/about" className="transition-colors hover:opacity-70">소개</a>
       </footer>
     </div>
   );

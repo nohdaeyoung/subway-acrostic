@@ -1,9 +1,9 @@
 # 지하철 N행시 — 인수인계서
 
-> 최종 업데이트: 2026-03-04
+> 최종 업데이트: 2026-03-28
 > 배포 URL: https://m.324.ing
 > GitHub: https://github.com/nohdaeyoung/subway-acrostic
-> 최신 커밋: `ec2c4c5`
+> 최신 커밋: `a0ba8d9`
 
 ---
 
@@ -56,7 +56,8 @@ src/
 │   ├── dev-note/page.tsx         # 개발 노트
 │   ├── line/[city]/[lineId]/     # 노선별 N행시 목록
 │   ├── station/[stationId]/      # 역별 N행시 상세 (SSG)
-│   ├── api/auth/login/route.ts   # 로그인 API (환경변수 인증)
+│   ├── api/auth/login/route.ts   # 어드민 패스워드 로그인 API
+│   ├── api/auth/google/route.ts  # Google OAuth 콜백 (Firebase ID 토큰 검증)
 │   ├── og/route.tsx              # OG 이미지 동적 생성
 │   ├── llms-full.txt/route.ts    # AI 인덱스 파일
 │   ├── robots.ts                 # robots.txt
@@ -86,11 +87,14 @@ src/
 │
 ├── hooks/
 │   ├── useSubwayPageState.ts     # 메인 페이지 전체 상태 관리
+│   ├── useCurvePoints.ts         # 커브포인트 Firestore 훅 (enabled 플래그로 인증 후 로드)
 │   └── useFocusTrap.ts           # 모달 포커스 트랩 훅
 │
 ├── lib/
-│   ├── bkend.ts                  # N행시 CRUD (localStorage + 시드 병합)
+│   ├── bkend.ts                  # N행시 CRUD (Firestore + 시드 폴백)
 │   ├── auth.ts                   # 로그인/로그아웃/토큰 검증
+│   ├── firebase.ts               # Firebase 앱 초기화 (db, auth, googleProvider)
+│   ├── curvePoints.ts            # 커브포인트 Firestore CRUD
 │   ├── subway-utils.ts           # toStation(), stationLabel() 유틸
 │   ├── acrostic-schema.ts        # N행시 입력 zod 스키마
 │   └── admin-settings.ts        # 관리자 설정 저장/불러오기
@@ -130,31 +134,36 @@ interface Acrostic {
 
 ### 데이터 저장 방식
 
-- **localStorage** (`subway-acrostic-data`): 관리자가 작성한 N행시
-- **acrostic-seeds.ts**: 빌드 타임 번들에 포함된 초기 시드
-- 병합 우선순위: localStorage > seeds (같은 `stationId`이면 localStorage 우선)
-- 삭제된 시드 ID는 `subway-acrostic-deleted` 키에 저장
+- **Firebase Firestore** (`acrostics` 컬렉션): 관리자가 작성한 N행시 (크로스 디바이스 동기화)
+- **acrostic-seeds.ts**: 빌드 타임 번들에 포함된 초기 시드 (Firestore 실패 시 오프라인 폴백)
+- **커브포인트**: Firestore `curvePoints` 컬렉션 (어드민 로그인 시에만 로드)
+- 읽기는 비인증 허용, 쓰기는 Firebase Auth 어드민 이메일 검증 (`firestore.rules`)
 
 ---
 
 ## 5. 인증 방식
 
 ```
-환경변수: ADMIN_PASSWORD_HASH (bcrypt 해시)
-         JWT_SECRET (토큰 서명 키)
+환경변수: ADMIN_PASSWORD (평문 비밀번호)
+         JWT_SECRET (토큰 서명 키, 32자 이상 랜덤)
 ```
 
-- POST `/api/auth/login` → 비밀번호 검증 후 JWT 발급 (1일 만료)
+- POST `/api/auth/login` → 비밀번호 검증 후 JWT 발급 (7일 만료)
+- POST `/api/auth/google` → Firebase ID 토큰 검증 후 JWT 발급
 - JWT는 `localStorage`의 `subway-acrostic-token` 키에 저장
-- `auth.ts`의 `isLoggedIn()`: jose로 JWT 서명 검증 (UI 사이드)
-- **주의**: 서버사이드 검증 없음. 관리자 기능은 UI 레이어 보호만 적용
+- `auth.ts`의 `isLoggedIn()`: JWT exp 클레임 확인 (UI 게이트, 서명 미검증)
+- **Firestore 쓰기 보호**: `firestore.rules`에서 `request.auth.token.email` 검증 (서버사이드 실질 보호)
 
 ### Vercel 환경변수 설정
 
 | 키 | 설명 |
 |----|------|
-| `ADMIN_PASSWORD_HASH` | bcrypt 해시값 |
-| `JWT_SECRET` | 최소 32자 랜덤 문자열 |
+| `ADMIN_PASSWORD` | 어드민 평문 비밀번호 |
+| `JWT_SECRET` | 최소 32자 랜덤 문자열 (`openssl rand -base64 32`) |
+| `NEXT_PUBLIC_FIREBASE_API_KEY` | Firebase API 키 (공개값) |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | Firebase Auth 도메인 |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | Firebase 프로젝트 ID |
+| `SEOUL_SUBWAY_API_KEY` | 서울 공공데이터 실시간 열차 API 키 |
 | `GOOGLE_SITE_VERIFICATION` | 구글 서치콘솔 인증 코드 |
 | `NAVER_SITE_VERIFICATION` | 네이버 서치어드바이저 인증 코드 |
 
@@ -311,10 +320,11 @@ SEOUL_LINE_ROUTES["2"] = [
 
 | 항목 | 내용 |
 |------|------|
-| 서버 DB 없음 | localStorage 기반. 브라우저 초기화 시 커스텀 데이터 소실 |
-| JWT 서버 검증 없음 | 의도적 설계. 관리자 기능은 UI 보호만 적용 |
+| Firestore 직접 쓰기 | API 라우트 경유 없이 클라이언트 SDK로 직접 쓰기. `firestore.rules`로 보호 |
+| JWT UI 게이트 | `isLoggedIn()`은 서명 미검증. 실질 쓰기 보호는 Firestore 규칙에 의존 |
 | 전체 역 데이터 번들 | Seoul ~500개 역 초기 로딩. 성능 개선 여지 있음 |
 | Leaflet SSR 불가 | `dynamic(..., { ssr: false })` 필수 |
+| 서울 API HTTP | `http://swopenapi.seoul.go.kr` — HTTPS 미지원 외부 제약 |
 
 ---
 
@@ -328,14 +338,18 @@ npm run dev       # http://localhost:3000
 ### 환경변수 설정 (`.env.local`)
 
 ```env
-ADMIN_PASSWORD_HASH=<bcrypt 해시>
+ADMIN_PASSWORD=<어드민 비밀번호>
 JWT_SECRET=<32자 이상 랜덤>
+NEXT_PUBLIC_FIREBASE_API_KEY=<Firebase 콘솔에서 복사>
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=<프로젝트>.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=<프로젝트 ID>
+SEOUL_SUBWAY_API_KEY=<서울 공공데이터 포털 API 키>
 ```
 
-bcrypt 해시 생성:
+JWT 시크릿 생성:
 
 ```bash
-node -e "const bcrypt=require('bcryptjs'); bcrypt.hash('비밀번호', 10, (e,h)=>console.log(h))"
+openssl rand -base64 32
 ```
 
 ---
@@ -364,7 +378,9 @@ Vercel 프로젝트 설정에서 환경변수 확인 필요 (§5 참고).
 | v1.5 | bkend.ai 제거 → localStorage + 환경변수 인증 전환 |
 | v1.6 | Wikidata 기반 좌표 전면 수정, 누락역 113개 추가 |
 | v1.7 | 별내선·하남선 등 세부 데이터 수정 |
-| 현재 | UI 전면 개선, 다크모드, SEO, 성능 최적화 |
+| v1.8 | UI 전면 개선, 다크모드, SEO, 성능 최적화, OG 이미지 |
+| v1.9 | localStorage → Firebase Firestore 마이그레이션, Google 로그인 |
+| v2.0 | 보안 강화 (Firestore 규칙, JWT 시크릿 교체), 폰트 preload 최적화 (2.98MB 감소) |
 
 ### 이번 세션 주요 변경
 

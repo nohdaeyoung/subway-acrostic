@@ -214,13 +214,13 @@ export default function AboutPage() {
         </article>
 
         {/* CTA */}
-        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-center">
-          <p className="text-sm text-emerald-800 font-medium mb-3">
+        <div className="bg-[#f0ebe3] border border-[#c4b8ab] rounded-2xl p-6 text-center">
+          <p className="text-sm text-[#2a2118] font-medium mb-3">
             지금 바로 지하철역 N행시를 감상해보세요
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 bg-emerald-600 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-emerald-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-[#c24b2e] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#a83d24] transition-colors"
           >
             노선도 보러 가기 →
           </Link>

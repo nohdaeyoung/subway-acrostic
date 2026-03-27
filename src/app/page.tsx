@@ -34,7 +34,7 @@ export default function Home() {
   } = useSubwayPageState();
 
   const { trains } = useTrainPositions(city, realtimeEnabled);
-  const { curvePoints, upsert: upsertCurvePoint, remove: removeCurvePoint } = useCurvePoints();
+  const { curvePoints, upsert: upsertCurvePoint, remove: removeCurvePoint } = useCurvePoints(loggedIn);
   const [curveEditMode, setCurveEditMode] = useState(false);
 
   // 전체 역 기준 진척도

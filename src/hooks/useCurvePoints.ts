@@ -9,13 +9,15 @@ import {
   curvePointKey,
 } from "@/lib/curvePoints";
 
-export function useCurvePoints() {
+export function useCurvePoints(enabled = false) {
   const [curvePoints, setCurvePoints] = useState<Map<string, CurvePoint>>(
     new Map(),
   );
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
+    setLoading(true);
     getAllCurvePoints()
       .then((pts) => {
         const map = new Map<string, CurvePoint>();
@@ -34,7 +36,7 @@ export function useCurvePoints() {
         console.error("[curvePoints] load failed:", err);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [enabled]);
 
   const upsert = useCallback((cp: CurvePoint) => {
     const key = curvePointKey(

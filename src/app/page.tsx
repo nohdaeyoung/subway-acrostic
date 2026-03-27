@@ -183,7 +183,7 @@ export default function Home() {
             ) : (
               <button
                 onClick={() => setShowLogin(true)}
-                className="text-xs transition-colors"
+                className="text-xs transition-colors p-2 -m-2"
                 style={{ color: "var(--text-ghost)" }}
               >
                 관리자
@@ -220,7 +220,7 @@ export default function Home() {
         <button
           onClick={() => setViewMode("list")}
           aria-pressed={viewMode === "list"}
-          className="px-3 py-1.5 text-sm rounded-lg transition-all font-serif"
+          className="px-3 py-3 text-sm rounded-lg transition-all font-serif"
           style={{
             background: viewMode === "list" ? "var(--bg-deep)" : "transparent",
             color: viewMode === "list" ? "var(--bg-card)" : "var(--text-faded)",
@@ -232,7 +232,7 @@ export default function Home() {
         <button
           onClick={() => setViewMode("map")}
           aria-pressed={viewMode === "map"}
-          className="px-3 py-1.5 text-sm rounded-lg transition-all font-serif"
+          className="px-3 py-3 text-sm rounded-lg transition-all font-serif"
           style={{
             background: viewMode === "map" ? "var(--bg-deep)" : "transparent",
             color: viewMode === "map" ? "var(--bg-card)" : "var(--text-faded)",

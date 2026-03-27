@@ -22,7 +22,7 @@ export default function CityTabs({ activeCity, onChange }: CityTabsProps) {
           aria-selected={activeCity === city}
           aria-label={`${label} 탭`}
           onClick={() => onChange(city)}
-          className="px-5 py-1.5 rounded-md text-sm font-serif transition-all duration-150"
+          className="px-5 py-3 rounded-md text-sm font-serif transition-all duration-150"
           style={{
             background: activeCity === city ? "var(--bg-card)" : "transparent",
             color: activeCity === city ? "var(--text-ink)" : "var(--text-faded)",

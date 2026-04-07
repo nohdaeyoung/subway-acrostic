@@ -146,30 +146,92 @@ function buildControlPointIcon(): L.DivIcon {
   });
 }
 
-// Leaflet 네이티브 API로 열차 마커를 직접 그리는 레이어
+/** 지하철 모양 열차 아이콘 (호선 색상 + 방향 표시) */
+function buildTrainIcon(color: string, lineId: string, direction: string, sttus: number): L.DivIcon {
+  const isMoving = sttus !== 1;
+  const isUp = direction === "up";
+  const W = 30;
+  const H = 16;
+
+  // 방향에 따른 전면 윈드실드 위치
+  const windshieldX = isUp ? 1 : W - 9;
+  const bodyClip = isUp
+    ? `M4,0 H${W - 2} Q${W},0 ${W},2 V${H - 2} Q${W},${H} ${W - 2},${H} H4 Q0,${H} 0,${H - 4} V4 Q0,0 4,0Z`
+    : `M2,0 H${W - 4} Q${W},0 ${W},4 V${H - 4} Q${W},${H} ${W - 4},${H} H2 Q0,${H} 0,${H - 2} V2 Q0,0 2,0Z`;
+
+  const opacity = sttus === 0 ? 0.8 : 1;
+  const shadow = isMoving ? "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" : "drop-shadow(0 1px 2px rgba(0,0,0,0.3))";
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" style="filter:${shadow};opacity:${opacity};pointer-events:none;">
+    <!-- 차체 -->
+    <path d="${bodyClip}" fill="${color}"/>
+    <!-- 윈드실드 -->
+    ${isMoving ? `<rect x="${windshieldX}" y="3" width="8" height="${H - 6}" rx="2" fill="white" opacity="0.35"/>` : ""}
+    <!-- 호선 번호 -->
+    <text x="${W / 2}" y="${H - 4}" text-anchor="middle" fill="white" font-size="9" font-weight="bold" font-family="system-ui,sans-serif">${lineId}</text>
+    <!-- 정차 표시 -->
+    ${sttus === 1 ? `<rect x="0" y="0" width="${W}" height="${H}" rx="4" fill="none" stroke="white" stroke-width="1.5" stroke-dasharray="3,2"/>` : ""}
+  </svg>`;
+
+  return L.divIcon({
+    className: "train-icon",
+    html: svg,
+    iconSize: [W, H],
+    iconAnchor: [W / 2, H / 2],
+  });
+}
+
+// Leaflet 네이티브 API로 열차 마커를 관리하는 레이어
+// 매초 위치 업데이트 시 마커를 재생성하지 않고 setLatLng으로 이동
 function TrainLayer({ trainPositions, lines }: { trainPositions: TrainPosition[]; lines: Record<string, LineInfo> }) {
   const map = useMap();
+  const markersRef = useRef<Map<string, { marker: L.Marker; sttus: number; lineId: string }>>(new Map());
 
   useEffect(() => {
-    const markers = trainPositions.map((train) => {
-      const color = lines[train.lineId]?.color ?? "#888";
-      const arrow = train.direction === "up" ? "▲" : "▼";
-      const icon = L.divIcon({
-        className: "train-icon",
-        html: `<div style="width:16px;height:16px;background:${color};border:2px solid white;border-radius:3px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,.5);pointer-events:none;"><span style="color:white;font-size:8px;font-weight:bold;line-height:1;">${arrow}</span></div>`,
-        iconSize: [16, 16],
-        iconAnchor: [8, 8],
-      });
-      return L.marker([train.lat, train.lng], {
-        icon,
-        zIndexOffset: 1000,
-      }).addTo(map);
-    });
+    const currentKeys = new Set<string>();
 
-    return () => {
-      markers.forEach((m) => m.remove());
-    };
+    for (const train of trainPositions) {
+      const key = `${train.trainNo}-${train.lineId}`;
+      currentKeys.add(key);
+
+      const color = lines[train.lineId]?.color ?? "#888";
+      const sttus = train.trainSttus ?? 1;
+
+      const existing = markersRef.current.get(key);
+
+      if (existing) {
+        existing.marker.setLatLng([train.lat, train.lng]);
+        if (existing.sttus !== sttus || existing.lineId !== train.lineId) {
+          existing.marker.setIcon(buildTrainIcon(color, train.lineId, train.direction, sttus));
+          existing.sttus = sttus;
+          existing.lineId = train.lineId;
+        }
+      } else {
+        const icon = buildTrainIcon(color, train.lineId, train.direction, sttus);
+        const marker = L.marker([train.lat, train.lng], {
+          icon,
+          zIndexOffset: 1000,
+        }).addTo(map);
+        markersRef.current.set(key, { marker, sttus, lineId: train.lineId });
+      }
+    }
+
+    // 사라진 열차 마커 제거
+    for (const [key, { marker }] of markersRef.current) {
+      if (!currentKeys.has(key)) {
+        marker.remove();
+        markersRef.current.delete(key);
+      }
+    }
   }, [trainPositions, lines, map]);
+
+  // 언마운트 시 전체 정리
+  useEffect(() => {
+    return () => {
+      markersRef.current.forEach(({ marker }) => marker.remove());
+      markersRef.current.clear();
+    };
+  }, [map]);
 
   return null;
 }

@@ -5,7 +5,7 @@ import type { Station, City, Acrostic } from "@/types/subway";
 import type { StationData } from "@/data/subway-types";
 import { SEOUL_LINES, SEOUL_STATIONS, SEOUL_LINE_ROUTES } from "@/data/seoul-subway";
 import { BUSAN_LINES, BUSAN_STATIONS, BUSAN_LINE_ROUTES } from "@/data/busan-subway";
-import { getAcrosticByStation, getAllAcrostics } from "@/lib/bkend";
+import { getAcrosticsByStation, getAllAcrostics } from "@/lib/bkend";
 import { isLoggedIn, clearToken } from "@/lib/auth";
 import { toStation } from "@/lib/subway-utils";
 
@@ -17,7 +17,7 @@ export function useSubwayPageState() {
   const [allAcrostics, setAllAcrostics] = useState<Acrostic[]>([]);
   const [acrosticStationIds, setAcrosticStationIds] = useState<Set<string>>(new Set());
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
-  const [currentAcrostic, setCurrentAcrostic] = useState<Acrostic | null>(null);
+  const [currentAcrostics, setCurrentAcrostics] = useState<Acrostic[]>([]);
   const [loadingAcrostic, setLoadingAcrostic] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -54,7 +54,11 @@ export function useSubwayPageState() {
     try {
       const acrostics = await getAllAcrostics();
       setAllAcrostics(acrostics);
-      setAcrosticStationIds(new Set(acrostics.map((a) => a.stationId)));
+      // 진행률/마커 하이라이트는 사용자 작성 시만 카운트 (관리자 모드 무관)
+      const userWrittenIds = acrostics
+        .filter((a) => !a.isAi)
+        .map((a) => a.stationId);
+      setAcrosticStationIds(new Set(userWrittenIds));
     } catch {
       setToast("저장 데이터를 불러오지 못했습니다");
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
@@ -72,10 +76,10 @@ export function useSubwayPageState() {
     setSelectedStation(station);
     setLoadingAcrostic(true);
     try {
-      const acrostic = await getAcrosticByStation(station.id);
-      setCurrentAcrostic(acrostic);
+      const acrostics = await getAcrosticsByStation(station.id);
+      setCurrentAcrostics(acrostics);
     } catch {
-      setCurrentAcrostic(null);
+      setCurrentAcrostics([]);
     } finally {
       setLoadingAcrostic(false);
     }
@@ -83,7 +87,7 @@ export function useSubwayPageState() {
 
   const handleCloseModal = useCallback(() => {
     setSelectedStation(null);
-    setCurrentAcrostic(null);
+    setCurrentAcrostics([]);
   }, []);
 
   const handleLoginSuccess = useCallback(() => {
@@ -117,7 +121,7 @@ export function useSubwayPageState() {
     stations, lines, lineRoutes, stationDataMap,
     allStations,
     allAcrostics, acrosticStationIds,
-    selectedStation, currentAcrostic, loadingAcrostic,
+    selectedStation, currentAcrostics, loadingAcrostic,
     loggedIn,
     showLogin, setShowLogin,
     toast,

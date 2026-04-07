@@ -151,57 +151,63 @@ export default function AcrosticList({
                     {lineName}
                   </span>
                   <span className="text-[11px] ml-auto" style={{ color: "var(--text-ghost)" }}>
-                    {lineItems.length}편
+                    {lineItems.filter((it) => !it.acrostic.isAi).length}편
                   </span>
                 </div>
 
-                {/* Poem cards */}
-                <div className="px-5 py-3 space-y-3">
-                  {lineItems.map(({ acrostic, station }, idx) => {
-                    const chars = station.name.split("");
-                    return (
-                      <button
-                        key={acrostic._id}
-                        onClick={() => onStationClick(station)}
-                        className="poem-card w-full text-left rounded-xl p-4 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 active:scale-[0.98]"
-                        style={{
-                          background: "var(--bg-card)",
-                          border: "1px solid var(--border-soft)",
-                          boxShadow: "0 1px 3px rgba(42, 33, 24, 0.06)",
-                          animationDelay: `${idx * 50}ms`,
-                        }}
-                      >
-                        {/* Station name */}
-                        <div className="flex items-center gap-2 mb-3">
+                {/* Compact rows */}
+                {lineItems.map(({ acrostic, station }) => (
+                  <button
+                    key={acrostic._id}
+                    onClick={() => onStationClick(station)}
+                    className="w-full flex items-center gap-3 px-5 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 active:scale-[0.99]"
+                    style={{ borderBottom: "1px solid var(--border-soft)" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-paper)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                  >
+                    <span
+                      className="w-0.5 self-stretch rounded-full shrink-0"
+                      style={{ backgroundColor: lineColor }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-serif font-bold leading-tight flex items-center gap-1.5" style={{ color: "var(--text-ink)" }}>
+                        <span>{stationLabel(station.name)}</span>
+                        {acrostic.isAi && (
                           <span
-                            className="w-1.5 h-5 rounded-full shrink-0"
-                            style={{ backgroundColor: lineColor }}
-                          />
-                          <span className="text-sm font-serif" style={{ color: "var(--text-ink)", fontWeight: 700 }}>
-                            {stationLabel(station.name)}
+                            className="text-[9px] px-1.5 py-0.5 rounded-full shrink-0"
+                            style={{
+                              background: "rgba(232, 93, 4, 0.08)",
+                              color: "var(--accent-vermillion)",
+                              border: "1px solid rgba(232, 93, 4, 0.2)",
+                              fontWeight: 600,
+                              letterSpacing: "0.02em",
+                            }}
+                          >
+                            ✨ AI
+                            {acrostic.aiConcept === "love" && " ❤️"}
+                            {acrostic.aiConcept === "philosophy" && " 🧠"}
+                            {acrostic.aiConcept === "humor" && " 😄"}
                           </span>
-                        </div>
-
-                        {/* Poem lines */}
-                        <div className="space-y-1">
-                          {chars.map((char, i) => (
-                            <div key={`${acrostic._id}-${i}`} className="flex items-start gap-2.5">
-                              <span
-                                className="font-serif text-sm shrink-0 mt-0.5"
-                                style={{ color: "var(--accent-vermillion)", fontWeight: 800, minWidth: "1em", textAlign: "center" }}
-                              >
-                                {char}
-                              </span>
-                              <span className="text-sm leading-relaxed" style={{ color: "var(--text-body)" }}>
-                                {acrostic.lines[i] || ""}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                        )}
+                      </p>
+                      <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-faded)" }}>
+                        <span className="font-serif font-bold" style={{ color: "var(--accent-vermillion)" }}>
+                          {station.name[0]}
+                        </span>
+                        {" "}
+                        {acrostic.lines[0] || ""}
+                      </p>
+                    </div>
+                    <svg
+                      aria-hidden="true" width="14" height="14" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" strokeWidth="2"
+                      strokeLinecap="round" strokeLinejoin="round"
+                      className="shrink-0" style={{ color: "var(--text-ghost)" }}
+                    >
+                      <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                  </button>
+                ))}
               </div>
             );
           })}

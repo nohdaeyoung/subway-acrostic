@@ -20,7 +20,7 @@ function getLineName(lineId: string, city: "seoul" | "busan"): string {
 
 interface AcrosticEditorProps {
   station: Station;
-  acrostic: Acrostic | null;
+  acrostics: Acrostic[];
   loading: boolean;
   loggedIn: boolean;
   onClose: () => void;
@@ -30,7 +30,7 @@ interface AcrosticEditorProps {
 
 export default function AcrosticEditor({
   station,
-  acrostic,
+  acrostics,
   loading,
   loggedIn,
   onClose,
@@ -38,6 +38,8 @@ export default function AcrosticEditor({
   onRandomView,
 }: AcrosticEditorProps) {
   const chars = station.name.split("");
+  const [pageIndex, setPageIndex] = useState(0);
+  const acrostic: Acrostic | null = acrostics[pageIndex] ?? null;
   const [lines, setLines] = useState<string[]>(chars.map(() => ""));
   const [fieldErrors, setFieldErrors] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -45,6 +47,11 @@ export default function AcrosticEditor({
   const [error, setError] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // station 변경 시 첫 페이지로 리셋
+  useEffect(() => {
+    setPageIndex(0);
+  }, [station.id]);
 
   useEffect(() => {
     if (acrostic) {
@@ -55,10 +62,10 @@ export default function AcrosticEditor({
   }, [acrostic, station.name]);
 
   useEffect(() => {
-    if (!loading && !acrostic && loggedIn) {
+    if (!loading && acrostics.length === 0 && loggedIn) {
       setIsEditing(true);
     }
-  }, [loading, acrostic, loggedIn]);
+  }, [loading, acrostics.length, loggedIn]);
 
   useEffect(() => {
     function handleEsc(e: KeyboardEvent) {
@@ -103,7 +110,8 @@ export default function AcrosticEditor({
     setSaving(true);
     setError("");
     try {
-      if (acrostic) {
+      // AI 시는 Firestore에 실제 없으므로 새로 생성 (사용자 시로 승격)
+      if (acrostic && !acrostic.isAi) {
         await updateAcrostic(acrostic._id, lines);
       } else {
         await createAcrostic(station.id, lines);
@@ -117,7 +125,7 @@ export default function AcrosticEditor({
   }
 
   async function handleDelete() {
-    if (!acrostic) return;
+    if (!acrostic || acrostic.isAi) return;
     setSaving(true);
     try {
       await deleteAcrostic(acrostic._id);
@@ -134,7 +142,7 @@ export default function AcrosticEditor({
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
       style={{ background: "rgba(28, 24, 21, 0.5)" }}
-      onClick={isEditing ? undefined : onClose}
+      onClick={onClose}
     >
       <div
         ref={modalRef}
@@ -217,6 +225,50 @@ export default function AcrosticEditor({
           ) : acrostic ? (
             /* ─── 감상 모드 ─── */
             <div className="space-y-3 py-2">
+              {/* 페이징 인디케이터 + 뱃지 */}
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  {acrostic.isAi ? (
+                    <span
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs"
+                      style={{
+                        background: "rgba(232, 93, 4, 0.08)",
+                        color: "var(--accent-vermillion)",
+                        border: "1px solid rgba(232, 93, 4, 0.2)",
+                        fontWeight: 600,
+                        letterSpacing: "0.03em",
+                      }}
+                    >
+                      <span>✨ AI</span>
+                      <span style={{ opacity: 0.7 }}>·</span>
+                      <span>
+                        {acrostic.aiConcept === "love" && "❤️ 사랑"}
+                        {acrostic.aiConcept === "philosophy" && "🧠 철학"}
+                        {acrostic.aiConcept === "humor" && "😄 유머"}
+                      </span>
+                    </span>
+                  ) : (
+                    <span
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs"
+                      style={{
+                        background: "rgba(28, 24, 21, 0.06)",
+                        color: "var(--text-body)",
+                        border: "1px solid var(--border-rule)",
+                        fontWeight: 600,
+                        letterSpacing: "0.03em",
+                      }}
+                    >
+                      ✍️ 324
+                    </span>
+                  )}
+                </div>
+                {acrostics.length > 1 && (
+                  <span className="text-xs font-serif" style={{ color: "var(--text-faded)" }}>
+                    {pageIndex + 1} / {acrostics.length}
+                  </span>
+                )}
+              </div>
+
               {chars.map((char, i) => (
                 <div key={`${char}-${i}`} className="flex items-start gap-3">
                   <span
@@ -235,6 +287,64 @@ export default function AcrosticEditor({
                   </span>
                 </div>
               ))}
+
+              {/* 작성자 안내 */}
+              <p className="text-xs pt-3" style={{ color: "var(--text-faded)", fontStyle: "italic" }}>
+                {acrostic.isAi
+                  ? "AI가 임시로 작성한 시입니다."
+                  : "324님이 지은 시입니다."}
+              </p>
+
+              {/* 페이징 컨트롤 */}
+              {acrostics.length > 1 && (
+                <div className="flex items-center justify-between gap-2 pt-3 mt-1" style={{ borderTop: "1px solid var(--border-soft)" }}>
+                  <button
+                    onClick={() => setPageIndex((p) => Math.max(0, p - 1))}
+                    disabled={pageIndex === 0}
+                    className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg transition-all disabled:opacity-30"
+                    style={{
+                      color: "var(--text-body)",
+                      background: "var(--bg-paper)",
+                      border: "1px solid var(--border-rule)",
+                    }}
+                    aria-label="이전 시"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                    이전
+                  </button>
+                  <div className="flex gap-1">
+                    {acrostics.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setPageIndex(i)}
+                        className="w-1.5 h-1.5 rounded-full transition-all"
+                        style={{
+                          background: i === pageIndex ? "var(--accent-vermillion)" : "var(--border-rule)",
+                        }}
+                        aria-label={`${i + 1}번째 시`}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setPageIndex((p) => Math.min(acrostics.length - 1, p + 1))}
+                    disabled={pageIndex === acrostics.length - 1}
+                    className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg transition-all disabled:opacity-30"
+                    style={{
+                      color: "var(--text-body)",
+                      background: "var(--bg-paper)",
+                      border: "1px solid var(--border-rule)",
+                    }}
+                    aria-label="다음 시"
+                  >
+                    다음
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <p className="text-center py-6 font-serif" style={{ color: "var(--text-ghost)" }}>
@@ -307,7 +417,13 @@ export default function AcrosticEditor({
               <div className="flex-1" />
               {loggedIn && (
                 <button
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => {
+                    // AI 시에서 편집 진입 시 빈 상태로 시작
+                    if (acrostic?.isAi) {
+                      setLines(chars.map(() => ""));
+                    }
+                    setIsEditing(true);
+                  }}
                   className="px-6 py-2 text-sm rounded-lg font-serif transition-colors"
                   style={{
                     background: "var(--bg-paper)",
@@ -316,7 +432,7 @@ export default function AcrosticEditor({
                     fontWeight: 700,
                   }}
                 >
-                  수정
+                  {acrostic?.isAi ? "직접 쓰기" : "수정"}
                 </button>
               )}
             </>

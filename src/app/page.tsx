@@ -22,7 +22,7 @@ export default function Home() {
     stations, lines, lineRoutes, stationDataMap,
     allStations,
     allAcrostics, acrosticStationIds,
-    selectedStation, currentAcrostic, loadingAcrostic,
+    selectedStation, currentAcrostics, loadingAcrostic,
     loggedIn,
     showLogin, setShowLogin,
     toast,
@@ -59,12 +59,14 @@ export default function Home() {
     handleStationClick(random);
   }
 
-  // 노선별 N행시 작성 수
+  // 노선별 N행시 작성 수 (사용자 작성 시만 카운트, AI 시 제외)
   const lineAcrosticCount = useMemo(() => {
-    const acrosticIds = new Set(allAcrostics.map((a) => a.stationId));
+    const userAcrosticIds = new Set(
+      allAcrostics.filter((a) => !a.isAi).map((a) => a.stationId)
+    );
     const countMap = new Map<string, number>();
     allStations
-      .filter((s) => s.city === city && acrosticIds.has(s.id))
+      .filter((s) => s.city === city && userAcrosticIds.has(s.id))
       .forEach((s) => {
         s.lines.forEach((lineId) => {
           countMap.set(lineId, (countMap.get(lineId) ?? 0) + 1);
@@ -74,13 +76,20 @@ export default function Home() {
   }, [allAcrostics, allStations, city]);
 
   const listAcrostics = useMemo(() => {
-    if (!selectedLine) return allAcrostics;
+    // 현재 도시의 역만 우선 필터링
+    const cityStationIds = new Set(
+      allStations.filter((s) => s.city === city).map((s) => s.id)
+    );
+    const cityAcrostics = allAcrostics.filter((a) => cityStationIds.has(a.stationId));
+
+    if (!selectedLine) return cityAcrostics;
+
     const lineStationIds = new Set(
       allStations
         .filter((s) => s.city === city && s.lines.includes(selectedLine))
         .map((s) => s.id)
     );
-    return allAcrostics.filter((a) => lineStationIds.has(a.stationId));
+    return cityAcrostics.filter((a) => lineStationIds.has(a.stationId));
   }, [allAcrostics, allStations, selectedLine, city]);
 
   // Desktop line filter pills
@@ -478,7 +487,7 @@ export default function Home() {
       {selectedStation && (
         <AcrosticEditor
           station={selectedStation}
-          acrostic={currentAcrostic}
+          acrostics={currentAcrostics}
           loading={loadingAcrostic}
           loggedIn={loggedIn}
           onClose={handleCloseModal}
